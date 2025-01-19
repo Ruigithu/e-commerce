@@ -1,0 +1,9 @@
+server:
+  port: 8761
+
+eureka:
+  server:
+    enable-self-preservation: false  # 禁用自我保护模式（可选）
+  client:
+    register-with-eureka: false  # Eureka 服务器不需要注册到自己
+    fetch-registry: false  # 不从注册中心拉取服务信息
