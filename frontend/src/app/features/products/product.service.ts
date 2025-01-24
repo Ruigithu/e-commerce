@@ -40,13 +40,19 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 // }
 
 export class ProductService {
-  private apiUrl = 'http://localhost:8080/products'; // 后端 API 地址
+  private apiUrlGetAllProducts = 'http://localhost:8080/products'; // 后端 API 地址
+
 
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<Product[]> {
 
-      return this.http.get<Product[]>(this.apiUrl);  // 移除重复的配置
+      return this.http.get<Product[]>(this.apiUrlGetAllProducts);  // 移除重复的配置
+    }
+
+    getProduct(productId: string):Observable<Product>{
+      const apiGetProductInfo = `http://localhost:8080/products/product/${productId}`;
+      return this.http.get<Product>(apiGetProductInfo);
     }
 
 }

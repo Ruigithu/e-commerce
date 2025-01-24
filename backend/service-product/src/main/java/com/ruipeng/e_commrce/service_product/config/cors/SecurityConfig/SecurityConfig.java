@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/products/**").permitAll()
+                        .requestMatchers("/products","/product/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

@@ -2,12 +2,13 @@
 // Component 是用于定义组件的装饰器，而 OnInit 是一个生命周期钩子，用于在组件初始化时执行逻辑。
 import { Component, OnInit } from '@angular/core';
 //product.model: 引入了 Product 模型，表示商品的数据结构。
-import { Product } from './product.model';
+import { Product } from '../product.model';
 //@angular/common: 引入了 CommonModule.
 // 这是 Angular 中常用的公共模块，提供了一些常用指令（如 ngIf、ngFor）和管道。
 import { CommonModule } from '@angular/common';
 //product.service: 引入了 ProductService，这是一个服务，用于获取商品数据。
-import { ProductService } from './product.service';
+import { ProductService } from '../product.service';
+import {RouterLink} from '@angular/router';
 
 //
 @Component({
@@ -15,15 +16,14 @@ import { ProductService } from './product.service';
   template: `
     <div class="container">
       <h2>商品列表</h2>
-      <button (click)="loadProducts()">加载商品</button>
-
-      <div class="product-grid">
+      <div class="product-grid" >
         <!--*ngFor="let product of products":
         使用 ngFor 指令循环遍历 products 数组，生成每个商品的卡片。-->
         <div *ngFor="let product of products" class="product-card">
           <h3>{{ product.name }}</h3>
           <p>价格: ¥{{ product.price }}</p>
           <p>{{ product.description }}</p>
+          <button [routerLink]="['/product',product.productId]">View</button>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@ import { ProductService } from './product.service';
   // ngFor: 循环渲染。用于遍历数组并为每个数组元素创建一个 DOM 元素。
   // ngClass: 动态添加/移除 CSS 类。
   // ngStyle: 动态应用样式。
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   //你需要依赖其他模块的导入，当你的组件需要使用来自其他模块的功能时。比如，如果你想使用表单功能，你需要导入 FormsModule 或 ReactiveFormsModule；如果你需要 HTTP 请求功能，你需要导入 HttpClientModule。
   //
   // 例如：
@@ -94,7 +94,9 @@ export class ProductListComponent implements OnInit {
 
   constructor(private productService: ProductService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadProducts();
+  }
 //这里的 subscribe 方法表示异步获取数据，products 是返回的数据，
 // this.products = products 是更新组件中的 products 数组。
 //   loadProducts() {
@@ -104,7 +106,10 @@ export class ProductListComponent implements OnInit {
 //   }
   loadProducts(): void {
     this.productService.getProducts().subscribe(
-      (data) => (this.products = data),
+      (data) => {
+        console.log('获取到的商品数据:', data);
+        this.products = data;
+      },
       (error) => console.error('加载商品失败:', error)
     );
   }

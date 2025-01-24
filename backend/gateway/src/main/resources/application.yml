@@ -38,6 +38,21 @@ spring:
             - Path=/pay/**
           filters:
             - RewritePath=/pay/(?<segment>.*), /$\{segment}
+
+
+        - id: login-route
+          uri: lb://user-service  # 用户服务的负载均衡地址
+          predicates:
+            - Path=/login
+          filters:
+            - StripPrefix=1
+
+        - id: signup-route
+          uri: lb://user-service  # 用户服务的负载均衡地址
+          predicates:
+            - Path=/signup
+          filters:
+            - StripPrefix=1
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
       globals:

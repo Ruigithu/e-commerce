@@ -1,22 +1,22 @@
 spring:
   application:
-    name: service-pay  # Eureka
+    name: service-pay
 
 
   datasource:
-    url: jdbc:h2:mem:testdb  # ???????
+    url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
     username: sa
     password: password
 
   h2:
     console:
-      enabled: true  # ?? H2 ??????????? /h2-console
+      enabled: true
 
   jpa:
     hibernate:
-      ddl-auto: update  # ??????????????? 'create', 'validate', 'none' ??
-    show-sql: true  # ?? SQL ????
+      ddl-auto: update
+    show-sql: true
 
 eureka:
   client:
@@ -25,3 +25,7 @@ eureka:
 
 server:
   port: 8019
+
+stripe:
+  secret-key: sk_test_51QkbM8GdsqdKUqpLbJ0SlhdGxr0JX0mHr2SyCJuseZmGZO8FuuNoOJtB18Vw3RXjnDaHCunoVxcM6M9pqeHn22y400dCwvHyVk
+  publishable-key: pk_test_51QkbM8GdsqdKUqpLbNg0xdvLmkCKvtCM1Lk34iR1iHPolLIdIb2CON4aDoPD6Uz7dB99Uv5cOYbgzoB22fsh8Z1M00OzQdhq0K
