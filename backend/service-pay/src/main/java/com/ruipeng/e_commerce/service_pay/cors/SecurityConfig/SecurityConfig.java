@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers( "/**").permitAll()
                         .requestMatchers("/pay","/create-checkout-session").permitAll()
                         .anyRequest().authenticated()
                 );

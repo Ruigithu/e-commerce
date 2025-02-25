@@ -8,9 +8,10 @@ import { Injectable } from '@angular/core';
 //它用于将传入的数据（如数组、对象等）转换为一个 Observable 对象。
 //它是一个非常简单的方式来创建 Observable，
 //在这里它将 this.products 数组转换成一个 Observable 对象。
-import { Observable, of } from 'rxjs';
+import {catchError, Observable, of, throwError} from 'rxjs';
 import { Product } from './product.model';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {ProductCategory} from './product-category.model';
 
 //@Injectable 装饰器表示 ProductService 是一个可注入的服务，
 //providedIn: 'root' 表示这个服务是根级别的，意味着它会在整个应用中共享，
@@ -55,4 +56,20 @@ export class ProductService {
       return this.http.get<Product>(apiGetProductInfo);
     }
 
+    getProductCategory(): Observable<ProductCategory[]> {
+
+      return this.http.get<ProductCategory[]>('http://localhost:8080/products/product-categories');  // 移除重复的配置
+    }
+
+
+  getSpecificCategoryProducts(categoryId: string): Observable<Product[]> {
+    const url = `http://localhost:8080/products/category/${categoryId}`;
+    console.log('请求URL:', url);
+    return this.http.get<Product[]>(url).pipe(
+      catchError(err => {
+        console.error('HTTP 请求错误:', err);
+        return throwError(() => err);
+      })
+    );
+  }
 }

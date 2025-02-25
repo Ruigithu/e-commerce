@@ -1,8 +1,6 @@
 package com.ruipeng.e_commrce.service_order.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,13 +11,15 @@ public class Order {
     @Id
     private UUID orderId;
     private UUID userId;
-    private String status;
+    @Enumerated(EnumType.STRING) // 使用 EnumType.STRING 映射为数据库中的字符串值
+    private OrderStatus status;  // 使用枚举类型
     private double totalAmount;
     private UUID shippingAddressId;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
-    public Order(UUID orderId, UUID userId, String status, double totalAmount, UUID shippingAddressId, LocalDateTime createAt, LocalDateTime updateAt) {
+
+    public Order(UUID orderId, UUID userId, OrderStatus status, double totalAmount, UUID shippingAddressId, LocalDateTime createAt, LocalDateTime updateAt) {
         this.orderId = orderId;
         this.userId = userId;
         this.status = status;
@@ -47,11 +47,11 @@ public class Order {
         this.userId = userId;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

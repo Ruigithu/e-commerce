@@ -7,6 +7,11 @@ import {ProductInfoComponent} from './features/products/products-info/product-in
 import {OrderInfoComponent} from './features/orders/order.component';
 import {PaymentCancelledComponent} from './features/payments/payment-failure.component';
 import {PaymentSuccessComponent} from './features/payments/payment-success.component';
+import {ShoppingCartComponent} from './features/orders/carts/cart.component';
+import {SpecificCategoryComponent} from './features/products/products-list/specific-category.component';
+import {AddressListComponent} from './features/users/addresss/address-list/address-list.component';
+import {AddressFormComponent} from './features/users/addresss/address-list/address-form.component';
+import {MyOrdersComponent} from './features/orders/my-orders/my-orders.component';
 
 export const routes: Routes = [
   {path: '', component: LandingPage, pathMatch: 'full'},  // 添加 pathMatch: 'full'
@@ -18,4 +23,10 @@ export const routes: Routes = [
   {path:'createOrder',component:OrderInfoComponent},
   { path: 'payment-success', component: PaymentSuccessComponent },
   { path: 'payment-cancelled', component: PaymentCancelledComponent },
+  { path: 'go-to-cart', component: ShoppingCartComponent },
+  {path: 'product-list/:categoryId', component: SpecificCategoryComponent},
+  {path: 'address', component: AddressListComponent},
+  {path: 'modify-address', component: AddressFormComponent},
+  {path: 'my-orders', component: MyOrdersComponent},
+
 ];

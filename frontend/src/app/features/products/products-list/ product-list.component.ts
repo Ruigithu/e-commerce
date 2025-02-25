@@ -15,15 +15,14 @@ import {RouterLink} from '@angular/router';
   selector: 'app-product-list',
   template: `
     <div class="container">
-      <h2>商品列表</h2>
+      <h2>Products List</h2>
       <div class="product-grid" >
         <!--*ngFor="let product of products":
         使用 ngFor 指令循环遍历 products 数组，生成每个商品的卡片。-->
-        <div *ngFor="let product of products" class="product-card">
+        <div *ngFor="let product of products" class="product-card" [routerLink]="['/product', product.productId]">
           <h3>{{ product.name }}</h3>
-          <p>价格: ¥{{ product.price }}</p>
+          <p>Price: €{{ product.price }}</p>
           <p>{{ product.description }}</p>
-          <button [routerLink]="['/product',product.productId]">View</button>
         </div>
       </div>
     </div>
@@ -59,25 +58,40 @@ import {RouterLink} from '@angular/router';
   // export class AppModule {}
   styles: [`
     .container {
-      padding: 20px;
+      padding: 10px;
+      margin-top: 0;
+      text-align: center;
+    }
+    h2{
+      margin-top: 0;
     }
 
     .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap; /* 允许换行 */
+      justify-content: space-between; /* 均匀分布 */
+      gap: 20px; /* 控制间距 */
+      padding: 20px;
     }
 
     .product-card {
-      border: 1px solid #ddd;
+      flex: 1 1 calc(33.333% - 20px); /* 让每个卡片占 1/3 宽度，并考虑间距 */
+      max-width: 200px; /* 限制最大宽度 */
       padding: 15px;
-      border-radius: 8px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      text-align: center;
+      background: #fff;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s; /* 动画效果 */
+    }
+    .product-card:hover {
+      transform: scale(1.05); /* 鼠标悬停时放大卡片 */
     }
 
     button {
       padding: 10px 20px;
-      background-color: #4CAF50;
+      background-color: #3D3D3D;
       color: white;
       border: none;
       border-radius: 4px;
@@ -85,7 +99,7 @@ import {RouterLink} from '@angular/router';
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: #3D3D3D;
     }
   `]
 })
@@ -97,13 +111,7 @@ export class ProductListComponent implements OnInit {
   ngOnInit() {
     this.loadProducts();
   }
-//这里的 subscribe 方法表示异步获取数据，products 是返回的数据，
-// this.products = products 是更新组件中的 products 数组。
-//   loadProducts() {
-//     this.productService.getProducts().subscribe(
-//       products => this.products = products
-//     );
-//   }
+
   loadProducts(): void {
     this.productService.getProducts().subscribe(
       (data) => {
@@ -113,4 +121,6 @@ export class ProductListComponent implements OnInit {
       (error) => console.error('加载商品失败:', error)
     );
   }
+
+  protected readonly RouterLink = RouterLink;
 }

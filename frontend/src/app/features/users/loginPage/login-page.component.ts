@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {LoginResponse} from './loginresponse.model'
 
 @Component({
   selector: `login-page`,
@@ -75,6 +76,7 @@ import {Router} from '@angular/router';
 export class LoginPageComponent {
   loginForm: FormGroup
 
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -89,7 +91,7 @@ export class LoginPageComponent {
   onSubmit() {
     if (this.loginForm.valid) {
     console.log(this.loginForm.value.username)
-      this.http.post('http://localhost:8080/users/login', {
+      this.http.post<LoginResponse>('http://localhost:8080/login', {
         username: this.loginForm.value.username,
         password: this.loginForm.value.password
       }, {
@@ -99,8 +101,34 @@ export class LoginPageComponent {
         }).subscribe({
           next: (response) => {
             console.log('Login successful:', response);
-            // 处理登录成功的逻辑，例如跳转到首页
-            this.router.navigate(['/home']);
+            const body = response.body; // 获取响应体
+            if (body && body.userId !== undefined) {
+              localStorage.setItem('userId', String(body.userId));
+              console.log(localStorage.getItem('userId'));
+              localStorage.setItem('userName',String(body.userName));
+              console.log('Stored userName:', localStorage.getItem('userName'));
+
+              localStorage.setItem('defaultAddress',JSON.stringify(body.defaultAddress));
+
+            } else {
+              console.error('User ID is missing in response');
+            }
+            if (localStorage.getItem('redirectAfterLogin')!==null){
+              const redirectUrl = localStorage.getItem('redirectAfterLogin');
+              if (redirectUrl) {
+                try {
+                  const url = new URL(redirectUrl);
+                  // 只使用路径部分，不包括域名
+                  this.router.navigate([url.pathname.substring(1)]);  // 移除开头的 '/'
+                } catch {
+                  // 如果不是完整 URL，直接使用
+                  this.router.navigate([redirectUrl]);
+                }
+              }
+            }else{
+              this.router.navigate(['/home']);
+            }
+
           },
           error: (error) => {
             console.error('Login failed:', error);

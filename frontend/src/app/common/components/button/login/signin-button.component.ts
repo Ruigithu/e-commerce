@@ -13,7 +13,12 @@ import {RouterLink} from '@angular/router';
     ],
     styles: `
       button {
-        background-color: darkseagreen;
+        background-color: #578E7E;
+        width: 100px;
+        height: 40px;
+        color: #FFFAEC;
+        border: none;
+        border-radius: 10px;
       }
     `
   }

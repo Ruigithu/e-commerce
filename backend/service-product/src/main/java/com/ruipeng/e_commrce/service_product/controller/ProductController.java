@@ -1,6 +1,7 @@
 package com.ruipeng.e_commrce.service_product.controller;
 
 import com.ruipeng.e_commrce.service_product.entity.Product;
+import com.ruipeng.e_commrce.service_product.entity.ProductCategory;
 import com.ruipeng.e_commrce.service_product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping
+@RequestMapping("/")
 @Slf4j
 public class ProductController {
 
@@ -23,17 +24,26 @@ public class ProductController {
         this.service = service;
     }
 
-    @GetMapping("/products")
-    public List<Product> getProducts() {
-        log.info("Received request for products");
-        log.info("Request headers: {}", RequestContextHolder.currentRequestAttributes());
-        System.out.println("收到前端请求");
-        return service.findAll();
-    }
+        @GetMapping
+        public List<Product> getProducts() {
+            log.info("Received request for products");
+            return service.findAll();
+        }
 
-    @GetMapping("/product/{productId}")
-    public Product getProduct(@PathVariable UUID productId) {
-        return service.findById(productId);
+        @GetMapping("/product/{productId}")
+        public Product getProduct(@PathVariable UUID productId) {
+            return service.findById(productId);
+        }
 
+        @GetMapping("/product-categories")
+        public List<ProductCategory> getProductCategory() {
+            log.info("Received request for product categories");
+            return service.findAllCategory();
+        }
+
+    @GetMapping("/category/{categoryId}")
+    public List<Product> getProductsByCategoryId(@PathVariable UUID categoryId) {
+        System.out.println(categoryId);
+        return service.findByCategoryId(categoryId);
     }
 }

@@ -1,6 +1,7 @@
 package com.ruipeng.e_commrce.service_product.service;
 
 import com.ruipeng.e_commrce.service_product.entity.Product;
+import com.ruipeng.e_commrce.service_product.entity.ProductCategory;
 import com.ruipeng.e_commrce.service_product.repo.ProductRepo;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @Service
 public class ProductService {
+
 
     private ProductRepo repo;
 
@@ -49,5 +51,29 @@ public class ProductService {
         Optional<Product> product = repo.findById(id);
         return product.orElse(null);
 
+    }
+
+    public List<ProductCategory> findAllCategory() {
+        List<ProductCategory> all = repo.findAllCategory();
+        if (all.isEmpty()) {
+            System.out.println("没有找到任何产品种类");
+        } else {
+            for (ProductCategory p : all) {
+                System.out.println("名字是：" + p.getName());
+            }
+        }
+        return all;
+    }
+
+    public List<Product> findByCategoryId(UUID categoryId) {
+        List<Product> all = repo.findAllByCategoryId(categoryId);
+        if (all.isEmpty()) {
+            System.out.println("没有找到任何产品");
+        } else {
+            for (Product p : all) {
+                System.out.println("名字是：" + p.getName());
+            }
+        }
+        return all;
     }
 }

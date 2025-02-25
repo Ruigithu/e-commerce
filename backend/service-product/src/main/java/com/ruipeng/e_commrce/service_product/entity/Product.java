@@ -17,15 +17,18 @@ public class Product {
     private String description;
     private double price;
     private int stock;
+    @Column(name = "category_id")
+    private UUID categoryId;
     @Column(name = "created_at")
     private LocalDateTime createAt;
 
-    public Product(String name, String description, double price, int stock, LocalDateTime createAt) {
+    public Product(String name, String description, double price, int stock, UUID categoryId,LocalDateTime createAt) {
         this.productId = UUID.randomUUID(); // 添加这行
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
+        this.categoryId=categoryId;
         this.createAt = LocalDateTime.now();
     }
     public Product() {
@@ -79,5 +82,13 @@ public class Product {
 
     public UUID getProductId() {
         return productId;
+    }
+
+    public UUID getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(UUID categoryId) {
+        this.categoryId = categoryId;
     }
 }

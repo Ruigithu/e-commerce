@@ -1,0 +1,163 @@
+.orders-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 24px;
+    font-size: 24px;
+    color: #333;
+  }
+}
+
+.status-filter {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  span {
+    color: #666;
+  }
+
+  button {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f5f5f5;
+    }
+
+    &.active {
+      background: #e6f7ff;
+      border-color: #1890ff;
+      color: #1890ff;
+    }
+  }
+}
+
+.loading, .error-message, .empty-state {
+  padding: 40px;
+  text-align: center;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin: 20px 0;
+
+  button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: #1890ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background: #40a9ff;
+    }
+  }
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  .order-header {
+    background: #fafafa;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+
+    .order-id {
+      font-family: monospace;
+      color: #666;
+    }
+
+    .order-status {
+      font-weight: 500;
+      padding: 2px 10px;
+      border-radius: 12px;
+
+      &.status-pending {
+        background: #fff7e6;
+        color: #fa8c16;
+      }
+
+      &.status-paid {
+        background: #f6ffed;
+        color: #52c41a;
+      }
+
+      &.status-refund {
+        background: #f5f5f5;
+        color: #8c8c8c;
+      }
+    }
+  }
+
+  .order-details {
+    padding: 16px;
+    background-color: whitesmoke;
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+
+      .label {
+        color: #8c8c8c;
+      }
+
+      .amount {
+        font-weight: 500;
+        color: #f5222d;
+      }
+    }
+  }
+
+  .order-actions {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+
+    button {
+      padding: 6px 12px;
+      border: 1px solid #d9d9d9;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+
+      &:hover {
+        color: #40a9ff;
+        border-color: #40a9ff;
+      }
+
+      &.primary-btn {
+        background: #1890ff;
+        color: white;
+        border-color: #1890ff;
+
+        &:hover {
+          background: #40a9ff;
+          border-color: #40a9ff;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,150 @@
+.order-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.order-header h2 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.order-status {
+  padding: 0.5rem 1rem;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.order-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.order-card h3 {
+  margin: 0 0 1.5rem 0;
+  color: #2c3e50;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row.total {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #eee;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.label {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.value {
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.shipping-info .value {
+  text-align: right;
+  max-width: 60%;
+}
+
+.payment-section {
+  margin-top: 1rem;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .order-container {
+    margin: 1rem auto;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .shipping-info .value {
+    max-width: 100%;
+    text-align: left;
+  }
+
+}
+.address {
+  display: flex;
+  align-items: center; /* 让图标和文本垂直居中 */
+  justify-content: space-between; /* 让接收人信息在左，icon 在右 */
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.receiver-info {
+  flex-grow: 0.8; /* 让接收人信息占据剩余空间 */
+}
+
+.address i {
+  font-size: 50px; /* 控制图标大小 */
+  cursor: pointer; /* 让图标可点击 */
+  transition: color 0.3s ease; /* 增加动画效果 */
+}
+
+

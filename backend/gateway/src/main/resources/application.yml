@@ -16,39 +16,39 @@ spring:
           predicates:
             - Path=/users/**
           filters:
-            - RewritePath=/users/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
 
         - id: product-service-route
           uri: lb://service-product
           predicates:
             - Path=/products/**
           filters:
-            - RewritePath=/products/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
 
         - id: order-service-route
           uri: lb://service-order
           predicates:
             - Path=/orders/**
           filters:
-            - RewritePath=/orders/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
 
         - id: pay-service-route
           uri: lb://service-pay
           predicates:
             - Path=/pay/**
           filters:
-            - RewritePath=/pay/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
 
 
         - id: login-route
-          uri: lb://user-service  # 用户服务的负载均衡地址
+          uri: lb://service-user  # 用户服务的负载均衡地址
           predicates:
             - Path=/login
           filters:
-            - StripPrefix=1
+
 
         - id: signup-route
-          uri: lb://user-service  # 用户服务的负载均衡地址
+          uri: lb://service-user  # 用户服务的负载均衡地址
           predicates:
             - Path=/signup
           filters:

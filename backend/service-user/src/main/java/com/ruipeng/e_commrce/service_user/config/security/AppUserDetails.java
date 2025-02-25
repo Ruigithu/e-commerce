@@ -3,13 +3,14 @@ package com.ruipeng.e_commrce.service_user.config.security;
 import com.ruipeng.e_commrce.service_user.entity.User;
 import com.ruipeng.e_commrce.service_user.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
-;
+
 
 public class AppUserDetails implements UserDetails {
     private final User user;
@@ -53,6 +54,9 @@ public class AppUserDetails implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
-
+    // 添加这个方法来获取原始的 User 对象
+    public User getUser() {
+        return user;
+    }
 
 }

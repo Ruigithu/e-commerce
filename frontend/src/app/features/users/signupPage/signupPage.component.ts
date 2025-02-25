@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {User} from './user.model';
 
 @Component({
   selector: `signup-page`,
@@ -91,7 +92,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
   `
 })
 
-export class SignupPageComponent{
+export class SignupPageComponent {
   signupForm: FormGroup
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
@@ -108,31 +109,35 @@ export class SignupPageComponent{
   onSubmit() {
     if (this.signupForm.valid) {
 
-      this.http.post('http://localhost:8080/users/signup', {
+      this.http.post<User>('http://localhost:8080/users/signup', {
         username: this.signupForm.value.username,
         firstname: this.signupForm.value.firstname,
         lastname: this.signupForm.value.lastname,
         password: this.signupForm.value.password,
         phone: this.signupForm.value.phone,
-        email:this.signupForm.value.email,
+        email: this.signupForm.value.email,
       }, {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-        withCredentials: true,
-        observe: 'response'
+        headers: new HttpHeaders({'Content-Type': 'application/json'}),
+        withCredentials: true
       }).subscribe({
-        next: (response) => {
-          console.log('Signup successful:', response);
-          // 处理登录成功的逻辑，例如跳转到首页
+        next: (user: User) => {
+          console.log('Signup successful:', user);
+          console.log('注册成功的用户信息:', user);
+          // 现在你可以安全地访问 user 的所有属性
+          console.log(`用户ID: ${user.userId}`);
 
+          // 创建购物车
+          this.http.post('http://localhost:8080/orders/add-newCart', {
+            userId: user.userId
+          }).subscribe({
+            next: () => console.log('Cart created successfully'),
+            error: (error) => console.error('Error creating cart:', error)
+          });
         },
         error: (error) => {
           console.error('Signup failed:', error);
-          // 处理登录失败的逻辑，例如显示错误信息
         }
       });
-    } else {
-      console.log('Form is invalid');
     }
   }
-
 }

@@ -52,9 +52,11 @@ public class SecurityConfig {
                                 )
                         .permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest()
                         .authenticated()
                 )
+                .formLogin(form -> form.disable())  // 禁用默认的表单登录
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler(logoutHandler)

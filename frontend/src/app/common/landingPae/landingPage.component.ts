@@ -18,19 +18,28 @@ import {ProductListComponent} from '../../features/products/products-list/ produ
     </div>
   `,
   styles:[`
-    .container{
-      height: 100vh;
+    .container {
+      min-height: 100vh;
       width: 100vw;
-      display: grid;
-      grid-template-rows: 2fr 4fr 1fr;
-      gap:0;
+      display: flex;
+      flex-direction: column;
     }
-    .main-content{
-      border: 1px solid gray;
-      text-align: center;
+    app-header{
+      margin-bottom: 0;
     }
-    footer{
+
+    .main-content {
+      flex: 1;
+      margin-top: 0;
+      padding: 0;
+    }
+    app-product-list{
+      margin-top: 0;
+    }
+
+    footer {
       text-align: center;
+      padding: 20px 0;
     }
   `]
 
