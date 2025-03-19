@@ -27,7 +27,7 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/add-newCart")
-    public ResponseEntity<ShoppingCart> addToCart(@RequestBody Map<String,String> map) {
+    public ResponseEntity<ShoppingCart> addToCart(@RequestBody Map<String, String> map) {
         ShoppingCart cart = shoppingCartService.addNewCart(UUID.fromString(map.get("userId")));
         if (cart == null) {
             return ResponseEntity.noContent().build();
@@ -39,12 +39,12 @@ public class ShoppingCartController {
     public List<CartItem> getItems(@PathVariable UUID userId) {
         UUID cartId = shoppingCartService.getCartId(userId);
         if (cartId != null) {
-          List<CartItem> itemList = cartItemService.getItemsByCartId(cartId);
-          if (itemList==null) {
-              return null;
-          }else{
-              return itemList;
-          }
+            List<CartItem> itemList = cartItemService.getItemsByCartId(cartId);
+            if (itemList == null) {
+                return null;
+            } else {
+                return itemList;
+            }
         }
         return null;
     }
@@ -58,7 +58,7 @@ public class ShoppingCartController {
     public void updateQuantity(@PathVariable UUID itemId, @RequestBody Map<String, Integer> body) {
         Integer quantity = body.get("quantity");  // 获取传递的数量
 
-         cartItemService.updateQuantity(itemId, quantity);
+        cartItemService.updateQuantity(itemId, quantity);
 
     }
 

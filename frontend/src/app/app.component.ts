@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {ProductListComponent} from './features/products/products-list/ product-list.component';
+import {ProductListComponent} from './features/products/products-list/product-list.component';
 import {RouterOutlet} from '@angular/router';
 
 

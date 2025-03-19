@@ -53,10 +53,10 @@ export class OrderService {
   // 订单状态文本映射
   getStatusText(status: OrderStatus): string {
     const statusMap = {
-      [OrderStatus.PENDING]: '待付款',
-      [OrderStatus.PAID]: '已付款',
-      [OrderStatus.REFUND]: '已退款'
+      [OrderStatus.PENDING]: 'Unpaid',
+      [OrderStatus.PAID]: 'Paid',
+      [OrderStatus.REFUND]: 'Refunded'
     };
-    return statusMap[status] || '未知状态';
+    return statusMap[status] || 'unknown';
   }
 }

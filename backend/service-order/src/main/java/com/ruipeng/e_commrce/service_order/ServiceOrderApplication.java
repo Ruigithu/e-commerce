@@ -13,5 +13,4 @@ public class ServiceOrderApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceOrderApplication.class, args);
 	}
-
 }

@@ -5,7 +5,9 @@ import com.ruipeng.e_commerce.service_pay.service.OrderServiceClient;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Event;
 import com.stripe.model.checkout.Session;
+import com.stripe.net.Webhook;
 import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +28,9 @@ public class PaymentController {
     private OrderServiceClient orderServiceClient;
     @Value("${stripe.secret-key}")
     private String secretKey;
+
+    @Value("${stripe.webhook-secret}")
+    private String webhookSecret;
 
     @PostMapping("/create-checkout-session")
     public ResponseEntity<Map<String, String>> createCheckoutSession(@RequestBody Map<String, String> request) {
@@ -74,5 +79,36 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
+    }
+
+    @PostMapping("/webhook")
+    public ResponseEntity<String> handleStripeWebhook(@RequestBody String payload,
+                                                      @RequestHeader("Stripe-Signature") String sigHeader) {
+        // 记录收到的webhook请求
+        Stripe.apiKey = secretKey;
+
+        try {
+            // 1. 验证 Webhook 签名
+            Event event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
+
+            // 2. 处理支付成功事件
+            if ("checkout.session.completed".equals(event.getType())) {
+                Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
+
+                if (session != null) {
+                    String orderId = session.getMetadata().get("orderId");
+
+                    // 3. 更新订单状态
+                    if (orderId != null) {
+                        orderServiceClient.updateOrderStatus(UUID.fromString(orderId), "PAID");
+                    }
+                }
+            }
+
+            return ResponseEntity.ok("Webhook received");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Webhook error: " + e.getMessage());
+        }
     }
 }

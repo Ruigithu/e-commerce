@@ -1,6 +1,5 @@
 package com.ruipeng.e_commrce.service_order.service;
 
-import com.netflix.discovery.converters.Auto;
 import com.ruipeng.e_commrce.service_order.entity.CartItem;
 import com.ruipeng.e_commrce.service_order.entity.ShoppingCart;
 import com.ruipeng.e_commrce.service_order.repo.CartItemRepository;
@@ -27,16 +26,17 @@ public class CartItemService {
     }
 
 
-    public CartItem addToCart(UUID userId, UUID productId, Integer quantity) {
-
+    public CartItem addToCart(UUID userId, UUID productId, Integer quantity, UUID cartId) {
+        System.out.println("add to cart "+userId);
         Optional<ShoppingCart> cart = cartRepository.findByUserId(userId);
 
         CartItem cartItem = new CartItem();
         cartItem.setItemId(UUID.randomUUID());
-        if (cart.isPresent()) {
-            ShoppingCart shoppingCart = cart.get();
-            cartItem.setCartId(shoppingCart.getCartId());
-        }
+//        if (cart.isPresent()) {
+//            ShoppingCart shoppingCart = cart.get();
+//            cartItem.setCartId(shoppingCart.getCartId());
+//        }
+        cartItem.setCartId(cartId);
         cartItem.setProductId(productId);
         cartItem.setQuantity(quantity);
         cartItem.setCreatedAt(LocalDateTime.now());
@@ -60,4 +60,5 @@ public class CartItemService {
     public void updateQuantity(UUID itemId, Integer quantity) {
         cartItemRepository.updateQuantity(itemId,quantity);
     }
+
 }

@@ -24,11 +24,14 @@ public class CartItemController {
         UUID userId = UUID.fromString(map.get("userId"));
         UUID productId = UUID.fromString(map.get("productId"));
         int quantity = Integer.parseInt(map.get("quantity"));
-        CartItem cartItem = cartItemService.addToCart(userId, productId, quantity);
+        UUID cartId = UUID.fromString("b5c83d9a-8acd-4646-b7c4-c9f6de32b70f");
+        CartItem cartItem = cartItemService.addToCart(userId, productId, quantity,cartId);
         if (cartItem != null) {
             return ResponseEntity.ok(cartItem);
         }
         return ResponseEntity.badRequest().build();
     }
+
+
 
 }

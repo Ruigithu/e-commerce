@@ -11,22 +11,21 @@ export class PaymentSuccessComponent {
   orderId: string | null = null;
 
   constructor(private route: ActivatedRoute,
-              private http:HttpClient) {}
+              private http: HttpClient) {
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.orderId = params['orderId']; // 从URL获取orderId
+      this.orderId = params['orderId'];
       if (this.orderId) {
-        this.updateOrderStatus(this.orderId);
+        // Call your API to update the order status
+        this.http.put(`http://localhost:8080/orders/updateStatus/${this.orderId}?status=PAID`, {},
+          { responseType: 'text' })
+          .subscribe({
+            next: (response) => console.log('Order status updated:', response),
+            error: (err) => console.error('Failed to update order status', err)
+          });
       }
     });
-  }
-
-  updateOrderStatus(orderId: string) {
-    this.http.post('http://localhost:8080/orders/update-payment-status', { orderId })
-      .subscribe(
-        response => console.log('Order status updated successfully', response),
-        error => console.error('Failed to update order status', error)
-      );
   }
 }

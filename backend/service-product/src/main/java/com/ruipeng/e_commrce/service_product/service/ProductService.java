@@ -2,6 +2,7 @@ package com.ruipeng.e_commrce.service_product.service;
 
 import com.ruipeng.e_commrce.service_product.entity.Product;
 import com.ruipeng.e_commrce.service_product.entity.ProductCategory;
+import com.ruipeng.e_commrce.service_product.entity.ProductImage;
 import com.ruipeng.e_commrce.service_product.repo.ProductRepo;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +23,6 @@ public class ProductService {
     public ProductService(ProductRepo repo) {
         this.repo = repo;
     }
-
-//    @PostConstruct
-//    public void init() {
-//        // 检查数据是否为空，如果为空，则插入一些默认数据
-//        if (repo.findAll().isEmpty()) {
-//            Product product1 = new Product("商品1", "描述1", 100.0, 10, LocalDateTime.now());
-//            Product product2 = new Product("商品2", "描述2", 200.0, 5, LocalDateTime.now());
-//            repo.save(product1);
-//            repo.save(product2);
-//            System.out.println("已插入默认产品数据");
-//        }
-//    }
 
     public List<Product> findAll() {
         List<Product> all = repo.findAll();
@@ -75,5 +64,20 @@ public class ProductService {
             }
         }
         return all;
+    }
+
+    public List<ProductImage> findAllImage(UUID productId) {
+        List<ProductImage> all = repo.findAllImage(productId);
+        if (all.isEmpty()) {
+            System.out.println("没有找到任何产品种类");
+        } else {
+            for (ProductImage image : all) {
+                System.out.println("路径是：" + image.getImageUrl());
+            }
+        }
+        return all;
+    }
+    public Product updateStock(Product product) {
+        return repo.save(product);
     }
 }

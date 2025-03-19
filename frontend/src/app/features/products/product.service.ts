@@ -12,6 +12,7 @@ import {catchError, Observable, of, throwError} from 'rxjs';
 import { Product } from './product.model';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ProductCategory} from './product-category.model';
+import {ProductImage} from './product-image.model';
 
 //@Injectable 装饰器表示 ProductService 是一个可注入的服务，
 //providedIn: 'root' 表示这个服务是根级别的，意味着它会在整个应用中共享，
@@ -60,6 +61,11 @@ export class ProductService {
 
       return this.http.get<ProductCategory[]>('http://localhost:8080/products/product-categories');  // 移除重复的配置
     }
+
+  getProductImages(productId: string): Observable<ProductImage[]> {
+
+    return this.http.get<ProductImage[]>(`http://localhost:8080/products/product-images/${productId}`);  // 移除重复的配置
+  }
 
 
   getSpecificCategoryProducts(categoryId: string): Observable<Product[]> {

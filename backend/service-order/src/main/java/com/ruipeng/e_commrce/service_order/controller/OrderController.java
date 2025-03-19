@@ -4,6 +4,7 @@ import com.ruipeng.e_commrce.service_order.entity.*;
 import com.ruipeng.e_commrce.service_order.service.OrderItemService;
 import com.ruipeng.e_commrce.service_order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,9 @@ public class OrderController {
     private OrderService orderService;
 
     private OrderItemService orderItemService;
+    @Qualifier("com.ruipeng.e_commrce.service_order.controller.ProductClient")
+    @Autowired
+    private ProductClient productClient;
 
     public OrderController(OrderService orderService, OrderItemService orderItemService) {
         this.orderService = orderService;
@@ -101,15 +105,51 @@ public class OrderController {
 
     }
 
-    @PostMapping("/update-payment-status")
-    public ResponseEntity<?> updatePaymentStatus(@RequestParam UUID orderId) {
-        boolean updated = orderService.updateOrderPaymentStatus(orderId);
+    @PutMapping("/updateStatus/{orderId}")
+    public ResponseEntity<?> updateOrderStatus(
+            @PathVariable UUID orderId,
+            @RequestParam String status
+    ){
+        boolean updated=false;
+        System.out.println("update status");
 
-        if (updated) {
-            return ResponseEntity.ok("Order payment status updated successfully");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to update order status");
+        try {
+            if (status.equals("PAID")) {
+                updated = orderService.updateOrderPaymentStatus(orderId);
+                System.out.println(updated);
+            }
+
+
+            if (updated) {
+                List<OrderItem> orderItems = orderItemService.getOrderItems(orderId);
+                List<Product> updatedProductList = new ArrayList<>();
+                for (OrderItem orderItem : orderItems) {
+
+                    Product product = productClient.getProduct(orderItem.getProductId());
+
+                    int  newStock=product.getStock()-orderItem.getQuantity();
+
+                    product.setStock(newStock);
+                    ProductStockUpdateDTO stockUpdate = new ProductStockUpdateDTO();
+                    stockUpdate.setProductId(orderItem.getProductId());
+                    stockUpdate.setStock(newStock);
+
+                    Product stockUpdatedProduct = productClient.updateProductStock(stockUpdate, orderItem.getProductId());  System.out.println(7);
+                    updatedProductList.add(stockUpdatedProduct);
+
+                }
+                if (!updatedProductList.isEmpty()) {
+                    return ResponseEntity.ok("Order payment status updated successfully");
+                }
+
+            } else {
+                return ResponseEntity.internalServerError().body("Failed to update order status");
+            }
+        }catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Failed to update order status");
         }
+
+        return ResponseEntity.internalServerError().body("Failed to update order status");
     }
 
     @GetMapping("/getOrder/{orderId}")

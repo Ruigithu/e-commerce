@@ -20,4 +20,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, UUID> {
     @Transactional
     @Query("UPDATE CartItem c SET c.quantity = :quantity WHERE c.itemId = :itemId")
     void updateQuantity(UUID itemId, Integer quantity);
+
+
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OrderItemService {
@@ -22,5 +23,9 @@ public class OrderItemService {
 
     public void addOrderItem(OrderItem orderItem) {
         orderItemRepository.save(orderItem);
+    }
+
+    public List<OrderItem> getOrderItems(UUID orderId) {
+        return orderItemRepository.findByOrderId(orderId);
     }
 }

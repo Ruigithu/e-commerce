@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { OrderService, Order, OrderStatus } from './my-orders.service';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
+import {CartService} from '../carts/cart.service';
+import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-order-list',
@@ -9,54 +11,55 @@ import {RouterModule} from '@angular/router';
     CommonModule,
     RouterModule,
   ],
-  template: `<div class="orders-container">
-    <h2>我的订单</h2>
+  template:
+    `<div class="orders-container">
+    <h2>My Orders</h2>
 
     <!-- 状态筛选器 -->
     <div class="status-filter">
-      <span>筛选: </span>
+      <span>Filer: </span>
       <button
         [class.active]="selectedStatus === 'ALL'"
         (click)="filterByStatus('ALL')">
-        全部
+        All
       </button>
       <button
         [class.active]="selectedStatus === 'PENDING'"
         (click)="filterByStatus('PENDING')">
-        待付款
+        Unpaid
       </button>
       <button
         [class.active]="selectedStatus === 'PAID'"
         (click)="filterByStatus('PAID')">
-        已付款
+        Paid
       </button>
       <button
         [class.active]="selectedStatus === 'REFUND'"
         (click)="filterByStatus('REFUND')">
-        已退款
+        Refunded
       </button>
     </div>
 
     <!-- 加载状态 -->
     <div *ngIf="isLoading" class="loading">
-      <p>正在加载订单数据...</p>
+      <p>loading...</p>
     </div>
 
     <!-- 错误信息 -->
     <div *ngIf="errorMessage" class="error-message">
       <p>{{ errorMessage }}</p>
-      <button (click)="loadOrders()">重试</button>
+      <button (click)="loadOrders()">Try again</button>
     </div>
 
     <!-- 订单列表 -->
     <div *ngIf="!isLoading && !errorMessage && filteredOrders.length === 0" class="empty-state">
-      <p>暂无订单数据</p>
+      <p>no data</p>
     </div>
 
     <div *ngIf="filteredOrders.length > 0" class="order-list">
       <div *ngFor="let order of filteredOrders" class="order-card">
         <div class="order-header">
-          <span class="order-id">订单号: {{ order.orderId  }}</span>
+          <span class="order-id">order id: {{ order.orderId  }}</span>
           <span
             class="order-status"
             [ngClass]="getStatusClass(order.status)">
@@ -66,18 +69,18 @@ import {RouterModule} from '@angular/router';
 
         <div class="order-details">
           <div class="info-row">
-            <span class="label">创建时间:</span>
+            <span class="label">created time:</span>
             <span>{{ formatDate(order.createAt) }}</span>
           </div>
           <div class="info-row">
-            <span class="label">总金额:</span>
+            <span class="label">total:</span>
             <span class="amount">¥{{ order.totalAmount.toFixed(2) }}</span>
           </div>
         </div>
 
         <div class="order-actions">
-          <button [routerLink]="['/orders', order.orderId]">查看详情</button>
-          <button *ngIf="order.status === 'PENDING'" class="primary-btn">去支付</button>
+<!--          <button [routerLink]="['/orders', order.orderId]">view</button>-->
+          <button *ngIf="order.status === 'PENDING'" class="primary-btn" (click)="handlePay(order.orderId)">go to pay</button>
         </div>
       </div>
     </div>
@@ -92,7 +95,8 @@ export class MyOrdersComponent implements OnInit {
   isLoading: boolean = true;
   errorMessage: string = '';
 
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService,
+              private cartService : CartService) { }
 
   ngOnInit(): void {
     this.loadOrders();
@@ -142,5 +146,20 @@ export class MyOrdersComponent implements OnInit {
 
   formatDate(dateString: string): string {
     return new Date(dateString).toLocaleString('zh-CN');
+  }
+
+  async handlePay(orderId: string) {
+
+
+    const paymentResponse = await firstValueFrom(
+      this.cartService.createPaymentSession(orderId)
+    );
+
+    // 3. 重定向到 Stripe 支付页面
+    if (paymentResponse && paymentResponse.url) {
+      window.location.href = paymentResponse.url;
+    } else {
+      console.error("Invalid payment response", paymentResponse);
+    }
   }
 }

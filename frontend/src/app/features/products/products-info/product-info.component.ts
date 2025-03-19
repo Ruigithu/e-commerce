@@ -6,6 +6,8 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import './product-info.style.css'
 import {Header} from '../../../common/components/header/header.component';
 import {CartService} from '../../orders/carts/cart.service';
+import {ProductImage} from '../product-image.model';
+import {environment} from '../../../environment';
 
 @Component({
   selector: `product-info`,
@@ -28,20 +30,20 @@ import {CartService} from '../../orders/carts/cart.service';
         <div class="top-half">
           <div class="item-pictures">
             <div class="main-image-container">
-              <img [src]="'assets/images/laptop.png'" alt="laptop" class="product-image"/>
+              <img [src]="getImageUrl(productImages[0])" alt="laptop" class="product-image"/>
               <div class="image-overlay">
                 <span class="zoom-hint">🔍 点击放大</span>
               </div>
             </div>
-            <div class="thumbnail-container">
+            <div class="thumbnail-container" *ngIf="productImages && productImages.length > 0">
               <div class="thumbnail active">
-                <img [src]="'assets/images/laptop.png'" alt="thumbnail 1"/>
+                <img [src]="getImageUrl(productImages[0])" alt="thumbnail 1"/>
               </div>
-              <div class="thumbnail">
-                <img [src]="'assets/images/laptop.png'" alt="thumbnail 2"/>
+              <div class="thumbnail" *ngIf="productImages.length > 1">
+                <img [src]="getImageUrl(productImages[1])" alt="thumbnail 2"/>
               </div>
-              <div class="thumbnail">
-                <img [src]="'assets/images/laptop.png'" alt="thumbnail 3"/>
+              <div class="thumbnail" *ngIf="productImages.length > 2">
+                <img [src]="getImageUrl(productImages[2])" alt="thumbnail 3"/>
               </div>
             </div>
           </div>
@@ -147,6 +149,8 @@ export class ProductInfoComponent implements OnInit {
   product!: Product;
   isInCart: boolean = false;
   quantity: number = 1;
+  productImages!:ProductImage[];
+  cartId: string | null = null;
 
   constructor(
     private productService: ProductService,
@@ -162,6 +166,11 @@ export class ProductInfoComponent implements OnInit {
     } else {
       console.error('productId 未定义');
     }
+
+  }
+  getImageUrl(image: ProductImage): string {
+    console.log(`${environment.apiUrl}/products/${image.imageUrl}`);
+    return `${environment.apiUrl}/products/${image.imageUrl}`;
   }
 
   loadProductInfo(productId: string): void {
@@ -171,6 +180,13 @@ export class ProductInfoComponent implements OnInit {
         this.product = data;
       },
       (error) => console.error('加载商品失败:', error)
+    );
+    this.productService.getProductImages(productId).subscribe(
+      (data)=>{
+        console.log(data);
+        this.productImages=data;
+      },
+      (error) => console.error('加载商品图片失败:', error)
     );
   }
 
@@ -223,6 +239,10 @@ export class ProductInfoComponent implements OnInit {
       this.quantity--;
     }
   }
+
+
+
+
 }
 
 

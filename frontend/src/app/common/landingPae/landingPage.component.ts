@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Header} from '../components/header/header.component';
-import {ProductListComponent} from '../../features/products/products-list/ product-list.component';
+import {ProductListComponent} from '../../features/products/products-list/product-list.component';
 
 @Component({
   selector: `app-landing-page`,

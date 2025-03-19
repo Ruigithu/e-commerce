@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -30,7 +31,40 @@ public class AddressController {
     @PostMapping("/addAddress")
     public Address addAddress(@RequestBody Address address) {
         System.out.println(address.getAddressId());
+        try {
+            if(address.isDefaultAddress()){
+                Address address1 = service.getDefaultAddressByUserId(address.getUserId());
+                address1.setDefaultAddress(false);
+                service.updateDefaultAddress(address1);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
        return service.save(address);
 
+    }
+    @DeleteMapping("/deleteAddress/{addressId}")
+    public void deleteAddress(@PathVariable UUID addressId) {
+        System.out.println(addressId);
+        Optional<Address> address = service.getAddress(addressId);
+        try {
+            if (address.isPresent()&& address.get().isDefaultAddress()) {
+                Address newDefault=  service.getTheSecondAddress(address.get().getUserId());
+                newDefault.setDefaultAddress(true);
+                service.updateDefaultAddress(newDefault);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        service.deleteAddress(addressId);
+
+    }
+    @PutMapping("/updateAddress/{addressId}")
+    public Address updateAddress(@PathVariable UUID addressId,
+                                       @RequestBody Address address) {
+
+        return  service.updateAddress(addressId,address);
     }
 }

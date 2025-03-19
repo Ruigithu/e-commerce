@@ -46,10 +46,10 @@ import {ActivatedRoute, Router} from '@angular/router';
               </div>
               <div class="address-item__actions" *ngIf="!selectionMode">
                 <button class="btn btn-outline btn-icon" (click)="editAddress(address)">
-                  <i class="fas fa-edit"></i>编辑
+                  <i class="fas fa-edit"></i>Edit
                 </button>
                 <button class="btn btn-outline btn-icon" (click)="deleteAddress(address.addressId)">
-                  <i class="fas fa-trash"></i>删除
+                  <i class="fas fa-trash"></i>Delete
                 </button>
               </div>
             </div>
@@ -129,7 +129,7 @@ export class AddressListComponent implements OnInit {
   deleteAddress(addressId: string) {
     if (confirm('确定要删除这个地址吗？')) {
       this.addressService.deleteAddress(addressId).subscribe(() => {
-        this.addresses = this.addresses.filter(addr => addr.addressId !== addressId);
+        this.loadAddresses();
       });
     }
   }

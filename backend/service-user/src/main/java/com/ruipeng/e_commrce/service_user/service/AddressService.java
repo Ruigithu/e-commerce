@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,5 +34,29 @@ public class AddressService {
 
     public Address save(Address address) {
         return addressRepo.save(address);
+    }
+
+    public void deleteAddress(UUID addressId) {
+        addressRepo.deleteById(addressId);
+    }
+
+    public Optional<Address> getAddress(UUID addressId) {
+       return addressRepo.findById(addressId);
+    }
+
+    public Address getTheSecondAddress(UUID userId) {
+      return  addressRepo.getTheSecondAddress(userId);
+    }
+
+    public void updateDefaultAddress(Address newDefault) {
+        addressRepo.updateNewDefault(newDefault.getAddressId(),newDefault.isDefaultAddress());
+    }
+
+    public Address updateAddress(UUID addressId, Address address) {
+        Optional<Address> existingAddress = addressRepo.findById(address.getAddressId());
+        if (existingAddress.isPresent()) {
+            return addressRepo.save(address);
+        }
+        return null;
     }
 }

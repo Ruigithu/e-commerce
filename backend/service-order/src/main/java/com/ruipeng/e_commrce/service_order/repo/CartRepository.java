@@ -15,4 +15,5 @@ public interface CartRepository extends JpaRepository<ShoppingCart, UUID> {
 
     @Query("SELECT s.cartId FROM ShoppingCart s WHERE s.userId = ?1")
     UUID getCartIdByUserId(UUID userId);
+
 }

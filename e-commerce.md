@@ -170,7 +170,7 @@
 
 ```
 
-+ service.ts
++ serviceenvironment.ts
   
   ```typescript
   //Injectable 是 Angular 提供的一个装饰器，用于标记一个类是可以被注入的服务。
@@ -222,7 +222,7 @@
   
   #### 示例：
   
-  1. **在 `app.routes.ts` 中定义路由规则**：只需要在这里配置
+  1. **在 `app.routesenvironment.ts` 中定义路由规则**：只需要在这里配置
   
   ```typescript
   import { Routes } from '@angular/router'; 
@@ -236,7 +236,7 @@
   
   
   
-  2. **在 `app.config.ts` 中配置路由**：
+  2. **在 `app.configenvironment.ts` 中配置路由**：
   
   ```typescript
   import { ApplicationConfig } from '@angular/core'; 
@@ -249,7 +249,7 @@
   
   `
   
-  3. **更新 `main.ts` 引导应用**：
+  3. **更新 `mainenvironment.ts` 引导应用**：
   
   ```typescript
   import { bootstrapApplication } from '@angular/platform-browser'; 
@@ -360,7 +360,7 @@
   
   ### 服务代码
   
-  `product.service.ts`:
+  `product.serviceenvironment.ts`:
   
   ```typescript
   import { Injectable } from '@angular/core';
@@ -392,7 +392,7 @@
   
   ### 组件代码
   
-  `product-list.component.ts`:
+  `product-list.componentenvironment.ts`:
   
   ```typescript
   import { Component, OnInit } from '@angular/core';
@@ -451,7 +451,7 @@
   
   ### 配置路由
   
-  `app.routes.ts`:
+  `app.routesenvironment.ts`:
   
   ```typescript
   import { Routes } from '@angular/router';
@@ -465,7 +465,7 @@
   
   ## 6. 添加 HttpClientModule
   
-  在 `app.config.ts` 中，确保引入了 `HttpClientModule`：
+  在 `app.configenvironment.ts` 中，确保引入了 `HttpClientModule`：
   
   ```typescript
   import { ApplicationConfig } from '@angular/core';

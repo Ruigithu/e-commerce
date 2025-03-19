@@ -23,11 +23,11 @@ export class AddressService {
   }
 
   updateAddress(address: Address): Observable<Address> {
-    return this.http.put<Address>(`http://localhost:8080/users/addresses/${address.addressId}`, address);
+    return this.http.put<Address>(`http://localhost:8080/users/updateAddress/${address.addressId}`, address);
   }
 
   deleteAddress(addressId: string): Observable<void> {
-    return this.http.delete<void>(`http://localhost:8080/users/addresses/${addressId}`);
+    return this.http.delete<void>(`http://localhost:8080/users/deleteAddress/${addressId}`);
   }
   selectAddress(address: Address) {
     this.selectedAddressSource.next(address);
