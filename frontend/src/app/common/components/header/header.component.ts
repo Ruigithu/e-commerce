@@ -3,22 +3,30 @@ import { SigninComponentButton} from '../button/login/signin-button.component';
 import {ProductService} from '../../../features/products/product.service';
 import {ProductCategory} from '../../../features/products/product-category.model';
 import {NgForOf, NgIf} from '@angular/common';
-import {Router, RouterModule} from '@angular/router';
+import {Router, RouterLink, RouterModule} from '@angular/router';
 import {UserMenuComponent} from './user-menu.component';
 
 @Component({
   selector: 'app-header',
   template: `
     <div class="header">
-      <div class="the-first-row">
-        <img [src]="'assets/icons/shopper.png'" alt="logo" class="icon">
-        <div class="search-bar">
-          <input type="text" placeholder="search what you want to buy">
+      <div class="header-main">
+        <div class="logo-container">
+          <img [routerLink]="['/home']" [src]="'assets/icons/shopper.png'" alt="BuyBuy" class="logo">
+          <h1 class="brand-name" [routerLink]="['/home']">BuyBuy</h1>
         </div>
+
+        <div class="search-bar">
+          <i class="fa-solid fa-search search-icon"></i>
+          <input type="text" placeholder="Search for products...">
+          <button class="search-button">Search</button>
+        </div>
+
         <div class="right-buttons">
           <ng-container *ngIf="isLoggedIn; else notLoggedIn">
             <button class="cart-button" (click)="navigateToCart()">
-              <i class="fa-solid fa-cart-shopping" ></i>
+              <i class="fa-solid fa-cart-shopping"></i>
+              <span class="cart-count">3</span>
             </button>
             <user-menu></user-menu>
           </ng-container>
@@ -27,78 +35,179 @@ import {UserMenuComponent} from './user-menu.component';
           </ng-template>
         </div>
       </div>
-      <div class="the-second-row">
-        <h4 class="category-item" [routerLink]="['/home']">Home</h4>
+
+      <nav class="categories-nav">
+        <div class="category-item" [routerLink]="['/home']">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
+        </div>
         <div *ngFor="let category of productCategories"
              (click)="navigateToSpecificCategory(category.categoryId)"
              class="category-item">
-          <h4>{{category.name}}</h4>
+          <span>{{category.name}}</span>
         </div>
-      </div>
+      </nav>
     </div>
   `,
   styles: [`
     .header {
-      display: grid;
-      grid-template-rows: auto auto;
-      border: none;
-      width: auto;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      background-color: #ffffff;
     }
 
-    .the-first-row {
+    .header-main {
       display: flex;
-      flex-direction: row;
-      padding: 30px;
       justify-content: space-between;
       align-items: center;
-      background-color: #F5ECD5;
+      padding: 1rem 2rem;
     }
 
-    .icon {
-      height: 65px;
-      width: 65px;
+    .logo-container {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .logo {
+      height: 40px;
+      width: 40px;
+      margin-right: 0.5rem;
+    }
+
+    .brand-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #578E7E;
+      margin: 0;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      width: 40%;
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+
+    .search-bar:focus-within {
+      box-shadow: 0 0 0 2px rgba(87, 142, 126, 0.3);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      color: #999;
     }
 
     input {
-      width: 600px;
-      height: 25px;
+      width: 100%;
+      height: 44px;
+      padding: 0 1rem 0 2.5rem;
+      border: none;
+      outline: none;
+      font-size: 0.9rem;
     }
 
-    .the-second-row {
-      display: flex;
-      flex-direction: row;
-      gap: 20px;
-      padding: 10px 30px;
-      margin-bottom: 0;
+    .search-button {
+      background-color: #578E7E;
+      color: white;
+      border: none;
+      padding: 0 1.5rem;
+      height: 44px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+
+    .search-button:hover {
+      background-color: #477a6c;
     }
 
     .right-buttons {
       display: flex;
-      gap: 16px;
-      align-items: flex-start;
+      align-items: center;
+      gap: 1rem;
     }
 
     .cart-button {
-      width: 50px;
-      height: 50px;
+      position: relative;
       background: none;
       border: none;
       cursor: pointer;
-      padding: 8px;
-    }
-
-    .fa-cart-shopping {
-      width: 35px;
-      height: 35px;
-      color: #3b4591;
-    }
-    .category-item {
-      cursor: pointer;
-      padding: 5px 10px;
-      border-radius: 4px;
+      font-size: 1.2rem;
+      color: #333;
+      padding: 0.5rem;
+      border-radius: 50%;
       transition: background-color 0.2s;
     }
 
+    .cart-button:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: #ff5252;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .categories-nav {
+      display: flex;
+      gap: 1.5rem;
+      background-color: #f9f9f9;
+      padding: 0.75rem 2rem;
+      overflow-x: auto;
+    }
+
+    .category-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .category-item:hover {
+      background-color: rgba(87, 142, 126, 0.1);
+      color: #578E7E;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header-main {
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .search-bar {
+        width: 100%;
+        order: 3;
+      }
+
+      .categories-nav {
+        padding: 0.5rem 1rem;
+      }
+    }
   `],
   imports: [
     SigninComponentButton,
@@ -106,13 +215,13 @@ import {UserMenuComponent} from './user-menu.component';
     NgIf,
     UserMenuComponent,
     RouterModule,
+    RouterLink
   ],
   standalone: true
 })
 export class Header implements OnInit {
   productCategories: ProductCategory[] = [];
   isLoggedIn = false;
-
 
   constructor(
     private productService: ProductService,
@@ -132,16 +241,16 @@ export class Header implements OnInit {
   loadProductCategory(): void {
     this.productService.getProductCategory().subscribe(
       (data) => {
-        console.log('获取到的商品种类数据:', data);
+        console.log('Categories loaded:', data);
         this.productCategories = data;
       },
-      (error) => console.error('加载商品种类失败:', error)
+      (error) => console.error('Failed to load categories:', error)
     );
   }
 
-  navigateToSpecificCategory(categoryId:string){
-    this.router.navigate([`/product-list/${categoryId}`])
-}
+  navigateToSpecificCategory(categoryId: string) {
+    this.router.navigate([`/product-list/${categoryId}`]);
+  }
 
   navigateToCart() {
     this.router.navigate(['/go-to-cart']);

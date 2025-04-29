@@ -3,9 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export enum OrderStatus {
-  PENDING = 'PENDING',
-  PAID = 'PAID',
-  REFUND = 'REFUND'
+  PENDING = 'PENDING',    // 待付款
+  PAID = 'PAID',          // 已支付
+  SHIPPED = 'SHIPPED',    // 已发货(新增)
+  DELIVERED = 'DELIVERED', // 已送达(新增)
+  COMPLETED = 'COMPLETED', // 已完成(新增)
+  CANCELLED = 'CANCELLED', // 已取消(新增)
+  REFUND = 'REFUND'       // 已退款
 }
 
 export interface OrderItem {
@@ -55,7 +59,11 @@ export class OrderService {
     const statusMap = {
       [OrderStatus.PENDING]: 'Unpaid',
       [OrderStatus.PAID]: 'Paid',
-      [OrderStatus.REFUND]: 'Refunded'
+      [OrderStatus.REFUND]: 'Refunded',
+      [OrderStatus.SHIPPED]: 'Shipped',
+      [OrderStatus.COMPLETED]: 'Completed',
+      [OrderStatus.DELIVERED]: 'Delivered',
+      [OrderStatus.CANCELLED]:'Cancelled'
     };
     return statusMap[status] || 'unknown';
   }

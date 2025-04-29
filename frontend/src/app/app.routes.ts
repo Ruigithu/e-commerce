@@ -12,6 +12,8 @@ import {SpecificCategoryComponent} from './features/products/products-list/speci
 import {AddressListComponent} from './features/users/addresss/address-list/address-list.component';
 import {AddressFormComponent} from './features/users/addresss/address-list/address-form.component';
 import {MyOrdersComponent} from './features/orders/my-orders/my-orders.component';
+import {MerchantDashboardComponent} from './features/merchants/merchant-dashboard-component';
+import {ProductManagementComponent} from './features/merchants/products-management.component';
 
 export const routes: Routes = [
   {path: '', component: LandingPage, pathMatch: 'full'},  // 添加 pathMatch: 'full'
@@ -29,4 +31,21 @@ export const routes: Routes = [
   {path: 'modify-address', component: AddressFormComponent},
   {path: 'my-orders', component: MyOrdersComponent},
 
+  {
+    path: 'merchant',
+    // component: MerchantLayoutComponent,
+    // canActivate: [MerchantGuard], // 确保用户有商家权限
+    children: [
+      { path: 'dashboard', component: MerchantDashboardComponent },
+      { path: 'products', component: ProductManagementComponent },
+      // { path: 'products/new', component: ProductFormComponent },
+      // { path: 'products/edit/:id', component: ProductFormComponent },
+      // { path: 'orders', component: OrderManagementComponent },
+      // { path: 'orders/:id', component: OrderDetailComponent },
+      // { path: 'shipping', component: ShippingManagementComponent },
+      // { path: 'settings', component: StoreSettingsComponent },
+    ]
+  }
+
 ];
+

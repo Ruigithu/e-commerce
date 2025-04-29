@@ -1,110 +1,337 @@
-//@angular/core: 引入了 Angular 核心模块中的 Component 和 OnInit。
-// Component 是用于定义组件的装饰器，而 OnInit 是一个生命周期钩子，用于在组件初始化时执行逻辑。
 import { Component, OnInit } from '@angular/core';
-//product.model: 引入了 Product 模型，表示商品的数据结构。
 import { Product } from '../product.model';
-//@angular/common: 引入了 CommonModule.
-// 这是 Angular 中常用的公共模块，提供了一些常用指令（如 ngIf、ngFor）和管道。
 import { CommonModule } from '@angular/common';
-//product.service: 引入了 ProductService，这是一个服务，用于获取商品数据。
 import { ProductService } from '../product.service';
-import {RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
-//
 @Component({
   selector: 'app-product-list',
   template: `
     <div class="container">
-      <h2>Products List</h2>
-      <div class="product-grid" >
-        <!--*ngFor="let product of products":
-        使用 ngFor 指令循环遍历 products 数组，生成每个商品的卡片。-->
-        <div *ngFor="let product of products" class="product-card" [routerLink]="['/product', product.productId]">
-          <h3>{{ product.name }}</h3>
-          <p>Price: €{{ product.price }}</p>
-          <p>{{ product.description }}</p>
+      <div class="product-header">
+        <h2>Featured Products</h2>
+        <div class="product-filters">
+          <button class="filter-button active">All</button>
+          <button class="filter-button">New Arrivals</button>
+          <button class="filter-button">Best Sellers</button>
+          <button class="filter-button">On Sale</button>
         </div>
+      </div>
+
+      <div *ngIf="loading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading products...</p>
+      </div>
+
+      <div *ngIf="!loading" class="product-grid">
+        <div *ngFor="let product of products" class="product-card" [routerLink]="['/product', product.productId]">
+          <div class="product-image">
+            <img src="https://via.placeholder.com/200x200" alt="{{ product.name }}">
+            <div class="product-actions">
+              <button class="action-button">
+                <i class="fa-solid fa-cart-plus"></i>
+              </button>
+              <button class="action-button">
+                <i class="fa-solid fa-heart"></i>
+              </button>
+            </div>
+            <div class="product-badge" *ngIf="product.stock < 50">Limited Stock</div>
+          </div>
+
+          <div class="product-content">
+            <h3 class="product-name">{{ product.name }}</h3>
+            <div class="product-rating">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+              <span>(24)</span>
+            </div>
+            <p class="product-description">{{ truncateDescription(product.description) }}</p>
+            <div class="product-price">
+              <span class="current-price">€{{ product.price.toFixed(2) }}</span>
+              <span class="original-price" *ngIf="hasDiscount(product)">€{{ (product.price * 1.2).toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!loading && products.length === 0" class="empty-state">
+        <i class="fa-solid fa-box-open"></i>
+        <p>No products found</p>
+        <button class="refresh-button" (click)="loadProducts()">Refresh</button>
       </div>
     </div>
   `,
-  //standalone: 这是 Angular 14 及以后版本中引入的新属性，表示该组件是独立的，不依赖于其他模块的导入。
   standalone: true,
-  //CommonModule 是 Angular 提供的一个模块，它包含了一些常用的指令和管道，主要用于 Angular 模块的共享功能。常见的指令包括：
-  //
-  // ngIf: 条件渲染。根据条件来决定是否渲染某个元素。
-  // ngFor: 循环渲染。用于遍历数组并为每个数组元素创建一个 DOM 元素。
-  // ngClass: 动态添加/移除 CSS 类。
-  // ngStyle: 动态应用样式。
   imports: [CommonModule, RouterLink],
-  //你需要依赖其他模块的导入，当你的组件需要使用来自其他模块的功能时。比如，如果你想使用表单功能，你需要导入 FormsModule 或 ReactiveFormsModule；如果你需要 HTTP 请求功能，你需要导入 HttpClientModule。
-  //
-  // 例如：
-  //
-  // FormsModule: 用于模板驱动表单。
-  // ReactiveFormsModule: 用于响应式表单。
-  // HttpClientModule: 用于发起 HTTP 请求。
-  // 你可以在 Angular 模块的 imports 数组中导入这些模块：
-  //
-  // typescript
-  // Copy
-  // Edit
-  // import { FormsModule } from '@angular/forms';
-  // import { HttpClientModule } from '@angular/common/http';
-  //
-  // @NgModule({
-  //   imports: [FormsModule, HttpClientModule],
-  //   // 其他配置...
-  // })
-  // export class AppModule {}
   styles: [`
     .container {
-      padding: 10px;
-      margin-top: 0;
-      text-align: center;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    h2{
-      margin-top: 0;
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+    }
+
+    .product-filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-button {
+      background: none;
+      border: 1px solid #e0e0e0;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-button:hover {
+      background-color: #f5f5f5;
+    }
+
+    .filter-button.active {
+      background-color: #578E7E;
+      color: white;
+      border-color: #578E7E;
+    }
+
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 0;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(87, 142, 126, 0.3);
+      border-radius: 50%;
+      border-top-color: #578E7E;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .product-grid {
-      display: flex;
-      flex-wrap: wrap; /* 允许换行 */
-      justify-content: space-between; /* 均匀分布 */
-      gap: 20px; /* 控制间距 */
-      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
     }
 
     .product-card {
-      flex: 1 1 calc(33.333% - 20px); /* 让每个卡片占 1/3 宽度，并考虑间距 */
-      max-width: 200px; /* 限制最大宽度 */
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      text-align: center;
-      background: #fff;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s; /* 动画效果 */
-    }
-    .product-card:hover {
-      transform: scale(1.05); /* 鼠标悬停时放大卡片 */
-    }
-
-    button {
-      padding: 10px 20px;
-      background-color: #3D3D3D;
-      color: white;
-      border: none;
-      border-radius: 4px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s;
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #3D3D3D;
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .product-card:hover .product-image img {
+      transform: scale(1.05);
+    }
+
+    .product-actions {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      opacity: 0;
+      transform: translateX(10px);
+      transition: all 0.3s;
+    }
+
+    .product-card:hover .product-actions {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .action-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background-color: white;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s;
+    }
+
+    .action-button:hover {
+      background-color: #578E7E;
+      color: white;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      background-color: #ff5252;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .product-content {
+      padding: 1rem;
+    }
+
+    .product-name {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      color: #333;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .product-rating i {
+      color: #ffc107;
+    }
+
+    .product-rating span {
+      color: #666;
+      margin-left: 0.25rem;
+    }
+
+    .product-description {
+      font-size: 0.85rem;
+      color: #666;
+      margin: 0 0 0.75rem 0;
+      line-height: 1.4;
+      height: 2.4rem;
+      overflow: hidden;
+    }
+
+    .product-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .current-price {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #578E7E;
+    }
+
+    .original-price {
+      font-size: 0.9rem;
+      color: #999;
+      text-decoration: line-through;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 0;
+      color: #666;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #ddd;
+    }
+
+    .refresh-button {
+      background-color: #578E7E;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .refresh-button:hover {
+      background-color: #477a6c;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .product-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .product-filters {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
     }
   `]
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
+  loading: boolean = true;
 
   constructor(private productService: ProductService) {}
 
@@ -113,14 +340,26 @@ export class ProductListComponent implements OnInit {
   }
 
   loadProducts(): void {
+    this.loading = true;
     this.productService.getProducts().subscribe(
       (data) => {
-        console.log('获取到的商品数据:', data);
+        console.log('Products loaded:', data);
         this.products = data;
+        this.loading = false;
       },
-      (error) => console.error('加载商品失败:', error)
+      (error) => {
+        console.error('Failed to load products:', error);
+        this.loading = false;
+      }
     );
   }
 
-  protected readonly RouterLink = RouterLink;
+  truncateDescription(description: string): string {
+    return description.length > 60 ? description.substring(0, 60) + '...' : description;
+  }
+
+  hasDiscount(product: Product): boolean {
+    // This is a placeholder. In a real application, you might have a discount field
+    return product.price > 50; // Just for demonstration
+  }
 }
