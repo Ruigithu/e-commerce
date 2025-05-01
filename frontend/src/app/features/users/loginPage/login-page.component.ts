@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Router, RouterLink} from '@angular/router';
 import {LoginResponse} from './loginresponse.model';
 import {CommonModule} from '@angular/common';
+import {environment} from '../../../environment';
 
 @Component({
   selector: `login-page`,
@@ -343,6 +344,7 @@ import {CommonModule} from '@angular/common';
   `]
 })
 export class LoginPageComponent {
+  private apiBaseUrl = environment.apiUrl;
   loginForm: FormGroup;
   isLoading = false;
   showPassword = false;
@@ -373,7 +375,7 @@ export class LoginPageComponent {
       this.isLoading = true;
       this.errorMessage = null;
 
-      this.http.post<LoginResponse>('http://localhost:8080/login', {
+      this.http.post<LoginResponse>(`${this.apiBaseUrl}/login`, {
         username: this.loginForm.value.username,
         password: this.loginForm.value.password
       }, {
@@ -389,6 +391,7 @@ export class LoginPageComponent {
             // Store user info
             localStorage.setItem('userId', String(body.userId));
             localStorage.setItem('userName', String(body.userName));
+            localStorage.setItem('isMerchant',String(body.isMerchant));
 
             if (body.defaultAddress) {
               localStorage.setItem('defaultAddress', JSON.stringify(body.defaultAddress));

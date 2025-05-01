@@ -1,0 +1,482 @@
+<div class="orders-management-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Order Management</h1>
+      <p class="subtitle">View and manage customer orders</p>
+    </div>
+    <div class="header-actions">
+      <div class="date-filter">
+        <button class="date-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          Last 30 days
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search orders by ID or customer name..."
+          [(ngModel)]="searchTerm"
+          (input)="applyFilters()"
+        >
+      </div>
+    </div>
+
+    <div class="filter-controls">
+      <select class="filter-dropdown" [(ngModel)]="statusFilter" (change)="applyFilters()">
+        <option value="">All Statuses</option>
+        <option value="PAID">Awaiting Processing</option>
+        <option value="PROCESSING">Processing</option>
+        <option value="SHIPPED">Shipped</option>
+        <option value="DELIVERED">Delivered</option>
+        <option value="COMPLETED">Completed</option>
+        <option value="CANCELLED">Cancelled</option>
+        <option value="REFUND_REQUESTED">Refund Requested</option>
+      </select>
+
+      <select class="filter-dropdown" [(ngModel)]="sortOption" (change)="applyFilters()">
+        <option value="date_desc">Newest First</option>
+        <option value="date_asc">Oldest First</option>
+        <option value="amount_desc">Amount (High-Low)</option>
+        <option value="amount_asc">Amount (Low-High)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Orders Section -->
+  <div class="orders-section">
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading orders...</p>
+    </div>
+
+    <div *ngIf="!isLoading" class="table-container">
+      <table *ngIf="paginatedOrders.length > 0" class="orders-table">
+        <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Date</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let order of paginatedOrders">
+          <td class="order-id">{{ order.orderId.substring(0, 8) }}</td>
+          <td class="customer-info">
+            <div>{{ order.customerName }}</div>
+            <div class="customer-email">{{ order.customerEmail }}</div>
+          </td>
+          <td>{{ formatDate(order.orderDate) }}</td>
+          <td class="order-items">
+            <span class="item-count">{{ order.items.length }} item(s)</span>
+          </td>
+          <td class="order-total">€{{ order.totalAmount.toFixed(2) }}</td>
+          <td>
+              <span class="status-badge" [ngClass]="getStatusClass(order.status)">
+                {{ getStatusText(order.status) }}
+              </span>
+          </td>
+          <td class="actions-cell">
+            <button class="action-button view-button" (click)="viewOrderDetails(order)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+
+            <button
+              *ngIf="order.status === 'PAID'"
+              class="action-button process-button"
+              (click)="processOrder(order.orderId)"
+              title="Mark as Processing"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </button>
+
+            <button
+              *ngIf="order.status === 'PROCESSING'"
+              class="action-button ship-button"
+              (click)="showShipOrderModal(order.orderId)"
+              title="Ship Order"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+            </button>
+
+            <button
+              *ngIf="order.status === 'SHIPPED'"
+              class="action-button deliver-button"
+              (click)="markAsDelivered(order.orderId)"
+              title="Mark as Delivered"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="filteredOrders.length === 0 && !isLoading" class="empty-state">
+        <div class="empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+        </div>
+        <h3>No orders found</h3>
+        <p>No orders match your current filters or search criteria.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div *ngIf="!isLoading && filteredOrders.length > 0" class="pagination-container">
+    <div class="pagination-info">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to
+      {{ Math.min(currentPage * pageSize, filteredOrders.length) }} of
+      {{ filteredOrders.length }} orders
+    </div>
+    <div class="pagination-controls">
+      <button
+        class="pagination-button"
+        [disabled]="currentPage === 1"
+        (click)="changePage(currentPage - 1)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <div class="page-numbers">
+        <button
+          *ngFor="let page of getPageNumbers()"
+          class="page-number"
+          [class.active]="page === currentPage"
+          (click)="changePage(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button
+        class="pagination-button"
+        [disabled]="currentPage === Math.ceil(filteredOrders.length / pageSize)"
+        (click)="changePage(currentPage + 1)"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Order Details Modal -->
+  <div *ngIf="showOrderDetailsModal" class="modal-overlay" (click)="closeOrderDetailsModal($event)">
+    <div class="modal-container order-details-modal">
+      <div class="modal-header">
+        <h2>Order Details</h2>
+        <button class="close-button" (click)="closeOrderDetailsModal($event)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div *ngIf="selectedOrder">
+          <div class="order-info-section">
+            <div class="order-header-details">
+              <div class="order-id-container">
+                <span class="label">Order ID:</span>
+                <span class="value">{{ selectedOrder.orderId }}</span>
+              </div>
+              <div class="order-date-container">
+                <span class="label">Date:</span>
+                <span class="value">{{ formatDate(selectedOrder.orderDate) }}</span>
+              </div>
+              <div class="order-status-container">
+                <span class="label">Status:</span>
+                <span class="status-badge" [ngClass]="getStatusClass(selectedOrder.status)">
+                  {{ getStatusText(selectedOrder.status) }}
+                </span>
+              </div>
+            </div>
+
+            <div class="details-columns">
+              <div class="customer-details">
+                <h3>Customer Information</h3>
+                <div class="detail-row">
+                  <span class="label">Name:</span>
+                  <span class="value">{{ selectedOrder.customerName }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Email:</span>
+                  <span class="value">{{ selectedOrder.customerEmail }}</span>
+                </div>
+              </div>
+
+              <div class="shipping-details">
+                <h3>Shipping Address</h3>
+                <div class="detail-row">
+                  <span class="label">Recipient:</span>
+                  <span class="value">{{ selectedOrder.shippingAddress.receiverName }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Address:</span>
+                  <span class="value">{{ selectedOrder.shippingAddress.addressLine }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">City:</span>
+                  <span class="value">{{ selectedOrder.shippingAddress.city }}, {{ selectedOrder.shippingAddress.postalCode }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="label">Phone:</span>
+                  <span class="value">{{ selectedOrder.shippingAddress.phone }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="selectedOrder.trackingNumber" class="tracking-info">
+              <h3>Shipping Information</h3>
+              <div class="detail-row">
+                <span class="label">Tracking Number:</span>
+                <span class="value">{{ selectedOrder.trackingNumber }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Carrier:</span>
+                <span class="value">{{ selectedOrder.shippingCarrier }}</span>
+              </div>
+            </div>
+
+            <div class="order-items-section">
+              <h3>Order Items</h3>
+              <table class="items-table">
+                <thead>
+                <tr>
+                  <th class="item-image-col"></th>
+                  <th class="item-details-col">Product</th>
+                  <th class="item-price-col">Price</th>
+                  <th class="item-quantity-col">Quantity</th>
+                  <th class="item-total-col">Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of selectedOrder.items">
+                  <td class="item-image-cell">
+                    <div class="item-image-container">
+                      <img [src]="item.imageUrl || 'assets/images/placeholder.png'" [alt]="item.productName">
+                    </div>
+                  </td>
+                  <td class="item-details-cell">
+                    <div class="item-name">{{ item.productName }}</div>
+                    <div class="item-id">Product ID: {{ item.productId.substring(0, 8) }}</div>
+                  </td>
+                  <td class="item-price-cell">€{{ item.unitPrice.toFixed(2) }}</td>
+                  <td class="item-quantity-cell">{{ item.quantity }}</td>
+                  <td class="item-total-cell">€{{ (item.unitPrice * item.quantity).toFixed(2) }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="order-totals">
+              <div class="total-row subtotal">
+                <span class="label">Subtotal:</span>
+                <span class="value">€{{ calculateSubtotal().toFixed(2) }}</span>
+              </div>
+              <div class="total-row shipping">
+                <span class="label">Shipping:</span>
+                <span class="value">€5.00</span>
+              </div>
+              <div class="total-row taxes">
+                <span class="label">Tax (20%):</span>
+                <span class="value">€{{ calculateTax().toFixed(2) }}</span>
+              </div>
+              <div class="total-row grand-total">
+                <span class="label">Total:</span>
+                <span class="value">€{{ selectedOrder.totalAmount.toFixed(2) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-notes" *ngIf="selectedOrder.notes">
+            <h3>Notes</h3>
+            <p>{{ selectedOrder.notes }}</p>
+          </div>
+
+          <div class="modal-actions">
+            <div class="action-buttons">
+              <button
+                *ngIf="selectedOrder.status === 'PAID'"
+                class="primary-button"
+                (click)="processOrder(selectedOrder.orderId); closeOrderDetailsModal()"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Mark as Processing
+              </button>
+
+              <button
+                *ngIf="selectedOrder.status === 'PROCESSING'"
+                class="primary-button"
+                (click)="closeOrderDetailsModal(); showShipOrderModal(selectedOrder.orderId)"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13"></rect>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                  <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                  <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                </svg>
+                Ship Order
+              </button>
+
+              <button
+                *ngIf="selectedOrder.status === 'SHIPPED'"
+                class="primary-button"
+                (click)="markAsDelivered(selectedOrder.orderId); closeOrderDetailsModal()"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                Mark as Delivered
+              </button>
+
+              <button class="secondary-button" (click)="closeOrderDetailsModal()">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ship Order Modal -->
+  <div *ngIf="showShipModal" class="modal-overlay" (click)="closeShipModal($event)">
+    <div class="modal-container ship-modal">
+      <div class="modal-header">
+        <h2>Ship Order</h2>
+        <button class="close-button" (click)="closeShipModal($event)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="shipOrder()">
+          <div class="form-group">
+            <label for="tracking-number">Tracking Number *</label>
+            <input
+              type="text"
+              id="tracking-number"
+              [(ngModel)]="shippingInfo.trackingNumber"
+              name="trackingNumber"
+              class="form-control"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="shipping-carrier">Shipping Carrier *</label>
+            <select
+              id="shipping-carrier"
+              [(ngModel)]="shippingInfo.carrier"
+              name="carrier"
+              class="form-control"
+              required
+            >
+              <option value="">Select a carrier</option>
+              <option value="DHL">DHL</option>
+              <option value="FedEx">FedEx</option>
+              <option value="UPS">UPS</option>
+              <option value="USPS">USPS</option>
+              <option value="Royal Mail">Royal Mail</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group" *ngIf="shippingInfo.carrier === 'Other'">
+            <label for="other-carrier">Specify Carrier *</label>
+            <input
+              type="text"
+              id="other-carrier"
+              [(ngModel)]="shippingInfo.otherCarrier"
+              name="otherCarrier"
+              class="form-control"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="shipping-notes">Notes (optional)</label>
+            <textarea
+              id="shipping-notes"
+              [(ngModel)]="shippingInfo.notes"
+              name="notes"
+              class="form-control"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-container">
+              <input
+                type="checkbox"
+                [(ngModel)]="shippingInfo.notifyCustomer"
+                name="notifyCustomer"
+              >
+              <span class="checkbox-label">Send notification email to customer</span>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="secondary-button" (click)="closeShipModal($event)">Cancel</button>
+            <button
+              type="submit"
+              class="primary-button"
+              [disabled]="!shippingInfo.trackingNumber || !getCarrierName()"
+            >
+              Ship Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

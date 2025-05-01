@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Product } from '../products/product.model';
 import { CommonModule } from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environment';
+import {Merchant} from './merchant.modal';
 
 @Component({
   selector: 'app-merchant-dashboard',
@@ -22,8 +25,7 @@ import { CommonModule } from '@angular/common';
         </div>
         <h1 class="register-title">Welcome to Merchant Center</h1>
         <p class="register-description">You haven't registered as a merchant yet. Register now to start selling your products!</p>
-        <button class="register-button" (click)="navigateToRegistration()">Register Your Shop</button>
-      </div>
+        <button class="register-button" (click)="navigateToRegistration()">Register Your Shop</button></div>
     </div>
 
     <!-- Merchant dashboard view -->
@@ -31,7 +33,7 @@ import { CommonModule } from '@angular/common';
       <!-- Top header with stats -->
       <div class="dashboard-header">
         <div class="header-welcome">
-          <h1>Welcome back, {{ storeName }}</h1>
+          <h1>Welcome back, <span class="store-name">{{ storeName }}</span></h1>
           <p class="subtitle">Here's your store performance at a glance</p>
         </div>
         <div class="date-filter">
@@ -176,6 +178,16 @@ import { CommonModule } from '@angular/common';
       display: block;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #333;
+    }
+    .store-name {
+      font-weight: 700;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      background: linear-gradient(90deg, #7a9e9f, #8ca9a6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      display: inline-block;
+      padding: 0 8px;
     }
 
     /* Non-merchant registration styles */
@@ -500,11 +512,14 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class MerchantDashboardComponent implements OnInit {
-  isMerchant=true;
+  private apiBaseUrl = environment.apiUrl;
+
+  isMerchant=false;
   storeName = '';
   todaySales = 0;
   salesChange = 0;
   pendingOrders = 0;
+
   lowStockProducts: Product[] = [];
   salesData: any[] = [];
 
@@ -512,12 +527,15 @@ export class MerchantDashboardComponent implements OnInit {
   isInventoryLoading = true;
   isChartLoading = true;
 
+  userId = localStorage.getItem('userId');
+
   constructor(
-    private router: Router
+    private router: Router,
     // Uncomment and add other services as needed:
     // private merchantService: MerchantService,
     // private orderService: OrderService,
     // private productService: ProductService
+    private http:HttpClient
   ) {}
 
   ngOnInit() {
@@ -527,8 +545,8 @@ export class MerchantDashboardComponent implements OnInit {
   checkMerchantStatus() {
     // This would typically be an API call to get user information
     // For now, we'll simulate it with a mock implementation
-      const is_Merchant = localStorage.getItem("isMerchant");
-      if (is_Merchant!=null){
+      const is_Merchant = localStorage.getItem('isMerchant');
+      if (is_Merchant=='true'){
         this.isMerchant=true;
       }
       if (this.isMerchant) {
@@ -546,12 +564,17 @@ export class MerchantDashboardComponent implements OnInit {
   }
 
   loadMerchantInfo() {
-    // Mock implementation - would be replaced with actual service call
-    setTimeout(() => {
-      this.storeName = 'ABC Store';
-      this.todaySales = 1250.75;
-      this.salesChange = 5.2;
-    }, 800);
+    this.http.get<Merchant>(`${this.apiBaseUrl}/users/getMerchantInformation/${this.userId}`).subscribe(
+      {
+        next: (data: Merchant) => {
+          console.log(data);
+          localStorage.setItem('merchantId',data.merchantId);
+          this.storeName = data.storeName;
+          //get todaySales
+          this.todaySales=0;
+          this.salesChange=0;
+        }
+      })
   }
 
   loadRecentOrders() {

@@ -3,6 +3,10 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {CommonModule} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {Product, ProductStatus} from '../products/product.model';
+import {ProductCategory} from '../products/product-category.model';
+import {ProductService} from '../products/product.service';
+import {MessageService} from '../../common/message.service';
+import {forkJoin, map} from 'rxjs';
 
 @Component({
   selector: 'app-product-management',
@@ -71,7 +75,6 @@ import {Product, ProductStatus} from '../products/product.model';
         </div>
       </div>
 
-      <!-- Products Table -->
       <div class="products-section">
         <div *ngIf="isLoading" class="loading-container">
           <div class="loading-spinner"></div>
@@ -104,13 +107,14 @@ import {Product, ProductStatus} from '../products/product.model';
                   <img *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.name">
                 </td>
                 <td class="product-name">{{ product.name }}</td>
-                <td>{{ product.categoryId }}</td>
+                <td>{{ product.category }}</td>
                 <td class="product-price">€{{ product.price.toFixed(2) }}</td>
                 <td class="product-stock" [class.low-stock]="product.stock < 10">{{ product.stock }}</td>
                 <td>
-                  <span class="status-badge" [class.active]="product.status" [class.inactive]="!product.status">
-                    {{ product.status ? 'Active' : 'Inactive' }}
-                  </span>
+                  <span class="status-badge"
+                        [class.active]="product.status === ProductStatus.ACTIVE"
+                        [class.inactive]="product.status === ProductStatus.INACTIVE">
+                        {{ product.status }}</span>
                 </td>
                 <td class="actions-cell">
                   <div class="action-buttons">
@@ -122,15 +126,15 @@ import {Product, ProductStatus} from '../products/product.model';
                     </button>
                     <button
                       class="action-button"
-                      [class.deactivate-button]="product.status"
-                      [class.activate-button]="!product.status"
+                      [class.deactivate-button]="product.status === ProductStatus.ACTIVE"
+                      [class.activate-button]="product.status === ProductStatus.INACTIVE"
                       (click)="toggleProductStatus(product)"
                     >
-                      <svg *ngIf="product.status" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg *ngIf="product.status === ProductStatus.ACTIVE" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
                         <line x1="12" y1="2" x2="12" y2="12"></line>
                       </svg>
-                      <svg *ngIf="!product.status" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg *ngIf="product.status === ProductStatus.INACTIVE" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M5 12h14"></path>
                         <path d="M12 5v14"></path>
                       </svg>
@@ -902,6 +906,7 @@ export class ProductManagementComponent implements OnInit {
   products: Product[] = [];
   filteredProducts: Product[] = [];
   paginatedProducts: Product[] = [];
+  merchantId= localStorage.getItem('merchantId');
 
   // Pagination
   currentPage = 1;
@@ -924,11 +929,23 @@ export class ProductManagementComponent implements OnInit {
   showDeleteModal = false;
   productToDelete: Product | null = null;
 
-  // Available categories (should come from a service in real app)
-  categories = ['Electronics', 'Clothing', 'Home & Garden', 'Beauty', 'Books', 'Sports', 'Toys', 'Food & Beverages'];
 
-  constructor(private fb: FormBuilder) {
+  // Available categories (should come from a service in real app)
+  categories = [
+    'ELECTRONICS',
+    'CLOTHING',
+    'HOME_APPLIANCES',
+    'BOOKS',
+    'FOOD',
+    'BEAUTY',
+    'SPORTS',
+    'TOYS'
+  ];
+
+  constructor(private fb: FormBuilder,private productService:ProductService, private messageService: MessageService) {
     this.productForm = this.createProductForm();
+    this.productService = productService;
+    this.messageService  = messageService;
   }
 
   ngOnInit(): void {
@@ -948,41 +965,48 @@ export class ProductManagementComponent implements OnInit {
   }
 
   loadProducts(): void {
-    // In a real application, you would call a service to fetch products from the API
-    // For demo purposes, we'll use mock data
-    setTimeout(() => {
-      this.products = this.generateMockProducts();
-      this.applyFilters();
-      this.isLoading = false;
-    }, 1000);
-  }
+    this.isLoading = true;
 
-  generateMockProducts(): Product[] {
-    // Generate mock products
-    const mockProducts: Product[] = [];
+    this.productService.getAllProductsByMerchantId(this.merchantId)
+      .subscribe({
+        next: (products: Product[]) => {
+          this.products = products;
+          products.forEach(
+            (product)=>{
+              console.log(`产品状态是${product.status}`);
+            }
+          )
 
-    for (let i = 1; i <= 52; i++) {
-      const category = this.categories[Math.floor(Math.random() * this.categories.length)];
-      const stock = Math.floor(Math.random() * 100);
+          // 对于每个产品，获取其主图片
+          const imageRequests = products.map(product =>
+            this.productService.getProductMainImage(product.productId).pipe(
+              map(imageUrl => ({productId: product.productId, imageUrl}))
+            )
+          );
 
-      mockProducts.push({
-        productId: `dd`,
-        name: `Product ${i}`,
-        description: `This is a description for Product ${i}. It contains details about the product features and specifications.`,
-        price: parseFloat((10 + Math.random() * 90).toFixed(2)),
-        stock: stock,
-        categoryId: category,
-        imageUrl: i % 3 === 0 ? `https://placeholder.com/300` : '',
-        createdAt: '',
-        images: [],
-        merchantId: '',
-        updatedAt: '', // Some products have images, some don't
-        status: ProductStatus.ACTIVE // 80% active products
+          // 合并所有图片请求的结果
+          forkJoin(imageRequests).subscribe(imageResults => {
+            // 将图片URL添加到相应的产品对象
+            imageResults.forEach(result => {
+              const product = this.products.find(p => p.productId === result.productId);
+              if (product) {
+                product.imageUrl = result.imageUrl;
+              }
+            });
+
+            this.applyFilters(); // 应用过滤器并更新分页
+            this.isLoading = false;
+          });
+        },
+        error: (error) => {
+          this.messageService.showError('Failed to load products: ' + (error.message || 'Unknown error'));
+          console.error('Load products error', error);
+          this.isLoading = false;
+        }
       });
-    }
-
-    return mockProducts;
   }
+
+
 
   applyFilters(): void {
     // Filter products based on search term, category, and status
@@ -993,12 +1017,12 @@ export class ProductManagementComponent implements OnInit {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(term) ||
         product.description.toLowerCase().includes(term) ||
-        product.categoryId.toLowerCase().includes(term)
+        product.category.toLowerCase().includes(term)
       );
     }
 
     if (this.categoryFilter) {
-      filtered = filtered.filter(product => product.categoryId=== this.categoryFilter);
+      filtered = filtered.filter(product => product.category=== this.categoryFilter);
     }
 
     if (this.statusFilter) {
@@ -1086,10 +1110,10 @@ export class ProductManagementComponent implements OnInit {
       name: product.name,
       price: product.price,
       stock: product.stock,
-      category: product.categoryId,
+      category: product.category,
       description: product.description,
       imageUrl: product.imageUrl,
-      active: product.status
+      active: product.status,
     });
     this.showModal = true;
   }
@@ -1098,46 +1122,129 @@ export class ProductManagementComponent implements OnInit {
     if (this.productForm.invalid) return;
 
     const productData = this.productForm.value;
+    const imageUrl = productData.imageUrl; // 提取图片URL
+
+    // 从产品数据中移除imageUrl，它不属于Product实体
+    delete productData.imageUrl;
+
+    // 确保其他字段正确设置
+    productData.merchantId = this.merchantId;
+    productData.status = productData.active ? 'ACTIVE' : 'INACTIVE';
+    delete productData.active; // 移除active字段，因为后端使用status
 
     if (this.isEditMode && this.selectedProductId) {
-      // Update existing product
-      const index = this.products.findIndex(p => p.productId === this.selectedProductId);
-      if (index !== -1) {
-        this.products[index] = {
-          ...this.products[index],
-          ...productData
-        };
-      }
+      // 更新现有产品
+      productData.productId = this.selectedProductId;
+
+      this.productService.updateProduct(productData).subscribe({
+        next: (updatedProduct: Product) => {
+          // 如果有新的图片URL，则添加/更新产品图片
+          if (imageUrl && imageUrl.trim() !== '') {
+            this.addOrUpdateProductImage(updatedProduct.productId, imageUrl);
+          }
+
+          // 更新本地数组中的产品
+          const index = this.products.findIndex(p => p.productId === this.selectedProductId);
+          if (index !== -1) {
+            // 保留图片URL显示在UI上，即使它不是Product实体的一部分
+            this.products[index] = {...updatedProduct, imageUrl: imageUrl};
+          }
+
+          this.messageService.showSuccess('Product updated successfully');
+          this.applyFilters();
+          this.closeModal();
+        },
+        error: (error: { message: any; }) => {
+          this.messageService.showError('Failed to update product: ' + (error.message || 'Unknown error'));
+          console.error('Update product error', error);
+        }
+      });
     } else {
-      // Add new product
-      const newProduct: Product = {
-        id: this.getNextProductId(),
-        ...productData,
-        createdAt: new Date()
-      };
-      this.products.unshift(newProduct);
+      // 添加新产品
+      this.productService.createProduct(productData).subscribe({
+        next: (newProduct: Product) => {
+          // 如果有图片URL，则添加产品图片
+          if (imageUrl && imageUrl.trim() !== '') {
+            this.addOrUpdateProductImage(newProduct.productId, imageUrl);
+          }
+
+          // 添加返回的产品到本地数组，附带图片URL以在UI中显示
+          this.products.unshift({...newProduct, imageUrl: imageUrl});
+
+          this.messageService.showSuccess('Product added successfully');
+          this.applyFilters();
+          this.closeModal();
+        },
+        error: (error: { message: any; }) => {
+          this.messageService.showError('Failed to add product: ' + (error.message || 'Unknown error'));
+          console.error('Add product error', error);
+        }
+      });
     }
+  }
 
-    this.applyFilters();
-    this.closeModal();
+// 添加一个新方法来处理产品图片
+  addOrUpdateProductImage(productId: string, imageUrl: string): void {
+    const productImage = {
+      productId: productId,
+      imageUrl: imageUrl
+    };
 
-    // In a real application, you would call a service to save the product to the API
-    // productService.saveProduct(productData).subscribe(...)
+    this.productService.addProductImage(productImage).subscribe({
+      next: (response) => {
+        console.log('Product image added/updated successfully');
+      },
+      error: (error) => {
+        console.error('Error adding/updating product image', error);
+        // 这里可以选择不向用户显示错误，因为产品本身已经成功保存
+      }
+    });
   }
 
   getNextProductId(): number {
     return Math.max(0, 1) + 1;
   }
 
-  toggleProductStatus(product: Product): void {
-    const index = this.products.findIndex(p => p.productId === product.productId );
-    if (index !== -1) {
-      this.products[index].status = ProductStatus.ACTIVE;
-      this.applyFilters();
-    }
 
-    // In a real application, you would call a service to update the product status
-    // productService.updateProductStatus(product.id, !product.active).subscribe(...)
+  toggleProductStatus(product: Product): void {
+    // 创建一个新对象，只包含必要的字段
+    const updatedProduct = {
+      productId: product.productId,
+      name: product.name,
+      price: product.price,
+      stock: product.stock,
+      category: product.category,
+      description: product.description,
+      merchantId: product.merchantId,
+      // 切换状态
+      status: product.status === ProductStatus.ACTIVE ?
+        ProductStatus.INACTIVE : ProductStatus.ACTIVE,
+      // 其他可能需要的必填字段
+    };
+    // 使用现有的更新方法
+    this.productService.updateProduct(updatedProduct as Product).subscribe({
+      next: (response: Product) => {
+        // 更新本地数组中的产品
+        const index = this.products.findIndex(p => p.productId === product.productId);
+        if (index !== -1) {
+          // 保留现有数据，更新状态
+          this.products[index] = {
+            ...this.products[index],
+            status: updatedProduct.status
+          };
+        }
+
+        this.messageService.showSuccess(
+          `Product ${updatedProduct.status === ProductStatus.ACTIVE ? 'activated' : 'deactivated'} successfully`
+        );
+
+        this.applyFilters();
+      },
+      error: (error) => {
+        this.messageService.showError('Failed to update product status: ' + (error.message || 'Unknown error'));
+        console.error('Update product status error', error);
+      }
+    });
   }
 
   confirmDelete(product: Product): void {
@@ -1145,19 +1252,34 @@ export class ProductManagementComponent implements OnInit {
     this.showDeleteModal = true;
   }
 
+
   deleteProduct(): void {
     if (!this.productToDelete) return;
 
-    const index = this.products.findIndex(p => p.productId  === this.productToDelete!.productId );
-    if (index !== -1) {
-      this.products.splice(index, 1);
-      this.applyFilters();
-    }
+    // 调用服务删除产品
+    this.productService.deleteProduct(this.productToDelete.productId).subscribe({
+      next: () => {
+        // 从本地数组中移除产品
+        const index = this.products.findIndex(p => p.productId === this.productToDelete!.productId);
+        if (index !== -1) {
+          this.products.splice(index, 1);
+        }
 
-    this.closeDeleteModal();
+        // 显示成功消息
+        this.messageService.showSuccess('Product deleted successfully');
 
-    // In a real application, you would call a service to delete the product
-    // productService.deleteProduct(this.productToDelete.id).subscribe(...)
+        // 应用过滤器以更新显示
+        this.applyFilters();
+
+        // 关闭删除确认模态框
+        this.closeDeleteModal();
+      },
+      error: (error) => {
+        this.messageService.showError('Failed to delete product: ' + (error.message || 'Unknown error'));
+        console.error('Delete product error', error);
+        this.closeDeleteModal();
+      }
+    });
   }
 
   closeModal(event?: Event): void {
@@ -1185,4 +1307,5 @@ export class ProductManagementComponent implements OnInit {
   }
 
   protected readonly Math = Math;
+  protected readonly ProductStatus = ProductStatus;
 }

@@ -2,8 +2,10 @@ package com.ruipeng.e_commrce.service_user.controller;
 
 import com.ruipeng.e_commrce.service_user.config.security.AppUserDetails;
 import com.ruipeng.e_commrce.service_user.entity.Address;
+import com.ruipeng.e_commrce.service_user.entity.Merchant;
 import com.ruipeng.e_commrce.service_user.entity.User;
 import com.ruipeng.e_commrce.service_user.service.AddressService;
+import com.ruipeng.e_commrce.service_user.service.MerchantService;
 import com.ruipeng.e_commrce.service_user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,13 +31,15 @@ import java.util.UUID;
 public class UserController {
 
    private UserService service;
+   private MerchantService merchantService;
    private AuthenticationManager authenticationManager;
    private UserDetailsService userDetailsService;
    private AddressService addressService;;
 
     @Autowired
-   public UserController(UserService service,AuthenticationManager authenticationManager,UserDetailsService userDetailsService,AddressService addressService) {
+   public UserController(UserService service,MerchantService merchantService,  AuthenticationManager authenticationManager,UserDetailsService userDetailsService,AddressService addressService) {
         this.service = service;
+        this.merchantService = merchantService;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.addressService = addressService;
@@ -67,12 +71,13 @@ public class UserController {
 
 
                 Address address = addressService.getDefaultAddressByUserId(authenticatedUser.getUserId());
-                System.out.println("到这了吗");
                 HashMap<String, Object> response = new HashMap<>();
                 System.out.println("userId: " + authenticatedUser.getUserId());
                 System.out.println("userName: " + authenticatedUser.getUsername()); // 确保 username 不是 null
                 response.put("userId", authenticatedUser.getUserId());
                 response.put("userName", authenticatedUser.getUsername());
+                response.put("isMerchant", authenticatedUser.getIsMerchant());
+
                 response.put("defaultAddress", address);
 
 

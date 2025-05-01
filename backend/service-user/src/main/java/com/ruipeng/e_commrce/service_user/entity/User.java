@@ -22,6 +22,8 @@ public class User {
     private String password;
     private String email;
     private String phone;
+    @Column(name = "is_merchant", columnDefinition = "boolean default false")
+    private boolean isMerchant;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createAt;
@@ -29,7 +31,8 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updateAt;
 
-    public User(UUID userId, String username, String firstname, String lastname, String password, String email, String phone, LocalDateTime createAt, LocalDateTime updateAt) {
+    public User(UUID userId, String username, String firstname, String lastname, String password, String email, String phone,
+                boolean isMerchant, LocalDateTime createAt, LocalDateTime updateAt) {
         this.userId = userId;
         this.username = username;
         this.firstname = firstname;
@@ -37,6 +40,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.phone = phone;
+        this.isMerchant = isMerchant;
         this.createAt = createAt;
         this.updateAt = updateAt;
     }
@@ -99,6 +103,14 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public boolean getIsMerchant() {
+        return isMerchant;
+    }
+
+    public void setIsMerchant(boolean isMerchant) {
+        this.isMerchant = isMerchant;
     }
 
     public LocalDateTime getCreateAt() {

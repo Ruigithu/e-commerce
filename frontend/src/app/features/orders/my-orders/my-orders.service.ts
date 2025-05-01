@@ -2,14 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+// 确保枚举值是字符串类型，使其可以作为索引
 export enum OrderStatus {
-  PENDING = 'PENDING',    // 待付款
-  PAID = 'PAID',          // 已支付
-  SHIPPED = 'SHIPPED',    // 已发货(新增)
-  DELIVERED = 'DELIVERED', // 已送达(新增)
-  COMPLETED = 'COMPLETED', // 已完成(新增)
-  CANCELLED = 'CANCELLED', // 已取消(新增)
-  REFUND = 'REFUND'       // 已退款
+  PENDING = 'PENDING',
+  PAID = 'PAID',
+  PROCESSING = 'PROCESSING',
+  SHIPPED = 'SHIPPED',
+  DELIVERED = 'DELIVERED',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+  REFUND_REQUESTED = 'REFUND_REQUESTED',
+  REFUND = 'REFUND'
 }
 
 export interface OrderItem {
@@ -54,17 +57,20 @@ export class OrderService {
     return this.http.get<Order[]>(`${this.apiUrl}/status/${status}`);
   }
 
-  // 订单状态文本映射
+  // 订单状态文本映射 - 使用类型安全的方式
   getStatusText(status: OrderStatus): string {
-    const statusMap = {
+    const statusTextMap: Record<OrderStatus, string> = {
       [OrderStatus.PENDING]: 'Unpaid',
       [OrderStatus.PAID]: 'Paid',
-      [OrderStatus.REFUND]: 'Refunded',
+      [OrderStatus.PROCESSING]: 'Processing',
       [OrderStatus.SHIPPED]: 'Shipped',
-      [OrderStatus.COMPLETED]: 'Completed',
       [OrderStatus.DELIVERED]: 'Delivered',
-      [OrderStatus.CANCELLED]:'Cancelled'
+      [OrderStatus.COMPLETED]: 'Completed',
+      [OrderStatus.CANCELLED]: 'Cancelled',
+      [OrderStatus.REFUND_REQUESTED]: 'Refund Requested',
+      [OrderStatus.REFUND]: 'Refunded'
     };
-    return statusMap[status] || 'unknown';
+
+    return statusTextMap[status] || 'Unknown';
   }
 }

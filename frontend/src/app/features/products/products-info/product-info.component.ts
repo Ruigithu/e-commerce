@@ -23,31 +23,36 @@ import {environment} from '../../../environment';
     <div class="product-page">
       <app-header></app-header>
 
-      <!-- 加载状态 -->
+      <!-- Loading state -->
       <div *ngIf="loading" class="loading-state">
         <div class="spinner"></div>
-        <p>正在加载商品信息...</p>
+        <p>Loading product information...</p>
       </div>
 
-      <!-- 产品详情 -->
+      <!-- Product details -->
       <div *ngIf="!loading && product" class="product-container">
-        <!-- 面包屑导航 -->
+        <!-- Breadcrumb navigation -->
         <div class="breadcrumb">
-          <a [routerLink]="['/home']">首页</a>
+          <a [routerLink]="['/home']">Home</a>
           <i class="fa-solid fa-chevron-right"></i>
-          <a [routerLink]="['/products']">商品</a>
+          <a [routerLink]="['/products']">Products</a>
           <i class="fa-solid fa-chevron-right"></i>
           <span>{{product.name}}</span>
         </div>
 
         <div class="product-details">
-          <!-- 商品图片区域 -->
+          <!-- Product images area -->
           <div class="product-images">
             <div class="main-image">
-              <img [src]="getMainImageUrl()" [alt]="product.name" (click)="openImageModal()">
+              <img
+                [src]="productService.isExternalUrl(getMainImageUrl()) ? getMainImageUrl() : (imageBaseUrl + getMainImageUrl())"
+                [alt]="product.name"
+                (click)="openImageModal()"
+                (error)="handleImageError($event)"
+              >
               <div class="image-overlay">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <span>点击放大查看</span>
+                <span>Click to zoom</span>
               </div>
             </div>
 
@@ -57,12 +62,16 @@ import {environment} from '../../../environment';
                 class="thumbnail"
                 [class.active]="selectedImageIndex === i"
                 (click)="selectedImageIndex = i">
-                <img [src]="getImageUrl(image)" [alt]="'缩略图 ' + (i + 1)">
+                <img
+                  [src]="productService.isExternalUrl(getImageUrl(image)) ? getImageUrl(image) : (imageBaseUrl + getImageUrl(image))"
+                  [alt]="'Thumbnail ' + (i + 1)"
+                  (error)="handleImageError($event)"
+                >
               </div>
             </div>
           </div>
 
-          <!-- 商品信息区域 -->
+          <!-- Product information area -->
           <div class="product-info">
             <h1 class="product-title">{{product.name}}</h1>
 
@@ -75,11 +84,11 @@ import {environment} from '../../../environment';
                   <i class="fa-solid fa-star"></i>
                   <i class="fa-solid fa-star-half-alt"></i>
                 </div>
-                <span class="rating-count">4.5 (245 评价)</span>
+                <span class="rating-count">4.5 (245 reviews)</span>
               </div>
 
               <div class="product-sku">
-                <span>商品编号: {{product.productId.substring(0, 8)}}</span>
+                <span>Product ID: {{product.productId.substring(0, 8)}}</span>
               </div>
             </div>
 
@@ -93,20 +102,20 @@ import {environment} from '../../../environment';
 
               <div class="price-promo">
                 <i class="fa-solid fa-tag"></i>
-                <span>限时优惠，仅剩2天</span>
+                <span>Limited time offer, only 2 days left</span>
               </div>
             </div>
 
             <div class="product-description">
-              <h3>商品详情</h3>
+              <h3>Product Details</h3>
               <p>{{product.description}}</p>
             </div>
 
             <div class="product-stock" [ngClass]="{'low-stock': product.stock < 100}">
               <i class="fa-solid" [ngClass]="product.stock > 0 ? 'fa-check-circle' : 'fa-times-circle'"></i>
               <span>
-                {{product.stock > 0 ? '有库存' : '无库存'}}
-                {{product.stock < 100 && product.stock > 0 ? '(仅剩 ' + product.stock + ' 件)' : ''}}
+                {{product.stock > 0 ? 'In Stock' : 'Out of Stock'}}
+                {{product.stock < 100 && product.stock > 0 ? '(Only ' + product.stock + ' left)' : ''}}
               </span>
             </div>
 
@@ -114,34 +123,34 @@ import {environment} from '../../../environment';
               <div class="info-item">
                 <i class="fa-solid fa-truck"></i>
                 <div>
-                  <h4>免费配送</h4>
-                  <p>订单满€50即可享受免费配送</p>
+                  <h4>Free Shipping</h4>
+                  <p>On orders over €50</p>
                 </div>
               </div>
 
               <div class="info-item">
                 <i class="fa-solid fa-rotate-left"></i>
                 <div>
-                  <h4>七天退换</h4>
-                  <p>7天内可无理由退换货</p>
+                  <h4>7-Day Returns</h4>
+                  <p>No-questions-asked return policy</p>
                 </div>
               </div>
 
               <div class="info-item">
                 <i class="fa-solid fa-shield-alt"></i>
                 <div>
-                  <h4>正品保证</h4>
-                  <p>所有商品均为官方授权正品</p>
+                  <h4>Authentic Products</h4>
+                  <p>All items are officially authorized</p>
                 </div>
               </div>
             </div>
 
             <div class="quantity-selector">
-              <button (click)="decreaseQuantity()" [disabled]="quantity <= 1" aria-label="减少数量">
+              <button (click)="decreaseQuantity()" [disabled]="quantity <= 1" aria-label="Decrease quantity">
                 <i class="fa-solid fa-minus"></i>
               </button>
-              <input type="number" [value]="quantity" min="1" max="99" readonly aria-label="商品数量">
-              <button (click)="increaseQuantity()" [disabled]="quantity >= product.stock" aria-label="增加数量">
+              <input type="number" [value]="quantity" min="1" max="99" readonly aria-label="Product quantity">
+              <button (click)="increaseQuantity()" [disabled]="quantity >= product.stock" aria-label="Increase quantity">
                 <i class="fa-solid fa-plus"></i>
               </button>
             </div>
@@ -149,7 +158,7 @@ import {environment} from '../../../environment';
             <div class="product-actions">
               <button class="buy-now-btn" (click)="handleBuyNow()">
                 <i class="fa-solid fa-bolt"></i>
-                立即购买
+                Buy Now
               </button>
 
               <button
@@ -157,13 +166,13 @@ import {environment} from '../../../environment';
                 [ngClass]="{'in-cart': isInCart}"
                 (click)="handleCartAction()">
                 <i class="fa-solid" [ngClass]="isInCart ? 'fa-shopping-cart' : 'fa-cart-plus'"></i>
-                {{isInCart ? '去购物车' : '加入购物车'}}
+                {{isInCart ? 'Go to Cart' : 'Add to Cart'}}
               </button>
             </div>
           </div>
         </div>
 
-        <!-- 产品选项卡 -->
+        <!-- Product tabs -->
         <div class="product-tabs">
           <div class="tabs-header">
             <button
@@ -175,7 +184,7 @@ import {environment} from '../../../environment';
           </div>
 
           <div class="tab-content">
-            <!-- 评价选项卡 -->
+            <!-- Reviews tab -->
             <div *ngIf="activeTab === 'reviews'" class="reviews-tab">
               <div class="reviews-summary">
                 <div class="overall-rating">
@@ -187,12 +196,12 @@ import {environment} from '../../../environment';
                     <i class="fa-solid fa-star"></i>
                     <i class="fa-solid fa-star-half-alt"></i>
                   </div>
-                  <span class="total-reviews">245 条评价</span>
+                  <span class="total-reviews">245 reviews</span>
                 </div>
 
                 <div class="rating-distribution">
                   <div class="rating-bar">
-                    <span>5星</span>
+                    <span>5 stars</span>
                     <div class="bar-container">
                       <div class="bar" style="width: 70%"></div>
                     </div>
@@ -200,7 +209,7 @@ import {environment} from '../../../environment';
                   </div>
 
                   <div class="rating-bar">
-                    <span>4星</span>
+                    <span>4 stars</span>
                     <div class="bar-container">
                       <div class="bar" style="width: 20%"></div>
                     </div>
@@ -208,7 +217,7 @@ import {environment} from '../../../environment';
                   </div>
 
                   <div class="rating-bar">
-                    <span>3星</span>
+                    <span>3 stars</span>
                     <div class="bar-container">
                       <div class="bar" style="width: 5%"></div>
                     </div>
@@ -216,7 +225,7 @@ import {environment} from '../../../environment';
                   </div>
 
                   <div class="rating-bar">
-                    <span>2星</span>
+                    <span>2 stars</span>
                     <div class="bar-container">
                       <div class="bar" style="width: 3%"></div>
                     </div>
@@ -224,7 +233,7 @@ import {environment} from '../../../environment';
                   </div>
 
                   <div class="rating-bar">
-                    <span>1星</span>
+                    <span>1 star</span>
                     <div class="bar-container">
                       <div class="bar" style="width: 2%"></div>
                     </div>
@@ -233,14 +242,14 @@ import {environment} from '../../../environment';
                 </div>
               </div>
 
-              <!-- 评价列表 -->
+              <!-- Reviews list -->
               <div class="review-list">
                 <div class="review-item">
                   <div class="reviewer-info">
-                    <div class="avatar">李</div>
+                    <div class="avatar">J</div>
                     <div>
-                      <div class="reviewer-name">李先生</div>
-                      <div class="review-date">2周前</div>
+                      <div class="reviewer-name">John Smith</div>
+                      <div class="review-date">2 weeks ago</div>
                     </div>
                   </div>
 
@@ -253,17 +262,17 @@ import {environment} from '../../../environment';
                   </div>
 
                   <div class="review-content">
-                    <h4>非常满意的购物体验</h4>
-                    <p>商品质量非常好，比我想象中的还要好。发货速度快，物流给力，包装也很完整。总体非常满意！</p>
+                    <h4>Excellent shopping experience</h4>
+                    <p>The product quality is excellent, even better than I expected. Fast shipping, excellent logistics, and perfect packaging. Overall very satisfied!</p>
                   </div>
                 </div>
 
                 <div class="review-item">
                   <div class="reviewer-info">
-                    <div class="avatar">张</div>
+                    <div class="avatar">M</div>
                     <div>
-                      <div class="reviewer-name">张女士</div>
-                      <div class="review-date">1个月前</div>
+                      <div class="reviewer-name">Maria Johnson</div>
+                      <div class="review-date">1 month ago</div>
                     </div>
                   </div>
 
@@ -276,50 +285,50 @@ import {environment} from '../../../environment';
                   </div>
 
                   <div class="review-content">
-                    <h4>还不错但有小问题</h4>
-                    <p>商品整体表现还不错，但是有些小瑕疵。希望卖家能在质量控制上再严格一些。客服回复很及时，物流也很快。</p>
+                    <h4>Good but with minor issues</h4>
+                    <p>The product overall is good, but there are some minor flaws. I hope the seller can be more strict on quality control. Customer service response was timely, and shipping was fast.</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- 规格选项卡 -->
+            <!-- Specifications tab -->
             <div *ngIf="activeTab === 'specs'" class="specs-tab">
               <table class="specs-table">
                 <tbody>
                 <tr>
-                  <th>商品ID</th>
+                  <th>Product ID</th>
                   <td>{{product.productId}}</td>
                 </tr>
                 <tr>
-                  <th>商品名称</th>
+                  <th>Product Name</th>
                   <td>{{product.name}}</td>
                 </tr>
                 <tr>
-                  <th>价格</th>
+                  <th>Price</th>
                   <td>€{{product.price.toFixed(2)}}</td>
                 </tr>
                 <tr>
-                  <th>库存</th>
-                  <td>{{product.stock}} 件</td>
+                  <th>Stock</th>
+                  <td>{{product.stock}} units</td>
                 </tr>
                 <tr>
-                  <th>分类</th>
-                  <td>电子产品</td>
+                  <th>Category</th>
+                  <td>Electronics</td>
                 </tr>
                 <tr>
-                  <th>重量</th>
+                  <th>Weight</th>
                   <td>0.5 kg</td>
                 </tr>
                 <tr>
-                  <th>尺寸</th>
+                  <th>Dimensions</th>
                   <td>20 × 15 × 5 cm</td>
                 </tr>
                 </tbody>
               </table>
             </div>
 
-            <!-- 常见问题选项卡 -->
+            <!-- FAQs tab -->
             <div *ngIf="activeTab === 'faqs'" class="faqs-tab">
               <div class="faq-item" *ngFor="let faq of faqs; let i = index">
                 <div class="faq-question" (click)="toggleFaq(i)">
@@ -335,13 +344,17 @@ import {environment} from '../../../environment';
         </div>
       </div>
 
-      <!-- 图片放大模态框 -->
+      <!-- Image zoom modal -->
       <div *ngIf="isImageModalOpen" class="image-modal" (click)="closeImageModal()">
         <div class="modal-content" (click)="$event.stopPropagation()">
           <button class="close-modal" (click)="closeImageModal()">
             <i class="fa-solid fa-times"></i>
           </button>
-          <img [src]="getMainImageUrl()" [alt]="product?.name">
+          <img
+            [src]="productService.isExternalUrl(getMainImageUrl()) ? getMainImageUrl() : (imageBaseUrl + getMainImageUrl())"
+            [alt]="product?.name"
+            (error)="handleImageError($event)"
+          >
         </div>
       </div>
     </div>
@@ -358,38 +371,39 @@ export class ProductInfoComponent implements OnInit {
   selectedImageIndex: number = 0;
   isImageModalOpen: boolean = false;
   activeTab: string = 'reviews';
+  imageBaseUrl: string = environment.apiUrl; // Use gateway address
 
   tabs = [
-    { id: 'reviews', label: '用户评价' },
-    { id: 'specs', label: '商品规格' },
-    { id: 'faqs', label: '常见问题' }
+    { id: 'reviews', label: 'Reviews' },
+    { id: 'specs', label: 'Specifications' },
+    { id: 'faqs', label: 'FAQs' }
   ];
 
   faqs = [
     {
-      question: '这个商品的保修期是多长时间？',
-      answer: '该商品提供标准12个月厂商保修，覆盖材料和工艺上的缺陷。',
+      question: 'How long is the warranty period for this product?',
+      answer: 'This product comes with a standard 12-month manufacturer warranty covering defects in materials and workmanship.',
       open: false
     },
     {
-      question: '你们支持国际配送吗？',
-      answer: '是的，我们支持全球大部分国家的配送。配送费用和交付时间可能因地区而异。',
+      question: 'Do you support international shipping?',
+      answer: 'Yes, we support shipping to most countries worldwide. Shipping fees and delivery times may vary by region.',
       open: false
     },
     {
-      question: '支持哪些支付方式？',
-      answer: '我们接受所有主要信用卡、PayPal和Apple Pay。所有交易都是安全加密的。',
+      question: 'What payment methods do you accept?',
+      answer: 'We accept all major credit cards, PayPal, and Apple Pay. All transactions are securely encrypted.',
       open: false
     },
     {
-      question: '如果不满意可以退货吗？',
-      answer: '是的，我们提供30天退货政策。商品必须保持原始状态和包装。',
+      question: 'Can I return the product if I\'m not satisfied?',
+      answer: 'Yes, we offer a 30-day return policy. Items must be in their original condition and packaging.',
       open: false
     }
   ];
 
   constructor(
-    private productService: ProductService,
+    public productService: ProductService, // Changed to public for template access
     private route: ActivatedRoute,
     private router: Router,
     private cartService: CartService
@@ -401,7 +415,7 @@ export class ProductInfoComponent implements OnInit {
     if (productId) {
       this.loadProductInfo(productId);
     } else {
-      console.error('没有找到商品ID');
+      console.error('Product ID not found');
       this.loading = false;
     }
   }
@@ -414,56 +428,64 @@ export class ProductInfoComponent implements OnInit {
   }
 
   getImageUrl(image: ProductImage): string {
-    return `${environment.apiUrl}/products/${image.imageUrl}`;
+    if (this.productService.isExternalUrl(image.imageUrl)) {
+      return image.imageUrl;
+    }
+    return `/images/products/${image.imageUrl}`;
+  }
+
+  // Handle image loading errors
+  handleImageError(event: any): void {
+    event.target.src = 'https://via.placeholder.com/400x400';
   }
 
   loadProductInfo(productId: string): void {
-    // 创建并行请求
+    // Create parallel requests
     const productRequest = this.productService.getProduct(productId);
     const imagesRequest = this.productService.getProductImages(productId);
 
-    // 获取商品数据
+    // Get product data
     productRequest.subscribe({
       next: (data) => {
-        console.log('商品数据加载成功:', data);
+        console.log('Product data loaded successfully:', data);
         this.product = data;
         this.checkCartStatus();
       },
       error: (error) => {
-        console.error('加载商品失败:', error);
+        console.error('Failed to load product:', error);
         this.loading = false;
       }
     });
 
-    // 获取商品图片
+    // Get product images
     imagesRequest.subscribe({
       next: (data) => {
-        console.log('商品图片加载成功:', data);
+        console.log('Product images loaded successfully:', data);
         this.productImages = data;
         this.loading = false;
       },
       error: (error) => {
-        console.error('加载商品图片失败:', error);
+        console.error('Failed to load product images:', error);
         this.loading = false;
       }
     });
   }
 
   checkCartStatus(): void {
-    // 这是检查商品是否在购物车中的占位逻辑
-    // 您需要实现实际的购物车检查逻辑
+    // This is a placeholder logic for checking if the product is in the cart
+    // You need to implement the actual cart check logic
     this.isInCart = false;
   }
 
   openImageModal(): void {
     this.isImageModalOpen = true;
-    // 防止模态框打开时页面滚动
+    // Prevent page scrolling when modal is open
     document.body.style.overflow = 'hidden';
   }
 
   closeImageModal(): void {
     this.isImageModalOpen = false;
-    // 恢复页面滚动
+    // Restore page scrolling
     document.body.style.overflow = 'auto';
   }
 
@@ -478,9 +500,9 @@ export class ProductInfoComponent implements OnInit {
           .subscribe({
             next: (response) => {
               this.isInCart = true;
-              // 可以添加成功提示
+              // Can add success notification here
             },
-            error: (error) => console.error('添加到购物车失败:', error)
+            error: (error) => console.error('Failed to add to cart:', error)
           });
       } else {
         this.router.navigate(['/go-to-cart']);

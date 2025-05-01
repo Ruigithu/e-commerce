@@ -1,9 +1,7 @@
 package com.ruipeng.e_commrce.service_product.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,27 +11,49 @@ import java.util.UUID;
 public class Product {
     @Id
     private UUID productId;
+
+    private UUID merchantId;
     private String name;
     private String description;
     private double price;
     private int stock;
-    @Column(name = "category_id")
-    private UUID categoryId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private ProductCategoryEnum category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private ProductStatusEnum status;
+
     @Column(name = "created_at")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createAt;
 
-    public Product(String name, String description, double price, int stock, UUID categoryId,LocalDateTime createAt) {
+    public Product( UUID merchantId, String name, String description, double price, int stock, ProductCategoryEnum category,ProductStatusEnum status,LocalDateTime createAt) {
+        this.merchantId=merchantId;
         this.productId = UUID.randomUUID(); // 添加这行
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
-        this.categoryId=categoryId;
+        this.category=category;
+        this.status=status;
+
         this.createAt = LocalDateTime.now();
     }
     public Product() {
 
     }
+
+    public UUID getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(UUID merchantId) {
+        this.merchantId = merchantId;
+    }
+
 
     public void setProductId(UUID productId) {
         this.productId = productId;
@@ -84,11 +104,19 @@ public class Product {
         return productId;
     }
 
-    public UUID getCategoryId() {
-        return categoryId;
+    public ProductCategoryEnum getCategory() {
+        return category;
     }
 
-    public void setCategoryId(UUID categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(ProductCategoryEnum category) {
+        this.category = category;
+    }
+
+    public ProductStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatusEnum status) {
+        this.status = status;
     }
 }

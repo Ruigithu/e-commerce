@@ -3,6 +3,8 @@ import { Product } from '../product.model';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../product.service';
 import { RouterLink } from '@angular/router';
+import {environment} from '../../../environment';
+import {catchError, forkJoin, map, of} from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -26,7 +28,11 @@ import { RouterLink } from '@angular/router';
       <div *ngIf="!loading" class="product-grid">
         <div *ngFor="let product of products" class="product-card" [routerLink]="['/product', product.productId]">
           <div class="product-image">
-            <img src="https://via.placeholder.com/200x200" alt="{{ product.name }}">
+            <img
+              [src]="product.imageUrl || 'https://via.placeholder.com/200x200'"
+              [alt]="product.name"
+              (error)="onImageError($event)"
+            >
             <div class="product-actions">
               <button class="action-button">
                 <i class="fa-solid fa-cart-plus"></i>
@@ -332,6 +338,7 @@ import { RouterLink } from '@angular/router';
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
   loading: boolean = true;
+  imageBaseUrl: string = `${environment.apiUrl}`;  // 使用网关地址
 
   constructor(private productService: ProductService) {}
 
@@ -341,17 +348,64 @@ export class ProductListComponent implements OnInit {
 
   loadProducts(): void {
     this.loading = true;
-    this.productService.getProducts().subscribe(
-      (data) => {
+    this.productService.getProducts().subscribe({
+      next: (data) => {
         console.log('Products loaded:', data);
         this.products = data;
-        this.loading = false;
+
+        // 对每个产品加载图片
+        this.loadProductImages();
       },
-      (error) => {
+      error: (error) => {
         console.error('Failed to load products:', error);
         this.loading = false;
       }
+    });
+  }
+
+  loadProductImages(): void {
+    // 创建所有产品图片请求的数组
+    const imageRequests = this.products.map(product =>
+      this.productService.getProductMainImage(product.productId).pipe(
+        map(imageUrl => ({ productId: product.productId, imageUrl })),
+        catchError(() => of({ productId: product.productId, imageUrl: '' }))
+      )
     );
+
+    // 若没有产品，直接返回
+    if (imageRequests.length === 0) {
+      this.loading = false;
+      return;
+    }
+
+    // 并行处理所有图片请求
+    forkJoin(imageRequests).subscribe({
+      next: (results) => {
+        // 为每个产品添加图片URL
+        results.forEach(result => {
+          const product = this.products.find(p => p.productId === result.productId);
+          if (product) {
+            // 确保图片URL是完整路径
+            console.log(result.imageUrl);
+            if (result.imageUrl && !result.imageUrl.startsWith('http')) {
+              product.imageUrl = `${this.imageBaseUrl}${result.imageUrl}`;
+            } else {
+              product.imageUrl = result.imageUrl;
+            }
+          }
+        });
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading product images:', error);
+        this.loading = false;
+      }
+    });
+  }
+
+  // 处理图片加载错误，使用默认图片
+  onImageError(event: any): void {
+    event.target.src = 'https://via.placeholder.com/200x200';
   }
 
   truncateDescription(description: string): string {
@@ -359,7 +413,7 @@ export class ProductListComponent implements OnInit {
   }
 
   hasDiscount(product: Product): boolean {
-    // This is a placeholder. In a real application, you might have a discount field
-    return product.price > 50; // Just for demonstration
+    // 这个方法保持不变
+    return product.price > 50;
   }
 }

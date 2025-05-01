@@ -112,10 +112,10 @@ import { Header } from '../../../common/components/header/header.component';
                 </div>
 
                 <div class="order-actions">
-<!--                  <button class="action-btn view-btn">-->
-<!--                    <i class="fa-solid fa-eye"></i>-->
-<!--                    查看详情-->
-<!--                  </button>-->
+                  <!--                  <button class="action-btn view-btn">-->
+                  <!--                    <i class="fa-solid fa-eye"></i>-->
+                  <!--                    查看详情-->
+                  <!--                  </button>-->
                   <button
                     *ngIf="order.status === 'PENDING'"
                     class="action-btn pay-btn"
@@ -383,6 +383,26 @@ import { Header } from '../../../common/components/header/header.component';
       color: #888888;
     }
 
+    .status-shipped {
+      background-color: #e6f7ff;
+      color: #1890ff;
+    }
+
+    .status-delivered {
+      background-color: #f9f0ff;
+      color: #722ed1;
+    }
+
+    .status-completed {
+      background-color: #f6ffed;
+      color: #52c41a;
+    }
+
+    .status-cancelled {
+      background-color: #fff1f0;
+      color: #f5222d;
+    }
+
     .order-details {
       padding: 1.5rem;
     }
@@ -530,29 +550,58 @@ export class MyOrdersComponent implements OnInit {
   }
 
   getStatusClass(status: OrderStatus): string {
-    const statusClasses = {
+    // 使用类型安全的方式处理枚举
+    const statusMap: {
+      [OrderStatus.CANCELLED]: string;
+      [OrderStatus.REFUND]: string;
+      [OrderStatus.COMPLETED]: string;
+      [OrderStatus.DELIVERED]: string;
+      [OrderStatus.PAID]: string;
+      [OrderStatus.PENDING]: string;
+      [OrderStatus.SHIPPED]: string;
+      [OrderStatus.REFUND_REQUESTED]: string;
+      [OrderStatus.PROCESSING]: string;
+
+    } = {
       [OrderStatus.PENDING]: 'status-pending',
       [OrderStatus.PAID]: 'status-paid',
       [OrderStatus.REFUND]: 'status-refund',
       [OrderStatus.SHIPPED]: 'status-shipped',
       [OrderStatus.COMPLETED]: 'status-completed',
       [OrderStatus.DELIVERED]: 'status-delivered',
-      [OrderStatus.CANCELLED]:'status-cancelled'
+      [OrderStatus.CANCELLED]: 'status-cancelled',
+      [OrderStatus.REFUND_REQUESTED]: 'status-refund_request',
+      [OrderStatus.PROCESSING]: 'status-processing',
     };
-    return statusClasses[status] || '';
+
+    return statusMap[status] || '';
   }
 
   getStatusIcon(status: OrderStatus): string {
-    const statusIcons = {
+    // 使用类型安全的方式处理枚举
+    const iconMap: {
+      [OrderStatus.CANCELLED]: string;
+      [OrderStatus.REFUND]: string;
+      [OrderStatus.COMPLETED]: string;
+      [OrderStatus.DELIVERED]: string;
+      [OrderStatus.PAID]: string;
+      [OrderStatus.PENDING]: string;
+      [OrderStatus.SHIPPED]: string;
+      [OrderStatus.REFUND_REQUESTED]: string;
+      [OrderStatus.PROCESSING]: string;
+    } = {
       [OrderStatus.PENDING]: 'fa-solid fa-clock',
       [OrderStatus.PAID]: 'fa-solid fa-check-circle',
       [OrderStatus.REFUND]: 'fa-solid fa-rotate-left',
-      [OrderStatus.SHIPPED]: 'fa-solid fa-rotate-left',
-      [OrderStatus.COMPLETED]: 'fa-solid fa-rotate-left',
-      [OrderStatus.DELIVERED]: 'fa-solid fa-rotate-left',
-      [OrderStatus.CANCELLED]:'fa-solid fa-rotate-left'
+      [OrderStatus.SHIPPED]: 'fa-solid fa-truck',
+      [OrderStatus.COMPLETED]: 'fa-solid fa-check-double',
+      [OrderStatus.DELIVERED]: 'fa-solid fa-box-open',
+      [OrderStatus.CANCELLED]: 'fa-solid fa-ban',
+      [OrderStatus.REFUND_REQUESTED]: 'fa-solid fa-hand-holding-dollar',
+      [OrderStatus.PROCESSING]: 'fa-solid fa-gear fa-spin'
     };
-    return statusIcons[status] || 'fa-solid fa-question-circle';
+
+    return iconMap[status] || 'fa-solid fa-question-circle';
   }
 
   getStatusText(status: OrderStatus): string {

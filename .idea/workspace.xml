@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="77caea28-e314-4b3c-b6c7-9803e7f3ec18" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/entity/ProductCategoryEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/e-commerce.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/OrderStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/OrderStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/controller/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/entity/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/entity/ProductCategory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/repo/ProductRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/repo/ProductRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-product/src/main/java/com/ruipeng/e_commrce/service_product/service/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-product/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-product/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/common/components/header/header.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/common/components/header/header.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant-dashboard-component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant-dashboard-component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant.modal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant.modal.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/merchants/products-management.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/merchants/products-management.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/product-category.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/product-category.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/product.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/product.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/product.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/product.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/products-info/product-info.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/products-info/product-info.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/product-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/product-list.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/specific-category.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/specific-category.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/users/loginPage/login-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/users/loginPage/login-page.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/users/loginPage/loginresponse.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/users/loginPage/loginresponse.model.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2wRmBMsg6HlQthzFmH0lXgotwKx" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.EurekaApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.GatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ServiceOrderApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ServicePayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ServiceProductApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ServiceUserApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/e-commerce&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.poratu.idea.plugins.tomcat.setting.TomcatServersConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;E:\\e-commerce\\frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ]
+  }
+}</component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.ServiceProductApplication">
+    <configuration name="EurekaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="eureka" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ruipeng.e_commrce.eureka.EurekaApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="gateway" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ruipeng.e_commrce.gateway.GatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServiceOrderApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="service-order" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ruipeng.e_commrce.service_order.ServiceOrderApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServicePayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="service-pay" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ruipeng.e_commerce.service_pay.ServicePayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServiceProductApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="service-product" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ruipeng.e_commrce.service_product.ServiceProductApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServiceUserApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="service-user" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.ruipeng.e_commrce.service_user.ServiceUserApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="77caea28-e314-4b3c-b6c7-9803e7f3ec18" name="Changes" comment="" />
+      <created>1746012623664</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1746012623664</updated>
+      <workItem from="1746012624815" duration="1226000" />
+      <workItem from="1746086628080" duration="20271000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

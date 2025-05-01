@@ -1,7 +1,6 @@
 package com.ruipeng.e_commrce.service_product.repo;
 
 import com.ruipeng.e_commrce.service_product.entity.Product;
-import com.ruipeng.e_commrce.service_product.entity.ProductCategory;
 import com.ruipeng.e_commrce.service_product.entity.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,12 +12,16 @@ import java.util.UUID;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, UUID> {
-    @Query(value = "SELECT * FROM product_category" , nativeQuery = true)
-    List<ProductCategory> findAllCategory();
 
-    @Query(value = "SELECT * FROM products WHERE category_id = ?1", nativeQuery = true)
-    List<Product> findAllByCategoryId(UUID categoryId);
 
     @Query(value = "SELECT * FROM product_images WHERE product_id = ?1", nativeQuery = true)
     List<ProductImage> findAllImage(UUID productId);
+
+
+    @Query(value = "SELECT * FROM products WHERE category = ?1", nativeQuery = true)
+    List<Product> findAllByCategoryName(String displayName);
+
+    @Query(value = "SELECT * FROM products where merchant_id=?1", nativeQuery = true)
+    List<Product> findAllByMerchantId(UUID merchantId);
+
 }

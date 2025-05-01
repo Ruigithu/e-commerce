@@ -42,9 +42,9 @@ import {UserMenuComponent} from './user-menu.component';
           <span>Home</span>
         </div>
         <div *ngFor="let category of productCategories"
-             (click)="navigateToSpecificCategory(category.categoryId)"
+             (click)="navigateToSpecificCategory(category)"
              class="category-item">
-          <span>{{category.name}}</span>
+          <span>{{category}}</span>
         </div>
       </nav>
     </div>
@@ -248,8 +248,8 @@ export class Header implements OnInit {
     );
   }
 
-  navigateToSpecificCategory(categoryId: string) {
-    this.router.navigate([`/product-list/${categoryId}`]);
+  navigateToSpecificCategory(displayName: string) {
+    this.router.navigate([`/product-list/${displayName}`]);
   }
 
   navigateToCart() {

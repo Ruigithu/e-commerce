@@ -1,5 +1,10 @@
-export interface ProductCategory {
-  categoryId: string;
-  name: string;
-  description: string;
+export enum ProductCategory {
+  ELECTRONICS = 'ELECTRONICS',
+  CLOTHING = 'CLOTHING',
+  HOME_APPLIANCES = 'HOME_APPLIANCES',
+  BOOKS = 'BOOKS',
+  FOOD = 'FOOD',
+  BEAUTY = 'BEAUTY',
+  SPORTS = 'SPORTS',
+  TOYS = 'TOYS'
 }

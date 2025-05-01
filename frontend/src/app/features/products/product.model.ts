@@ -1,3 +1,5 @@
+import {ProductCategory} from './product-category.model';
+
 export interface Product {
   productId: string;
   merchantId: string;     // 新增：关联商家ID
@@ -5,7 +7,7 @@ export interface Product {
   price: number;
   description: string;
   stock: number;
-  categoryId: string;     // 分类ID
+  category:ProductCategory;     // 分类ID
   images: string[];       // 产品图片数组
   status: ProductStatus;  // 新增：产品状态
   createdAt: string;      // 新增：创建时间

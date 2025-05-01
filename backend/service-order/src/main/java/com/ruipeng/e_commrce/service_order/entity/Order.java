@@ -11,6 +11,7 @@ public class Order {
     @Id
     private UUID orderId;
     private UUID userId;
+    private UUID merchantId;
     @Enumerated(EnumType.STRING) // 使用 EnumType.STRING 映射为数据库中的字符串值
     private OrderStatus status;  // 使用枚举类型
     private double totalAmount;
@@ -19,9 +20,10 @@ public class Order {
     private LocalDateTime updateAt;
 
 
-    public Order(UUID orderId, UUID userId, OrderStatus status, double totalAmount, UUID shippingAddressId, LocalDateTime createAt, LocalDateTime updateAt) {
+    public Order(UUID orderId, UUID userId, UUID merchantId,   OrderStatus status, double totalAmount, UUID shippingAddressId, LocalDateTime createAt, LocalDateTime updateAt) {
         this.orderId = orderId;
         this.userId = userId;
+        this.merchantId = merchantId;
         this.status = status;
         this.totalAmount = totalAmount;
         this.shippingAddressId = shippingAddressId;
@@ -45,6 +47,14 @@ public class Order {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    public UUID getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(UUID merchantId) {
+        this.merchantId = merchantId;
     }
 
     public OrderStatus getStatus() {
