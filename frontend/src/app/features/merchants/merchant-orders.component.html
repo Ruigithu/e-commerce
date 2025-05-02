@@ -1,4 +1,8 @@
+
+
 <div class="orders-management-container">
+  <app-header></app-header>
+  <br/>
   <!-- Page Header -->
   <div class="page-header">
     <div>
@@ -71,7 +75,6 @@
         <thead>
         <tr>
           <th>Order ID</th>
-          <th>Customer</th>
           <th>Date</th>
           <th>Items</th>
           <th>Total</th>
@@ -82,13 +85,9 @@
         <tbody>
         <tr *ngFor="let order of paginatedOrders">
           <td class="order-id">{{ order.orderId.substring(0, 8) }}</td>
-          <td class="customer-info">
-            <div>{{ order.customerName }}</div>
-            <div class="customer-email">{{ order.customerEmail }}</div>
-          </td>
-          <td>{{ formatDate(order.orderDate) }}</td>
+          <td>{{ formatDate(order.createAt) }}</td>
           <td class="order-items">
-            <span class="item-count">{{ order.items.length }} item(s)</span>
+            <span class="item-count">{{ getItemCount(order) }} item(s)</span>
           </td>
           <td class="order-total">€{{ order.totalAmount.toFixed(2) }}</td>
           <td>
@@ -223,7 +222,7 @@
               </div>
               <div class="order-date-container">
                 <span class="label">Date:</span>
-                <span class="value">{{ formatDate(selectedOrder.orderDate) }}</span>
+                <span class="value">{{ formatDate(selectedOrder.createAt) }}</span>
               </div>
               <div class="order-status-container">
                 <span class="label">Status:</span>
@@ -234,50 +233,41 @@
             </div>
 
             <div class="details-columns">
-              <div class="customer-details">
-                <h3>Customer Information</h3>
-                <div class="detail-row">
-                  <span class="label">Name:</span>
-                  <span class="value">{{ selectedOrder.customerName }}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="label">Email:</span>
-                  <span class="value">{{ selectedOrder.customerEmail }}</span>
-                </div>
-              </div>
 
               <div class="shipping-details">
                 <h3>Shipping Address</h3>
+                <div *ngIf="getAddressInformation(selectedOrder.shippingAddressId) | async as address" class="address-details">
                 <div class="detail-row">
                   <span class="label">Recipient:</span>
-                  <span class="value">{{ selectedOrder.shippingAddress.receiverName }}</span>
+                  <span class="value">{{ address.receiverName }}</span>
                 </div>
                 <div class="detail-row">
                   <span class="label">Address:</span>
-                  <span class="value">{{ selectedOrder.shippingAddress.addressLine }}</span>
+                  <span class="value">{{ address.addressLine }}</span>
                 </div>
                 <div class="detail-row">
                   <span class="label">City:</span>
-                  <span class="value">{{ selectedOrder.shippingAddress.city }}, {{ selectedOrder.shippingAddress.postalCode }}</span>
+                  <span class="value">{{ address.city }}, {{ address.postalCode }}</span>
                 </div>
                 <div class="detail-row">
                   <span class="label">Phone:</span>
-                  <span class="value">{{ selectedOrder.shippingAddress.phone }}</span>
+                  <span class="value">{{ address.phone }}</span>
+                </div>
                 </div>
               </div>
             </div>
 
-            <div *ngIf="selectedOrder.trackingNumber" class="tracking-info">
-              <h3>Shipping Information</h3>
-              <div class="detail-row">
-                <span class="label">Tracking Number:</span>
-                <span class="value">{{ selectedOrder.trackingNumber }}</span>
-              </div>
-              <div class="detail-row">
-                <span class="label">Carrier:</span>
-                <span class="value">{{ selectedOrder.shippingCarrier }}</span>
-              </div>
-            </div>
+<!--            <div *ngIf="selectedOrder.trackingNumber" class="tracking-info">-->
+<!--              <h3>Shipping Information</h3>-->
+<!--              <div class="detail-row">-->
+<!--                <span class="label">Tracking Number:</span>-->
+<!--                <span class="value">{{ selectedOrder.trackingNumber }}</span>-->
+<!--              </div>-->
+<!--              <div class="detail-row">-->
+<!--                <span class="label">Carrier:</span>-->
+<!--                <span class="value">{{ selectedOrder.shippingCarrier }}</span>-->
+<!--              </div>-->
+<!--            </div>-->
 
             <div class="order-items-section">
               <h3>Order Items</h3>
@@ -295,16 +285,18 @@
                 <tr *ngFor="let item of selectedOrder.items">
                   <td class="item-image-cell">
                     <div class="item-image-container">
-                      <img [src]="item.imageUrl || 'assets/images/placeholder.png'" [alt]="item.productName">
+                      <img *ngIf="getProductImage(item.productId)" [src]="getProductImage(item.productId)" alt="Product image">
                     </div>
                   </td>
                   <td class="item-details-cell">
-                    <div class="item-name">{{ item.productName }}</div>
-                    <div class="item-id">Product ID: {{ item.productId.substring(0, 8) }}</div>
+                    <ng-container *ngIf="getProductInfo(item.productId) as product">
+                      <div class="item-name" [routerLink]="['/product', product.productId]">  {{ product.name }}  </div>
+                    </ng-container>
+
                   </td>
-                  <td class="item-price-cell">€{{ item.unitPrice.toFixed(2) }}</td>
-                  <td class="item-quantity-cell">{{ item.quantity }}</td>
-                  <td class="item-total-cell">€{{ (item.unitPrice * item.quantity).toFixed(2) }}</td>
+                  <td class="item-price-col">€{{ item.unitPrice.toFixed(2) }}</td>
+                  <td class="item-quantity-col">{{ item.quantity }}</td>
+                  <td class="item-total-col">€{{ (item.unitPrice * item.quantity).toFixed(2) }}</td>
                 </tr>
                 </tbody>
               </table>
@@ -313,7 +305,7 @@
             <div class="order-totals">
               <div class="total-row subtotal">
                 <span class="label">Subtotal:</span>
-                <span class="value">€{{ calculateSubtotal().toFixed(2) }}</span>
+                <span class="value">€{{ calculateSubtotal(selectedOrder).toFixed(2) }}</span>
               </div>
               <div class="total-row shipping">
                 <span class="label">Shipping:</span>
@@ -330,10 +322,6 @@
             </div>
           </div>
 
-          <div class="order-notes" *ngIf="selectedOrder.notes">
-            <h3>Notes</h3>
-            <p>{{ selectedOrder.notes }}</p>
-          </div>
 
           <div class="modal-actions">
             <div class="action-buttons">

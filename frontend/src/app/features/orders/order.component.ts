@@ -21,41 +21,41 @@ import { Header } from '../../../app/common/components/header/header.component';
       <app-header></app-header>
 
       <div class="order-container">
-        <!-- 加载状态 -->
+        <!-- Loading State -->
         <div *ngIf="!product && isLoading" class="loading-state">
           <div class="spinner"></div>
-          <p>正在加载订单信息...</p>
+          <p>Loading order information...</p>
         </div>
 
-        <!-- 错误状态 -->
+        <!-- Error State -->
         <div *ngIf="!product && !isLoading && errorMessage" class="error-message">
           <i class="fa-solid fa-circle-exclamation"></i>
           <div>
-            <h3>加载失败</h3>
+            <h3>Loading Failed</h3>
             <p>{{ errorMessage }}</p>
-            <button (click)="retry()" class="retry-btn">重试</button>
+            <button (click)="retry()" class="retry-btn">Retry</button>
           </div>
         </div>
 
-        <!-- 订单详情 -->
+        <!-- Order Details -->
         <div *ngIf="product" class="order-content">
           <div class="order-header">
             <div>
-              <h1>订单详情</h1>
-              <p class="order-id">订单号: ORDER-{{ generateOrderId() }}</p>
+              <h1>Order Details</h1>
+              <p class="order-id">Order ID: ORDER-{{ generateOrderId() }}</p>
             </div>
             <div class="order-status">
               <i class="fa-solid fa-circle-notch fa-spin"></i>
-              处理中
+              Processing
             </div>
           </div>
 
           <div class="order-details">
-            <!-- 商品信息卡 -->
+            <!-- Product Information Card -->
             <div class="order-card item-details">
               <h2>
                 <i class="fa-solid fa-box"></i>
-                商品信息
+                Product Information
               </h2>
 
               <div class="product-card">
@@ -68,7 +68,7 @@ import { Header } from '../../../app/common/components/header/header.component';
                   <p class="product-price">€{{ product.price.toFixed(2) }}</p>
 
                   <div class="quantity-info">
-                    <span class="quantity-label">数量:</span>
+                    <span class="quantity-label">Quantity:</span>
                     <div class="quantity-selector">
                       <button (click)="decreaseQuantity()" [disabled]="quantity <= 1" class="quantity-btn">
                         <i class="fa-solid fa-minus"></i>
@@ -84,30 +84,30 @@ import { Header } from '../../../app/common/components/header/header.component';
 
               <div class="order-summary">
                 <div class="summary-row">
-                  <span>商品金额:</span>
+                  <span>Product Amount:</span>
                   <span>€{{ product.price.toFixed(2) }}</span>
                 </div>
                 <div class="summary-row">
-                  <span>数量:</span>
+                  <span>Quantity:</span>
                   <span>{{ quantity }}</span>
                 </div>
                 <div class="summary-row shipping">
-                  <span>运费:</span>
-                  <span>{{ shippingFee > 0 ? '€' + shippingFee.toFixed(2) : '免运费' }}</span>
+                  <span>Shipping Fee:</span>
+                  <span>{{ shippingFee > 0 ? '€' + shippingFee.toFixed(2) : 'Free Shipping' }}</span>
                 </div>
                 <div class="summary-divider"></div>
                 <div class="summary-row total">
-                  <span>总计:</span>
+                  <span>Total:</span>
                   <span>€{{ getTotalPrice().toFixed(2) }}</span>
                 </div>
               </div>
             </div>
 
-            <!-- 收货地址卡 -->
+            <!-- Shipping Address Card -->
             <div class="order-card shipping-info">
               <h2>
                 <i class="fa-solid fa-location-dot"></i>
-                收货信息
+                Shipping Information
               </h2>
 
               <div *ngIf="defaultAddress" class="address-details">
@@ -120,24 +120,24 @@ import { Header } from '../../../app/common/components/header/header.component';
 
                 <button class="address-edit-btn" (click)="navigateToAddressSelection()">
                   <i class="fa-solid fa-pen-to-square"></i>
-                  修改
+                  Edit
                 </button>
               </div>
 
               <div *ngIf="!defaultAddress" class="no-address">
-                <p>您还没有添加收货地址</p>
+                <p>You haven't added a shipping address yet</p>
                 <button class="add-address-btn" (click)="navigateToAddressSelection()">
                   <i class="fa-solid fa-plus"></i>
-                  添加地址
+                  Add Address
                 </button>
               </div>
             </div>
 
-            <!-- 支付方式卡 -->
+            <!-- Payment Method Card -->
             <div class="order-card payment-section">
               <h2>
                 <i class="fa-solid fa-credit-card"></i>
-                支付方式
+                Payment Method
               </h2>
 
               <div class="payment-method">
@@ -145,7 +145,7 @@ import { Header } from '../../../app/common/components/header/header.component';
                   <input type="radio" id="stripe" name="payment" checked>
                   <label for="stripe">
                     <i class="fa-brands fa-stripe"></i>
-                    Stripe支付
+                    Stripe Payment
                   </label>
                 </div>
 
@@ -621,7 +621,7 @@ export class OrderInfoComponent implements OnInit {
         this.loadProductInfo(this.productId);
       } else {
         this.isLoading = false;
-        this.errorMessage = "未找到商品信息";
+        this.errorMessage = "Product no found";
       }
     });
   }

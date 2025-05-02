@@ -2,8 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { OrderStatus } from '../orders/my-orders/my-orders.service';
+import {Order, OrderService, OrderStatus} from '../orders/my-orders/my-orders.service';
 import { MerchantService } from './merchant.service';
+import {Header} from "../../common/components/header/header.component";
+import {ProductService} from '../products/product.service';
+import {MessageService} from '../../common/message.service';
+import {Address} from '../users/addresss/address.model';
+import {Observable, of, tap} from 'rxjs';
+import {AddressService} from '../users/addresss/address.service';
+import {Product} from '../products/product.model';
 
 interface OrderItem {
   itemId: string;
@@ -14,43 +21,25 @@ interface OrderItem {
   imageUrl?: string;
 }
 
-interface MerchantOrder {
-  orderId: string;
-  customerName: string;
-  customerEmail: string;
-  orderDate: string;
-  status: OrderStatus;
-  totalAmount: number;
-  items: OrderItem[];
-  shippingAddress: {
-    receiverName: string;
-    addressLine: string;
-    city: string;
-    postalCode: string;
-    phone: string;
-  };
-  trackingNumber?: string;
-  shippingCarrier?: string;
-  notes?: string;
-}
 
 @Component({
   selector: 'app-merchant-orders',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    FormsModule,
-    ReactiveFormsModule
-  ],
+    imports: [
+        CommonModule,
+        RouterLink,
+        FormsModule,
+        ReactiveFormsModule,
+        Header
+    ],
   templateUrl: './merchant-orders.component.html',
   styleUrls: ['./merchant-orders.component.css']
 })
 export class MerchantOrdersComponent implements OnInit {
-  orders: MerchantOrder[] = [];
-  filteredOrders: MerchantOrder[] = [];
-  paginatedOrders: MerchantOrder[] = [];
-  selectedOrder: MerchantOrder | null = null;
+  orders: Order[] = [];
+  filteredOrders: Order[] = [];
+  paginatedOrders: Order[] = [];
+  selectedOrder: Order | null = null;
 
   // Pagination
   currentPage = 1;
@@ -67,6 +56,8 @@ export class MerchantOrdersComponent implements OnInit {
   showShipModal = false;
   orderIdToShip = '';
 
+  productImagesMap = new Map<string, string>();
+
   // Shipping form data
   shippingInfo = {
     trackingNumber: '',
@@ -76,7 +67,9 @@ export class MerchantOrdersComponent implements OnInit {
     notifyCustomer: true
   };
 
-  constructor(private merchantService: MerchantService) {}
+  constructor(private merchantService: MerchantService,private orderService:OrderService, private productService:ProductService,
+              private messageService:MessageService,
+              private addressService:AddressService) {}
 
   ngOnInit(): void {
     this.loadOrders();
@@ -85,76 +78,77 @@ export class MerchantOrdersComponent implements OnInit {
   loadOrders(): void {
     this.isLoading = true;
 
-    // In a real app, this would call the merchant service
-    setTimeout(() => {
-      this.orders = this.generateMockOrders();
-      this.applyFilters();
-      this.isLoading = false;
-    }, 1000);
-  }
+    this.orderService.getAllOrdersByMerchantId().subscribe({
+      next: (data: Order[]) => {
+        this.orders = data; // Now data is already the processed array with orders and their items
 
-  generateMockOrders(): MerchantOrder[] {
-    const mockOrders: MerchantOrder[] = [];
-    const statuses = [
-      OrderStatus.PENDING,
-      OrderStatus.PAID,
-      OrderStatus.PROCESSING,
-      OrderStatus.SHIPPED,
-      OrderStatus.DELIVERED,
-      OrderStatus.COMPLETED
-    ];
-
-    for (let i = 1; i <= 25; i++) {
-      const orderDate = new Date();
-      orderDate.setDate(orderDate.getDate() - Math.floor(Math.random() * 30));
-
-      const items: OrderItem[] = [];
-      const itemCount = Math.floor(Math.random() * 3) + 1;
-
-      let totalAmount = 0;
-      for (let j = 1; j <= itemCount; j++) {
-        const price = parseFloat((10 + Math.random() * 90).toFixed(2));
-        const quantity = Math.floor(Math.random() * 3) + 1;
-        totalAmount += price * quantity;
-
-        items.push({
-          itemId: `item-${i}-${j}`,
-          productId: `product-${j}`,
-          productName: `Product ${j}`,
-          quantity: quantity,
-          unitPrice: price
+        // Load product images for all products in all orders
+        const productIds = new Set<string>();
+        this.orders.forEach(order => {
+          if (order.items && order.items.length > 0) {
+            order.items.forEach(item => {
+              productIds.add(item.productId);
+            });
+          }
         });
+
+        // Load images for all unique productIds
+        const imageRequests = Array.from(productIds).map(productId =>
+          this.productService.getProductMainImage(productId)
+            .subscribe({
+              next: (imageUrl: string) => {
+                this.productImagesMap.set(productId, imageUrl);
+              },
+              error: (error) => {
+                console.error(`Error loading image for product ${productId}:`, error);
+              }
+            })
+        );
+
+        this.applyFilters();
+        this.isLoading = false;
+      },
+      error: (error: any) => {
+        this.messageService.showError( 'Failed to get order data. Please try again later.');
+        this.isLoading = false;
+        console.error('Error getting orders:', error);
       }
+    });
+  }
+  productMap = new Map<string, Product>();
+  loadingProducts = new Set<string>();
 
-      const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+  getProductInfo(productId: string): Product | undefined {
+    // Return from cache if available
+    if (this.productMap.has(productId)) {
+      return this.productMap.get(productId);
+    }
 
-      mockOrders.push({
-        orderId: `order-${i}`,
-        customerName: `Customer ${i}`,
-        customerEmail: `customer${i}@example.com`,
-        orderDate: orderDate.toISOString(),
-        status: randomStatus,
-        totalAmount: parseFloat(totalAmount.toFixed(2)),
-        items: items,
-        shippingAddress: {
-          receiverName: `Customer ${i}`,
-          addressLine: `${i} Main Street`,
-          city: 'Example City',
-          postalCode: '12345',
-          phone: '123-456-7890'
+    // Don't fetch if already loading
+    if (!this.loadingProducts.has(productId)) {
+      this.loadingProducts.add(productId);
+
+      this.getProductInformation(productId).subscribe({
+        next: (product) => {
+          this.productMap.set(productId, product);
+          this.loadingProducts.delete(productId);
         },
-        trackingNumber: randomStatus === OrderStatus.SHIPPED ||
-        randomStatus === OrderStatus.DELIVERED ||
-        randomStatus === OrderStatus.COMPLETED
-          ? `TRK${100000 + i}` : undefined,
-        shippingCarrier: randomStatus === OrderStatus.SHIPPED ||
-        randomStatus === OrderStatus.DELIVERED ||
-        randomStatus === OrderStatus.COMPLETED
-          ? 'DHL' : undefined
+        error: (error) => {
+          console.error(`Error loading product ${productId}:`, error);
+          this.loadingProducts.delete(productId);
+        }
       });
     }
 
-    return mockOrders;
+    return undefined; // Return undefined while loading
+  }
+
+  getProductInformation(productId:string):Observable<Product> {
+    return this.productService.getProduct(productId);
+  }
+  getProductImage(productId: string): string {
+
+    return this.productImagesMap.get(productId) || '';
   }
 
   applyFilters(): void {
@@ -164,9 +158,7 @@ export class MerchantOrdersComponent implements OnInit {
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
       filtered = filtered.filter(order =>
-        order.orderId.toLowerCase().includes(term) ||
-        order.customerName.toLowerCase().includes(term) ||
-        order.customerEmail.toLowerCase().includes(term)
+        order.orderId.toLowerCase().includes(term)
       );
     }
 
@@ -182,13 +174,13 @@ export class MerchantOrdersComponent implements OnInit {
     this.updatePaginatedOrders();
   }
 
-  sortOrders(orders: MerchantOrder[]): void {
+  sortOrders(orders: Order[]): void {
     switch (this.sortOption) {
       case 'date_desc':
-        orders.sort((a, b) => new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime());
+        orders.sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime());
         break;
       case 'date_asc':
-        orders.sort((a, b) => new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime());
+        orders.sort((a, b) => new Date(a.createAt).getTime() - new Date(b.createAt).getTime());
         break;
       case 'amount_desc':
         orders.sort((a, b) => b.totalAmount - a.totalAmount);
@@ -253,8 +245,19 @@ export class MerchantOrdersComponent implements OnInit {
     }
   }
 
-  viewOrderDetails(order: MerchantOrder): void {
+  viewOrderDetails(order: Order): void {
     this.selectedOrder = { ...order };
+
+    if (order.items) {
+      order.items.forEach(item => {
+        this.getProductInfo(item.productId);
+      });
+    }
+
+    if (order.shippingAddressId) {
+      this.getAddressInformation(order.shippingAddressId).subscribe();
+    }
+
     this.showOrderDetailsModal = true;
   }
 
@@ -324,9 +327,6 @@ export class MerchantOrdersComponent implements OnInit {
     const orderIndex = this.orders.findIndex(o => o.orderId === this.orderIdToShip);
     if (orderIndex !== -1) {
       this.orders[orderIndex].status = OrderStatus.SHIPPED;
-      this.orders[orderIndex].trackingNumber = this.shippingInfo.trackingNumber;
-      this.orders[orderIndex].shippingCarrier = this.getCarrierName();
-      this.orders[orderIndex].notes = this.shippingInfo.notes || '';
 
       // Apply filters to update the UI
       this.applyFilters();
@@ -358,16 +358,41 @@ export class MerchantOrdersComponent implements OnInit {
     }
   }
 
-  calculateSubtotal(): number {
-    if (!this.selectedOrder) return 0;
+  getItemCount(order: Order): number {
+    return order.items?.length || 0;
+  }
 
-    return this.selectedOrder.items.reduce((total, item) => {
-      return total + (item.unitPrice * item.quantity);
-    }, 0);
+  calculateSubtotal(order: Order | null): number {
+    if(order!=null) {
+      if (!order.items || order.items.length === 0) return 0;
+
+      return order.items.reduce((total, item) => {
+        return total + (item.unitPrice * item.quantity);
+      }, 0);
+    }
+    return -1;
   }
 
   calculateTax(): number {
-    return this.calculateSubtotal() * 0.2; // 20% tax rate
+    return this.calculateSubtotal(this.selectedOrder) * 0.2; // 20% tax rate
+  }
+  // 在服务中创建一个缓存 Map
+  private addressCache = new Map<string, Address>();
+
+// 获取地址信息的方法
+  getAddressInformation(addressId: string): Observable<Address> {
+    // 如果缓存中已经有这个地址，直接从缓存返回
+    if (this.addressCache.has(addressId)) {
+      // 将缓存的值包装成 Observable
+      return of(this.addressCache.get(addressId) as Address);
+    }
+
+    // 如果缓存中没有，则从服务请求
+    return this.addressService.getAddressById(addressId).pipe(
+      tap(address => {
+        this.addressCache.set(addressId, address);
+      })
+    );
   }
 
   protected readonly Math = Math;

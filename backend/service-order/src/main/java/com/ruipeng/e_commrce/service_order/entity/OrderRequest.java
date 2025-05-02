@@ -5,11 +5,12 @@ import java.util.UUID;
 public class OrderRequest {
     private UUID userId;
     private UUID addressId;
+    private UUID merchantId;
     private Product product;
     private int quantity;
     private double totalAmount;
 
-    public OrderRequest(UUID userId, UUID addressId, Product product, int quantity, double totalAmount) {
+    public OrderRequest(UUID userId, UUID addressId, UUID merchantId, Product product, int quantity, double totalAmount) {
         this.userId = userId;
         this.addressId = addressId;
         this.product = product;
@@ -31,6 +32,14 @@ public class OrderRequest {
 
     public void setAddressId(UUID addressId) {
         this.addressId = addressId;
+    }
+
+    public UUID getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(UUID merchantId) {
+        this.merchantId = merchantId;
     }
 
     public Product getProduct() {

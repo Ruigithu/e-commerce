@@ -7,6 +7,7 @@ import com.ruipeng.e_commrce.service_order.repo.CartRepository;
 import com.ruipeng.e_commrce.service_order.repo.OrderItemRepository;
 import com.ruipeng.e_commrce.service_order.repo.OrderRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -32,7 +33,8 @@ public class OrderService {
 
     @Autowired
     private ProductClient productClient; // Feign客户端获取商品信息
-
+    @Autowired
+    private OrderItemService orderItemService;
 
 
     @Transactional
@@ -103,10 +105,12 @@ public class OrderService {
         }
     }
 
-    public List<Order> getAllOrdersByUserId(UUID userId) {
+    public Map<String,Object> getAllOrdersByUserId(UUID userId) {
         if (userId == null) {
             throw new IllegalArgumentException("用户ID不能为空");
         }
+        Map<String,Object> allOrdersInformation = new HashMap<String,Object>();
+        Map<UUID,List<OrderItem>> specificOrderItemsInformation= new HashMap<>();
 
         try {
             // 从数据库查询用户的所有订单
@@ -115,14 +119,52 @@ public class OrderService {
             // 如果找不到订单，返回空列表或抛出异常
             if (userOrders.isEmpty()) {
                 // 选项1: 返回空列表
-                return Collections.emptyList();
-
-                // 选项2: 抛出自定义异常
-                // throw new OrderNotFoundException("未找到用户 " + userId + " 的订单");
+                return new HashMap<>();
             }
+            allOrdersInformation.put("userOrders",userOrders);
+            for(Order order:userOrders){
+                List<OrderItem> orderItems = orderItemService.getOrderItems(order.getOrderId());
+                if (orderItems!=null){
+                    specificOrderItemsInformation.put(order.getOrderId(),orderItems);
+                }
+            }
+            allOrdersInformation.put("specificOrderItems",specificOrderItemsInformation);
 
             // 返回找到的订单列表
-            return userOrders;
+            return allOrdersInformation;
+        } catch (DataAccessException e) {
+
+            throw new ServiceException("获取订单数据时发生错误", e);
+        }
+    }
+
+    public Map<String, Object> getAllOrdersByMerchantId(UUID merchantId) {
+        if (merchantId == null) {
+            throw new IllegalArgumentException("merchantID不能为空");
+        }
+        Map<String,Object> allOrdersInformation = new HashMap<>();
+        Map<UUID,List<OrderItem>> specificOrderItemsInformation= new HashMap<>();
+
+        try {
+            // 从数据库查询用户的所有订单
+            List<Order> merchantOrders = orderRepository.findByMerchantId(merchantId);
+
+            // 如果找不到订单，返回空列表或抛出异常
+            if (merchantOrders.isEmpty()) {
+                // 选项1: 返回空列表
+                return new HashMap<>();
+            }
+            allOrdersInformation.put("merchantOrders",merchantOrders);
+            for(Order order:merchantOrders){
+                List<OrderItem> orderItems = orderItemService.getOrderItems(order.getOrderId());
+                if (orderItems!=null){
+                    specificOrderItemsInformation.put(order.getOrderId(),orderItems);
+                }
+            }
+            allOrdersInformation.put("specificOrderItems",specificOrderItemsInformation);
+
+            // 返回找到的订单列表
+            return allOrdersInformation;
         } catch (DataAccessException e) {
 
             throw new ServiceException("获取订单数据时发生错误", e);

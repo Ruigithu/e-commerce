@@ -34,7 +34,7 @@ import {Router} from '@angular/router';
         </button>
 
         <button (click)="navigateToMerchantDashboard()" class="menu-item">
-          <i class="fa-solid fa-location-dot"></i>
+          <i class="fa-solid fa-store"></i>
           <span>Merchant Dashboard</span>
         </button>
 

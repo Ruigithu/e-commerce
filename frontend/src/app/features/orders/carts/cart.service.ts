@@ -82,6 +82,6 @@ export class CartService {
       userId,
       productId,
       quantity
-    });
+    })
   }
 }

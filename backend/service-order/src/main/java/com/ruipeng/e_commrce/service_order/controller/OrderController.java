@@ -77,7 +77,6 @@ public class OrderController {
     @PostMapping("/createOrder")
     public ResponseEntity<Order> createOrderForOneItem(
             @RequestBody OrderRequest request) {
-        System.out.println("1");
 
         Order order = new Order();
         order.setOrderId(UUID.randomUUID());
@@ -87,9 +86,9 @@ public class OrderController {
         order.setUpdateAt(LocalDateTime.now());
         order.setTotalAmount(request.getTotalAmount());
         order.setStatus(OrderStatus.PENDING);
+        order.setMerchantId(request.getMerchantId());
 
         Order newOrder = orderService.createNewOrder(order);
-        System.out.println("2");
         OrderItem orderItem=new OrderItem();
             orderItem.setItemId(UUID.randomUUID());
             orderItem.setOrderId(newOrder.getOrderId());
@@ -97,10 +96,7 @@ public class OrderController {
             orderItem.setQuantity(request.getQuantity());
             orderItem.setUnitPrice(request.getProduct().getPrice());
 
-        System.out.println("3");
         orderItemService.addOrderItem(orderItem);
-        System.out.println("4");
-        System.out.println(newOrder.getOrderId());
         return ResponseEntity.ok(newOrder);
 
     }
@@ -156,10 +152,17 @@ public class OrderController {
     public Order getOrder(@PathVariable UUID orderId) {
         return orderService.getOrderByOrderId(orderId);
     }
+
     @GetMapping("/getAllOrders/{userId}")
-    public List<Order> getAllOrders(@PathVariable UUID userId) {
+    public Map<String, Object> getAllOrders(@PathVariable UUID userId) {
         return orderService.getAllOrdersByUserId(userId);
     }
+
+    @GetMapping("/getAllOrdersByMerchantId/{merchantId}")
+    public Map<String, Object> getAllOrdersByMerchantId(@PathVariable UUID merchantId) {
+        return orderService.getAllOrdersByMerchantId(merchantId);
+    }
+
 }
 
 

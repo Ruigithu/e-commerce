@@ -55,9 +55,16 @@ import { Header } from '../../../common/components/header/header.component';
               <!-- Cart Items -->
               <div *ngFor="let item of cartItems" class="cart-item">
                 <ng-container *ngIf="getProduct(item.productId) as product">
-                  <!-- Product Image -->
-                  <div class="item-image">
-                    <img src="https://via.placeholder.com/80x80" [alt]="product.name">
+                  <!-- Updated Product Image to match product-management style -->
+                  <div class="item-image product-image">
+                    <div class="image-placeholder" *ngIf="!product.imageUrl">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                      </svg>
+                    </div>
+                    <img *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.name">
                   </div>
 
                   <!-- Product Details -->
@@ -506,6 +513,29 @@ import { Header } from '../../../common/components/header/header.component';
         align-self: flex-start;
       }
     }
+
+    .item-image.product-image {
+      width: 80px;
+      height: 80px;
+    }
+
+    .item-image .image-placeholder {
+      width: 100%;
+      height: 100%;
+      background-color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      color: #94a3b8;
+    }
+
+    .item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+    }
   `]
 })
 export class ShoppingCartComponent implements OnInit {
@@ -582,18 +612,6 @@ export class ShoppingCartComponent implements OnInit {
     }
   }
 
-  removeItem(itemId: string): void {
-    if (confirm('Are you sure you want to remove this item?')) {
-      this.cartService.removeFromCart(itemId).subscribe({
-        next: () => {
-          this.loadCartItems();
-        },
-        error: (error) => {
-          console.error('Error removing item:', error);
-        }
-      });
-    }
-  }
 
   calculateSubtotal(): number {
     return this.cartItems.reduce((total, item) => {
@@ -637,6 +655,22 @@ export class ShoppingCartComponent implements OnInit {
     this.router.navigate(['/product', productId]);
   }
 
+
+  // Only confirmation message changes
+  removeItem(itemId: string): void {
+    if (confirm('Are you sure you want to remove this item?')) {
+      this.cartService.removeFromCart(itemId).subscribe({
+        next: () => {
+          this.loadCartItems();
+        },
+        error: (error) => {
+          console.error('Error removing item:', error);
+        }
+      });
+    }
+  }
+
+  // This method needs translation for error messages
   async proceedToCheckout() {
     if (!this.cartItems.length) {
       return;

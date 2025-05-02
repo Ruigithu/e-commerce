@@ -5,6 +5,8 @@ import { ProductService } from '../product.service';
 import { RouterLink } from '@angular/router';
 import {environment} from '../../../environment';
 import {catchError, forkJoin, map, of} from 'rxjs';
+import {CartService} from '../../orders/carts/cart.service';
+import {MessageService} from '../../../common/message.service';
 
 @Component({
   selector: 'app-product-list',
@@ -25,8 +27,8 @@ import {catchError, forkJoin, map, of} from 'rxjs';
         <p>Loading products...</p>
       </div>
 
-      <div *ngIf="!loading" class="product-grid">
-        <div *ngFor="let product of products" class="product-card" [routerLink]="['/product', product.productId]">
+      <div *ngIf="!loading" class="product-grid" >
+        <div *ngFor="let product of products" class="product-card"  [routerLink]="['/product', product.productId]">
           <div class="product-image">
             <img
               [src]="product.imageUrl || 'https://via.placeholder.com/200x200'"
@@ -34,17 +36,15 @@ import {catchError, forkJoin, map, of} from 'rxjs';
               (error)="onImageError($event)"
             >
             <div class="product-actions">
-              <button class="action-button">
+              <button class="action-button" (click)="addToCart(product.productId, $event)">
                 <i class="fa-solid fa-cart-plus"></i>
               </button>
-              <button class="action-button">
-                <i class="fa-solid fa-heart"></i>
-              </button>
+
             </div>
             <div class="product-badge" *ngIf="product.stock < 50">Limited Stock</div>
           </div>
 
-          <div class="product-content">
+          <div class="product-content" >
             <h3 class="product-name">{{ product.name }}</h3>
             <div class="product-rating">
               <i class="fa-solid fa-star"></i>
@@ -340,7 +340,7 @@ export class ProductListComponent implements OnInit {
   loading: boolean = true;
   imageBaseUrl: string = `${environment.apiUrl}`;  // 使用网关地址
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService,private cartService:CartService,private messageService:MessageService) {}
 
   ngOnInit() {
     this.loadProducts();
@@ -415,5 +415,20 @@ export class ProductListComponent implements OnInit {
   hasDiscount(product: Product): boolean {
     // 这个方法保持不变
     return product.price > 50;
+  }
+
+  addToCart(productId: string, event?: Event) {
+    if (event) {
+      event.stopPropagation(); // Stop the click from bubbling up to parent elements
+    }
+    this.cartService.addToCart(productId,1).subscribe({
+      next: (response) => {
+        // Handle response, maybe update cart count, etc.
+        this.messageService.showSuccess('Product added to cart');
+      },
+      error: (error) => {
+        this.messageService.showError('Error adding to cart');
+      }
+    });
   }
 }

@@ -9,6 +9,7 @@ import {CartItem} from '../orders/carts/CartItem.model';
 import {Product} from '../products/product.model';
 import { Address } from '../users/addresss/address.model';
 import {Order} from '../orders/my-orders/my-orders.service';
+import {environment} from '../../environment';
 
 
 @Component({
@@ -35,7 +36,9 @@ export class PaymentComponent {
   @Input() product!: Product;
   @Input() quantity!: number;
   address: Address | null = null;
-  orderResponse: Order | null = null;  // 修正类型声明
+  orderResponse: Order | null = null;
+
+  api = `${environment.apiUrl}/orders`;
 
   constructor(
     private cartService: CartService,
@@ -67,6 +70,7 @@ export class PaymentComponent {
 
     const orderData = {
       userId,
+      merchantId:product.merchantId,
       addressId: this.address.addressId,
       product,
       quantity,
@@ -74,7 +78,7 @@ export class PaymentComponent {
     };
 
     // 直接返回 Order 类型
-    return this.http.post<Order>(`http://localhost:8080/orders/createOrder`, orderData);
+    return this.http.post<Order>(`${this.api}/createOrder`, orderData);
   }
 
   async redirectToCheckout() {

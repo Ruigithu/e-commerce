@@ -9,13 +9,15 @@ import java.util.UUID;
 public class OrderRequestFromCart {
     private UUID userId;
     private UUID addressId;
+    private List<UUID> merchantId;
     private List<CartItem> cartItems; // 接收复杂对象
     private List<Product> products; // 接收复杂对象
     private double totalAmount;
 
-    public OrderRequestFromCart(UUID userId, UUID addressId, List<CartItem> cartItems, List<Product> products, double totalAmount) {
+    public OrderRequestFromCart(UUID userId, UUID addressId,List<UUID> merchantId, List<CartItem> cartItems, List<Product> products, double totalAmount) {
         this.userId = userId;
         this.addressId = addressId;
+        this.merchantId = merchantId;
         this.cartItems = cartItems;
         this.products = products;
         this.totalAmount = totalAmount;
@@ -35,6 +37,14 @@ public class OrderRequestFromCart {
 
     public void setAddressId(UUID addressId) {
         this.addressId = addressId;
+    }
+
+    public List<UUID> getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(List<UUID> merchantId) {
+        this.merchantId = merchantId;
     }
 
     public List<CartItem> getCartItems() {

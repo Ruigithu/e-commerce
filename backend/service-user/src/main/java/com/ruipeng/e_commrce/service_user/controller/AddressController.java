@@ -5,7 +5,6 @@ import com.ruipeng.e_commrce.service_user.config.security.AppLogoutHandler;
 import com.ruipeng.e_commrce.service_user.entity.Address;
 import com.ruipeng.e_commrce.service_user.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,11 +15,13 @@ import java.util.UUID;
 @RequestMapping("/")
 public class AddressController {
 
+    private final AddressService addressService;
     private AddressService service;
 
     @Autowired
-    public AddressController(AddressService service, AppLogoutHandler appLogoutHandler) {
+    public AddressController(AddressService service, AppLogoutHandler appLogoutHandler, AddressService addressService) {
         this.service = service;
+        this.addressService = addressService;
     }
 
     @GetMapping("/addresses/{userId}")
@@ -61,10 +62,16 @@ public class AddressController {
         service.deleteAddress(addressId);
 
     }
+
     @PutMapping("/updateAddress/{addressId}")
     public Address updateAddress(@PathVariable UUID addressId,
                                        @RequestBody Address address) {
 
         return  service.updateAddress(addressId,address);
+    }
+
+    @GetMapping("/getAddressById/{addressId}")
+    public Optional<Address> getAddressById(@PathVariable("addressId") UUID addressId){
+      return  addressService.getAddressById(addressId);
     }
 }

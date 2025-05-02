@@ -59,4 +59,8 @@ public class AddressService {
         }
         return null;
     }
+
+    public Optional<Address> getAddressById(UUID addressId) {
+       return addressRepo.findById(addressId);
+    }
 }

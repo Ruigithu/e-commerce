@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {map, Observable} from 'rxjs';
 
 // 确保枚举值是字符串类型，使其可以作为索引
 export enum OrderStatus {
@@ -44,7 +44,21 @@ export class OrderService {
 
   // 获取用户所有订单
   getAllOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/getAllOrders/${localStorage.getItem('userId')}`);
+    const userId = localStorage.getItem('userId');
+    return this.http.get<any>(`${this.apiUrl}/getAllOrders/${userId}`).pipe(
+      map(response => {
+        const userOrders: Order[] = response.userOrders || [];
+        const specificOrderItems: { [key: string]: OrderItem[] } = response.specificOrderItems || {};
+
+        // Merge order items into their respective orders
+        return userOrders.map(order => {
+          return {
+            ...order,
+            items: specificOrderItems[order.orderId] || []
+          };
+        });
+      })
+    );
   }
 
   // 获取单个订单详情（包括订单项）
@@ -72,5 +86,23 @@ export class OrderService {
     };
 
     return statusTextMap[status] || 'Unknown';
+  }
+
+  getAllOrdersByMerchantId():Observable<Order[]> {
+    return this.http.get<any>(`${this.apiUrl}/getAllOrdersByMerchantId/${localStorage.getItem('merchantId')}`)
+      .pipe(
+      map(response => {
+        const merchantOrders: Order[] = response.merchantOrders || [];
+        const specificOrderItems: { [key: string]: OrderItem[] } = response.specificOrderItems || {};
+
+        // Merge order items into their respective orders
+        return merchantOrders.map(order => {
+          return {
+            ...order,
+            items: specificOrderItems[order.orderId] || []
+          };
+        });
+      })
+    );
   }
 }

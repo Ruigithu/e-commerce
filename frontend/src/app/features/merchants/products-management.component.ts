@@ -19,7 +19,7 @@ import {forkJoin, map} from 'rxjs';
   ],
   template: `
     <div class="product-management-container">
-      <!-- Page Header -->
+      <!-- Page Header add new product-->
       <div class="page-header">
         <div>
           <h1 class="page-title">Product Management</h1>
@@ -60,8 +60,8 @@ import {forkJoin, map} from 'rxjs';
 
           <select class="filter-dropdown" [(ngModel)]="statusFilter" (change)="applyFilters()">
             <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
           </select>
 
           <select class="filter-dropdown" [(ngModel)]="sortOption" (change)="applyFilters()">
@@ -930,7 +930,7 @@ export class ProductManagementComponent implements OnInit {
   productToDelete: Product | null = null;
 
 
-  // Available categories (should come from a service in real app)
+  // Available categories
   categories = [
     'ELECTRONICS',
     'CLOTHING',
@@ -1026,8 +1026,7 @@ export class ProductManagementComponent implements OnInit {
     }
 
     if (this.statusFilter) {
-      const isActive = this.statusFilter === 'active';
-      filtered = filtered.filter(product => product.status === ProductStatus.ACTIVE);
+      filtered = filtered.filter(product => product.status === this.statusFilter);
     }
 
     // Apply sorting
@@ -1219,7 +1218,6 @@ export class ProductManagementComponent implements OnInit {
       // 切换状态
       status: product.status === ProductStatus.ACTIVE ?
         ProductStatus.INACTIVE : ProductStatus.ACTIVE,
-      // 其他可能需要的必填字段
     };
     // 使用现有的更新方法
     this.productService.updateProduct(updatedProduct as Product).subscribe({

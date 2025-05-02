@@ -13,126 +13,126 @@ import { CommonModule } from '@angular/common';
   template: `
     <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="address-form">
       <div class="form-fields">
-        <!-- 收件人姓名 -->
+        <!-- Recipient Name -->
         <div class="form-group">
           <label for="receiver_name">
             <i class="fa-solid fa-user"></i>
-            收件人姓名
+            Recipient Name
           </label>
           <div class="input-container">
             <input
               type="text"
               id="receiver_name"
               formControlName="receiver_name"
-              placeholder="请输入收件人姓名"
+              placeholder="Enter recipient's name"
               [class.error]="isFieldInvalid('receiver_name')"
             >
           </div>
           <div *ngIf="isFieldInvalid('receiver_name')" class="error-message">
-            收件人姓名不能为空
+            Recipient name is required
           </div>
         </div>
 
-        <!-- 手机号码 -->
+        <!-- Phone Number -->
         <div class="form-group">
           <label for="phone">
             <i class="fa-solid fa-phone"></i>
-            手机号码
+            Phone Number
           </label>
           <div class="input-container">
             <input
               type="tel"
               id="phone"
               formControlName="phone"
-              placeholder="请输入手机号码"
+              placeholder="Enter phone number"
               [class.error]="isFieldInvalid('phone')"
             >
           </div>
           <div *ngIf="addressForm.get('phone')?.errors?.['required'] && addressForm.get('phone')?.touched" class="error-message">
-            手机号码不能为空
+            Phone number is required
           </div>
           <div *ngIf="addressForm.get('phone')?.errors?.['pattern'] && addressForm.get('phone')?.touched" class="error-message">
-            请输入有效的手机号码
+            Please enter a valid phone number
           </div>
         </div>
 
-        <!-- 详细地址 -->
+        <!-- Address Line -->
         <div class="form-group">
           <label for="address_line">
             <i class="fa-solid fa-location-dot"></i>
-            详细地址
+            Address Line
           </label>
           <div class="input-container">
             <input
               type="text"
               id="address_line"
               formControlName="address_line"
-              placeholder="街道、楼层、门牌号等"
+              placeholder="Street, building, apartment number"
               [class.error]="isFieldInvalid('address_line')"
             >
           </div>
           <div *ngIf="isFieldInvalid('address_line')" class="error-message">
-            详细地址不能为空
+            Address is required
           </div>
         </div>
 
-        <!-- 城市 -->
+        <!-- City -->
         <div class="form-group">
           <label for="city">
             <i class="fa-solid fa-city"></i>
-            城市
+            City
           </label>
           <div class="input-container">
             <input
               type="text"
               id="city"
               formControlName="city"
-              placeholder="请输入城市名称"
+              placeholder="Enter city name"
               [class.error]="isFieldInvalid('city')"
             >
           </div>
           <div *ngIf="isFieldInvalid('city')" class="error-message">
-            城市不能为空
+            City is required
           </div>
         </div>
 
-        <!-- 邮政编码 -->
+        <!-- Postal Code -->
         <div class="form-group">
           <label for="postal_code">
             <i class="fa-solid fa-envelope"></i>
-            邮政编码
+            Postal Code
           </label>
           <div class="input-container">
             <input
               type="text"
               id="postal_code"
               formControlName="postal_code"
-              placeholder="请输入邮政编码"
+              placeholder="Enter postal code"
               [class.error]="isFieldInvalid('postal_code')"
             >
           </div>
           <div *ngIf="isFieldInvalid('postal_code')" class="error-message">
-            邮政编码不能为空
+            Postal code is required
           </div>
         </div>
       </div>
 
-      <!-- 默认地址设置 -->
+      <!-- Default Address Setting -->
       <div class="default-address-option">
         <label class="checkbox-container">
           <input type="checkbox" formControlName="is_default">
           <span class="checkmark"></span>
-          设为默认地址
+          Set as default address
         </label>
       </div>
 
-      <!-- 按钮组 -->
+      <!-- Action Buttons -->
       <div class="form-actions">
         <button type="button" class="cancel-btn" (click)="onCancel()">
-          取消
+          Cancel
         </button>
         <button type="submit" class="submit-btn" [disabled]="!addressForm.valid || isSubmitting">
-          <span *ngIf="!isSubmitting">保存</span>
+          <span *ngIf="!isSubmitting">Save</span>
           <span *ngIf="isSubmitting" class="spinner-small"></span>
         </button>
       </div>
