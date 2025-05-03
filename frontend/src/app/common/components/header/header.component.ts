@@ -1,10 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { SigninComponentButton} from '../button/login/signin-button.component';
 import {ProductService} from '../../../features/products/product.service';
 import {ProductCategory} from '../../../features/products/product-category.model';
 import {NgForOf, NgIf} from '@angular/common';
 import {Router, RouterLink, RouterModule} from '@angular/router';
 import {UserMenuComponent} from './user-menu.component';
+import {CartService} from '../../../features/orders/carts/cart.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +28,7 @@ import {UserMenuComponent} from './user-menu.component';
           <ng-container *ngIf="isLoggedIn; else notLoggedIn">
             <button class="cart-button" (click)="navigateToCart()">
               <i class="fa-solid fa-cart-shopping"></i>
-              <span class="cart-count">3</span>
+              <span class="cart-count">{{ cartItemsCount}}</span>
             </button>
             <user-menu></user-menu>
           </ng-container>
@@ -219,23 +221,78 @@ import {UserMenuComponent} from './user-menu.component';
   ],
   standalone: true
 })
-export class Header implements OnInit {
+export class Header implements OnInit, OnDestroy {
   productCategories: ProductCategory[] = [];
   isLoggedIn = false;
+  cartItemsCount = 0;
+  private cartSubscription: Subscription | null = null;
 
   constructor(
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private cartService: CartService
   ) {}
 
   ngOnInit() {
     this.loadProductCategory();
     this.checkLoginStatus();
+
+    if (this.isLoggedIn) {
+      this.loadCartItemsCount();
+
+      // Set up listener for storage events to detect changes from other tabs/components
+      window.addEventListener('storage', this.handleStorageChange.bind(this));
+    }
+  }
+
+  ngOnDestroy() {
+    // Clean up subscription to prevent memory leaks
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
+
+    // Remove event listener
+    window.removeEventListener('storage', this.handleStorageChange.bind(this));
   }
 
   checkLoginStatus() {
     const userId = localStorage.getItem('userId');
     this.isLoggedIn = !!userId;
+  }
+
+  loadCartItemsCount(): void {
+    // First try to get from localStorage
+    const storedCount = localStorage.getItem('cartItemsCount');
+    if (storedCount) {
+      this.cartItemsCount = parseInt(storedCount, 10);
+    }
+
+    // Then refresh from server
+    this.refreshCartItemsCount();
+  }
+
+  refreshCartItemsCount(): void {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
+
+    this.cartSubscription = this.cartService.getCartItems().subscribe({
+      next: (items) => {
+        this.cartItemsCount = items.length;
+        // Save to localStorage for persistence
+        localStorage.setItem('cartItemsCount', this.cartItemsCount.toString());
+      },
+      error: (error) => {
+        console.error('Failed to load cart items:', error);
+      }
+    });
+  }
+
+  handleStorageChange(event: StorageEvent): void {
+    // Only react to cart count changes
+    if (event.key === 'cartItemsCount' && event.newValue) {
+      this.cartItemsCount = parseInt(event.newValue, 10);
+    }
   }
 
   loadProductCategory(): void {

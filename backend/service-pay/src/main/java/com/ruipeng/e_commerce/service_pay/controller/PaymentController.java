@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -33,52 +34,102 @@ public class PaymentController {
     private String webhookSecret;
 
     @PostMapping("/create-checkout-session")
-    public ResponseEntity<Map<String, String>> createCheckoutSession(@RequestBody Map<String, String> request) {
+    public ResponseEntity<Map<String, String>> createCheckoutSession(@RequestBody Map<String, Object> request) {
         System.out.println("Received request: " + request); // 添加日志
-        UUID orderId = UUID.fromString(request.get("orderId"));
+
         Stripe.apiKey = secretKey;
 
         try {
-            // 1. 获取订单信息（从数据库获取）
-            OrderDTO order = orderServiceClient.getOrder(orderId);  // 从 Feign 客户端获取订单
+            SessionCreateParams.Builder paramsBuilder;
 
-            // 2. 只需要订单的总金额，而不关心每个商品的价格
-            // 创建支付会话参数，使用 totalAmount 作为总金额
-            SessionCreateParams params = SessionCreateParams.builder()
-                    .setMode(SessionCreateParams.Mode.PAYMENT)
-                    .setSuccessUrl("http://localhost:4200/payment-success?orderId=" + order.getOrderId())
-                    .setCancelUrl("http://localhost:4200/payment-cancelled?orderId=" + order.getOrderId())
-                    .addLineItem(SessionCreateParams.LineItem.builder()
-                            .setQuantity(1L)  // 假设这是整个订单的商品数量，可能为 1（代表一个订单总额）
-                            .setPriceData(
-                                    SessionCreateParams.LineItem.PriceData.builder()
-                                            .setCurrency("eur")
-                                            .setUnitAmount(Math.round(order.getTotalAmount() * 100))
-                                            .setProductData(  // 添加产品数据
-                                                    SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                            .setName("Order #" + order.getOrderId())
-                                                            .setDescription("Payment for order")
-                                                            .build()
-                                            )
-                                            .build()
-                            )
-                            .build())
-                    .putMetadata("orderId", order.getOrderId().toString())  // 将订单 ID 放到元数据中
-                    .build();
+            if (request.containsKey("orderId")) {
+                // 单订单处理逻辑
+                UUID orderId = UUID.fromString((String) request.get("orderId"));
 
-            // 3. 创建支付会话
+                // 获取订单信息（从数据库获取）
+                OrderDTO order = orderServiceClient.getOrder(orderId);
+
+                // 创建单订单支付会话参数
+                paramsBuilder = SessionCreateParams.builder()
+                        .setMode(SessionCreateParams.Mode.PAYMENT)
+                        .setSuccessUrl("http://localhost:4200/payment-success?orderId=" + order.getOrderId())
+                        .setCancelUrl("http://localhost:4200/payment-cancelled?orderId=" + order.getOrderId())
+                        .addLineItem(SessionCreateParams.LineItem.builder()
+                                .setQuantity(1L)
+                                .setPriceData(
+                                        SessionCreateParams.LineItem.PriceData.builder()
+                                                .setCurrency("eur")
+                                                .setUnitAmount(Math.round(order.getTotalAmount() * 100))
+                                                .setProductData(
+                                                        SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                                .setName("Order #" + order.getOrderId())
+                                                                .setDescription("Payment for order")
+                                                                .build()
+                                                )
+                                                .build()
+                                )
+                                .build());
+
+                // 将订单 ID 放到元数据中
+                paramsBuilder.putMetadata("orderId", order.getOrderId().toString());
+
+            } else if (request.containsKey("orderIds")) {
+                // 多订单处理逻辑
+                List<String> orderIds = (List<String>) request.get("orderIds");
+                Object totalAmountObj = request.get("totalAmount");
+                double totalAmount;
+
+                // 处理 totalAmount 可能是 Double 或 Integer 的情况
+                if (totalAmountObj instanceof Number) {
+                    totalAmount = ((Number) totalAmountObj).doubleValue();
+                } else {
+                    totalAmount = Double.parseDouble(totalAmountObj.toString());
+                }
+
+                // 创建多订单支付会话参数
+                paramsBuilder = SessionCreateParams.builder()
+                        .setMode(SessionCreateParams.Mode.PAYMENT)
+                        .setSuccessUrl("http://localhost:4200/payment-success")
+                        .setCancelUrl("http://localhost:4200/payment-cancelled")
+                        .addLineItem(SessionCreateParams.LineItem.builder()
+                                .setQuantity(1L)
+                                .setPriceData(
+                                        SessionCreateParams.LineItem.PriceData.builder()
+                                                .setCurrency("eur")
+                                                .setUnitAmount(Math.round(totalAmount * 100))
+                                                .setProductData(
+                                                        SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                                .setName("Order Payment")
+                                                                .setDescription("Payment for " + orderIds.size() + " order(s)")
+                                                                .build()
+                                                )
+                                                .build()
+                                )
+                                .build());
+
+                // 将多个订单 ID 放到元数据中
+                paramsBuilder.putMetadata("orderIds", String.join(",", orderIds));
+                paramsBuilder.putMetadata("totalAmount", String.valueOf(totalAmount));
+
+            } else {
+                // 如果既没有 orderId 也没有 orderIds，返回错误请求
+                return ResponseEntity.badRequest().build();
+            }
+
+            // 构建参数并创建支付会话
+            SessionCreateParams params = paramsBuilder.build();
             Session session = Session.create(params);
 
-
+            // 准备响应数据
             Map<String, String> responseData = new HashMap<>();
             responseData.put("id", session.getId());
             responseData.put("url", session.getUrl());
             return ResponseEntity.ok(responseData);
+
         } catch (StripeException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
     }
 
     @PostMapping("/webhook")
@@ -97,10 +148,17 @@ public class PaymentController {
 
                 if (session != null) {
                     String orderId = session.getMetadata().get("orderId");
+                    String orderIdsStr = session.getMetadata().get("orderIds");
 
-                    // 3. 更新订单状态
                     if (orderId != null) {
+                        // 处理单订单
                         orderServiceClient.updateOrderStatus(UUID.fromString(orderId), "PAID");
+                    } else if (orderIdsStr != null) {
+                        // 处理多订单
+                        String[] orderIds = orderIdsStr.split(",");
+                        for (String id : orderIds) {
+                            orderServiceClient.updateOrderStatus(UUID.fromString(id.trim()), "PAID");
+                        }
                     }
                 }
             }

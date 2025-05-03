@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public class Product {
     private UUID productId;
+    private UUID merchantId;
     private String name;
     private String description;
     private double price;
@@ -15,6 +16,14 @@ public class Product {
 
     public void setProductId(UUID productId) {
         this.productId = productId;
+    }
+
+    public UUID getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(UUID merchantId) {
+        this.merchantId = merchantId;
     }
 
     public String getName() {

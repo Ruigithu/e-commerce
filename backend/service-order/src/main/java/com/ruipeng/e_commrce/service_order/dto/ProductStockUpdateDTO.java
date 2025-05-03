@@ -1,4 +1,4 @@
-package com.ruipeng.e_commrce.service_order.entity;
+package com.ruipeng.e_commrce.service_order.dto;
 
 import java.util.UUID;
 

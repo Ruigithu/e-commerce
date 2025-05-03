@@ -1,7 +1,7 @@
-package com.ruipeng.e_commrce.service_order.entity;
+package com.ruipeng.e_commrce.service_order.dto;
 
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.ruipeng.e_commrce.service_order.entity.CartItem;
+import com.ruipeng.e_commrce.service_order.entity.Product;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,15 +9,13 @@ import java.util.UUID;
 public class OrderRequestFromCart {
     private UUID userId;
     private UUID addressId;
-    private List<UUID> merchantId;
     private List<CartItem> cartItems; // 接收复杂对象
     private List<Product> products; // 接收复杂对象
     private double totalAmount;
 
-    public OrderRequestFromCart(UUID userId, UUID addressId,List<UUID> merchantId, List<CartItem> cartItems, List<Product> products, double totalAmount) {
+    public OrderRequestFromCart(UUID userId, UUID addressId, List<CartItem> cartItems, List<Product> products, double totalAmount) {
         this.userId = userId;
         this.addressId = addressId;
-        this.merchantId = merchantId;
         this.cartItems = cartItems;
         this.products = products;
         this.totalAmount = totalAmount;
@@ -39,13 +37,6 @@ public class OrderRequestFromCart {
         this.addressId = addressId;
     }
 
-    public List<UUID> getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(List<UUID> merchantId) {
-        this.merchantId = merchantId;
-    }
 
     public List<CartItem> getCartItems() {
         return cartItems;

@@ -1,5 +1,8 @@
 package com.ruipeng.e_commrce.service_order.controller;
 
+import com.ruipeng.e_commrce.service_order.dto.OrderRequest;
+import com.ruipeng.e_commrce.service_order.dto.OrderRequestFromCart;
+import com.ruipeng.e_commrce.service_order.dto.ProductStockUpdateDTO;
 import com.ruipeng.e_commrce.service_order.entity.*;
 import com.ruipeng.e_commrce.service_order.service.OrderItemService;
 import com.ruipeng.e_commrce.service_order.service.OrderService;
@@ -27,8 +30,7 @@ public class OrderController {
     }
 
     @PostMapping("/createOrderFromCart")
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequestFromCart request) {
-        // 添加空值检查
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequestFromCart request) {
         UUID userId = null;
         UUID addressId = null;
 
@@ -42,35 +44,58 @@ public class OrderController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
-
-        Order order = new Order();
-        order.setOrderId(UUID.randomUUID());
-        order.setUserId(userId);
-        order.setShippingAddressId(addressId);
-        order.setCreateAt(LocalDateTime.now());
-        order.setUpdateAt(LocalDateTime.now());
-        order.setTotalAmount(request.getTotalAmount());
-        order.setStatus(OrderStatus.PENDING);
-
-        Order newOrder = orderService.createNewOrder(order);
-
-        List<OrderItem> itemList=new ArrayList<>();
-
-        for(CartItem cartItem : request.getCartItems()) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setItemId(UUID.randomUUID());
-            orderItem.setOrderId(newOrder.getOrderId());
-            orderItem.setProductId(cartItem.getProductId());
-            orderItem.setQuantity(cartItem.getQuantity());
+        List<Order> orderList =new ArrayList<>();
+        try {
+            Map<UUID, List<UUID>> merchantIds_products = new HashMap<>();
+            Set<UUID> merchantIds = new HashSet<>();
             for (Product product : request.getProducts()) {
-                if (product.getProductId().equals(cartItem.getProductId())) {
-                    orderItem.setUnitPrice(product.getPrice());
+                if (merchantIds_products.containsKey(product.getMerchantId())) {
+                    merchantIds_products.get(product.getMerchantId()).add(product.getProductId());
+                } else {
+                    merchantIds.add(product.getMerchantId());
+                    List<UUID> productsId = new ArrayList<>();
+                    productsId.add(product.getProductId());
+                    merchantIds_products.put(product.getMerchantId(), productsId);
                 }
             }
-            itemList.add(orderItem);
+
+            for (UUID merchantId : merchantIds) {
+                Order order = new Order();
+                order.setOrderId(UUID.randomUUID());
+                order.setUserId(userId);
+                order.setMerchantId(merchantId);
+                order.setShippingAddressId(addressId);
+                order.setCreateAt(LocalDateTime.now());
+                order.setUpdateAt(LocalDateTime.now());
+                order.setTotalAmount(request.getTotalAmount());
+                order.setStatus(OrderStatus.PENDING);
+
+                Order newOrder = orderService.createNewOrder(order);
+
+                List<OrderItem> itemList = new ArrayList<>();
+
+                for (CartItem cartItem : request.getCartItems()) {
+                    if (merchantIds_products.get(merchantId).contains(cartItem.getProductId())) {
+                        OrderItem orderItem = new OrderItem();
+                        orderItem.setItemId(UUID.randomUUID());
+                        orderItem.setOrderId(newOrder.getOrderId());
+                        orderItem.setProductId(cartItem.getProductId());
+                        orderItem.setQuantity(cartItem.getQuantity());
+                        for (Product product : request.getProducts()) {
+                            if (product.getProductId().equals(cartItem.getProductId())) {
+                                orderItem.setUnitPrice(product.getPrice());
+                            }
+                        }
+                        itemList.add(orderItem);
+                    }
+                    orderItemService.addOrderItems(itemList);
+                }
+                orderList.add(newOrder);
+            }
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().build();
         }
-        orderItemService.addOrderItems(itemList);
-        return ResponseEntity.ok(newOrder);
+        return ResponseEntity.ok(orderList);
 
     }
 
@@ -86,7 +111,7 @@ public class OrderController {
         order.setUpdateAt(LocalDateTime.now());
         order.setTotalAmount(request.getTotalAmount());
         order.setStatus(OrderStatus.PENDING);
-        order.setMerchantId(request.getMerchantId());
+        order.setMerchantId(request.getProduct().getMerchantId());
 
         Order newOrder = orderService.createNewOrder(order);
         OrderItem orderItem=new OrderItem();

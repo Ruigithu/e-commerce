@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../products/product.service';
 import { Address } from '../users/addresss/address.model';
 import { AddressService } from '../users/addresss/address.service';
-import { Header } from '../../../app/common/components/header/header.component';
+import { Header } from '../../common/components/header/header.component';
+import {Observable, of, tap} from 'rxjs';
 
 @Component({
   selector: 'specific-order',
@@ -42,7 +43,6 @@ import { Header } from '../../../app/common/components/header/header.component';
           <div class="order-header">
             <div>
               <h1>Order Details</h1>
-              <p class="order-id">Order ID: ORDER-{{ generateOrderId() }}</p>
             </div>
             <div class="order-status">
               <i class="fa-solid fa-circle-notch fa-spin"></i>
@@ -60,7 +60,9 @@ import { Header } from '../../../app/common/components/header/header.component';
 
               <div class="product-card">
                 <div class="product-image">
-                  <img src="https://via.placeholder.com/100" [alt]="product.name">
+                  <img *ngIf="getProductImage(productId) | async as imageUrl"
+                       [src]="imageUrl"
+                       alt="Product image">
                 </div>
 
                 <div class="product-info">
@@ -580,6 +582,7 @@ export class OrderInfoComponent implements OnInit {
   isLoading: boolean = true;
   errorMessage: string = "";
   shippingFee: number = 0;
+  image='';
 
   constructor(
     private route: ActivatedRoute,
@@ -638,6 +641,7 @@ export class OrderInfoComponent implements OnInit {
       }
     });
   }
+  productImagesMap = new Map<string, string>();
 
   loadProductInfo(productId: string): void {
     this.productService.getProduct(productId).subscribe({
@@ -657,6 +661,20 @@ export class OrderInfoComponent implements OnInit {
     });
   }
 
+  getProductImage(productId: string): Observable<string> {
+    // 如果缓存中已有图片，直接返回
+    if (this.productImagesMap.has(productId)) {
+      return of(this.productImagesMap.get(productId) || '');
+    }
+
+    // 否则调用服务获取图片
+    return this.productService.getProductMainImage(productId).pipe(
+      tap(imageUrl => {
+        // 存入缓存
+        this.productImagesMap.set(productId, imageUrl);
+      })
+    );
+  }
   calculateShipping() {
     // 简单的运费计算逻辑：订单金额超过50欧元免运费，否则5欧元运费
     if (this.product) {
@@ -670,10 +688,6 @@ export class OrderInfoComponent implements OnInit {
     return (this.product.price * this.quantity) + this.shippingFee;
   }
 
-  generateOrderId(): string {
-    // 生成一个假的订单ID
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
 
   formatPhoneNumber(phone: string): string {
     // 简单的电话号码格式化

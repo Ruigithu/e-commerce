@@ -5,29 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77caea28-e314-4b3c-b6c7-9803e7f3ec18" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c510b24b-2df3-4751-a3c1-4d5d0d7f0c09.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c510b24b-2df3-4751-a3c1-4d5d0d7f0c09.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/OrderRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/OrderRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/OrderRequestFromCart.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/OrderRequestFromCart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/repo/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/repo/OrderRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/service/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/controller/AddressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/controller/AddressController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/service/AddressService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/service/AddressService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/common/components/header/user-menu.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/common/components/header/user-menu.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/merchants/mechant-orders.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/merchants/mechant-orders.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant-orders.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant-orders.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/merchants/products-management.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/merchants/products-management.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/controller/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/controller/ProductClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/OrderRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/dto/OrderRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/OrderRequestFromCart.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/dto/OrderRequestFromCart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/entity/ProductStockUpdateDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/java/com/ruipeng/e_commrce/service_order/dto/ProductStockUpdateDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-pay/src/main/java/com/ruipeng/e_commerce/service_pay/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-pay/src/main/java/com/ruipeng/e_commerce/service_pay/controller/PaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/entity/Merchant.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/entity/Merchant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/common/components/header/header.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/common/components/header/header.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/features/orders/carts/cart.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/orders/carts/cart.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/features/orders/carts/cart.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/orders/carts/cart.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/features/orders/order.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/orders/order.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/payments/payment.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/payments/payment.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/product-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/product-list.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/users/addresss/address-list/address-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/users/addresss/address-list/address-form.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/users/addresss/address-list/address-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/users/addresss/address-list/address-list.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/users/addresss/address.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/users/addresss/address.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,7 +154,8 @@
       <updated>1746012623664</updated>
       <workItem from="1746012624815" duration="1226000" />
       <workItem from="1746086628080" duration="20387000" />
-      <workItem from="1746171597667" duration="22211000" />
+      <workItem from="1746171597667" duration="26575000" />
+      <workItem from="1746262029485" duration="13831000" />
     </task>
     <servers />
   </component>
@@ -177,38 +168,42 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.component.ts</url>
           <line>332</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/frontend/src/app/features/products/product.service.ts</url>
           <line>96</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.service.ts</url>
           <line>46</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.component.ts</url>
           <line>1277</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.component.ts</url>
           <line>232</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/frontend/src/app/features/merchants/mechant-orders.component.ts</url>
           <line>247</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.component.ts</url>
+          <line>1082</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/backend/service-pay/src/main/java/com/ruipeng/e_commerce/service_pay/controller/PaymentController.java</url>
+          <line>136</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

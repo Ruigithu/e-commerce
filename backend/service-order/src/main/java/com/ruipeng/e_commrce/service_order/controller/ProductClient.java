@@ -1,7 +1,7 @@
 package com.ruipeng.e_commrce.service_order.controller;
 
 import com.ruipeng.e_commrce.service_order.entity.Product;
-import com.ruipeng.e_commrce.service_order.entity.ProductStockUpdateDTO;
+import com.ruipeng.e_commrce.service_order.dto.ProductStockUpdateDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { PaymentComponent } from '../../payments/payment.component';
 import { Router, RouterLink } from '@angular/router';
 import { CartService } from './cart.service';
-import { firstValueFrom, forkJoin } from 'rxjs';
+import {firstValueFrom, forkJoin, Observable, of, tap} from 'rxjs';
 import { Product } from '../../products/product.model';
 import { ProductService } from '../../products/product.service';
 import { CartItem } from './CartItem.model';
@@ -57,14 +57,16 @@ import { Header } from '../../../common/components/header/header.component';
                 <ng-container *ngIf="getProduct(item.productId) as product">
                   <!-- Updated Product Image to match product-management style -->
                   <div class="item-image product-image">
-                    <div class="image-placeholder" *ngIf="!product.imageUrl">
+                    <div class="image-placeholder" *ngIf="!getProductImageUrl(item.productId)">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                         <circle cx="8.5" cy="8.5" r="1.5"></circle>
                         <polyline points="21 15 16 10 5 21"></polyline>
                       </svg>
                     </div>
-                    <img *ngIf="product.imageUrl" [src]="product.imageUrl" [alt]="product.name">
+                    <img *ngIf="getProductImageUrl(item.productId)"
+                         [src]="getProductImageUrl(item.productId)"
+                         [alt]="product.name">
                   </div>
 
                   <!-- Product Details -->
@@ -543,6 +545,7 @@ export class ShoppingCartComponent implements OnInit {
   cartItems: CartItem[] = [];
   loading: boolean = true;
   errorMessage: string | null = null;
+  productImagesMap = new Map<string, string>();
 
   constructor(
     private cartService: CartService,
@@ -570,6 +573,7 @@ export class ShoppingCartComponent implements OnInit {
             next: (products) => {
               products.forEach(product => {
                 this.products.set(product.productId, product);
+                this.preloadImage(product.productId);
               });
               this.loading = false;
             },
@@ -648,7 +652,7 @@ export class ShoppingCartComponent implements OnInit {
     const tax = this.calculateTax();
     const discount = this.calculateDiscount();
 
-    return subtotal + shipping + tax - discount;
+    return subtotal;
   }
 
   navigateToProduct(productId: string): void {
@@ -685,34 +689,51 @@ export class ShoppingCartComponent implements OnInit {
     }
 
     try {
-      // Show a loading indicator
       this.loading = true;
 
-      // 1. Create order
+      // 1. 创建订单（返回数组）
       const orderResponse = await firstValueFrom(
         this.cartService.createOrder(this.cartItems, Array.from(this.products.values()), this.calculateTotal())
       );
 
-      if (orderResponse && orderResponse.orderId) {
-        // 2. Create payment session
+      if (orderResponse && Array.isArray(orderResponse) && orderResponse.length > 0) {
+        // 提取所有订单 ID
+        const orderIds = orderResponse.map(order => order.orderId);
+
+        // 2. 创建多订单支付请求
+        const paymentRequest = {
+          orderIds: orderIds,
+          totalAmount: this.calculateTotal()
+        };
+
+        // 3. 使用新的多订单支付方法
         const paymentResponse = await firstValueFrom(
-          this.cartService.createPaymentSession(orderResponse.orderId)
+          this.cartService.createPaymentSessionForMultipleOrders(paymentRequest)
         );
 
-        // 3. Redirect to payment page
         if (paymentResponse && paymentResponse.url) {
           window.location.href = paymentResponse.url;
-        } else {
-          console.error("Invalid payment response", paymentResponse);
-          this.loading = false;
         }
       }
     } catch (error) {
       console.error('Checkout process failed:', error);
       this.loading = false;
-      // Show error message
       this.errorMessage = "An error occurred during checkout. Please try again.";
       alert(this.errorMessage);
     }
+  }
+
+
+  preloadImage(productId: string): void {
+    if (!this.productImagesMap.has(productId)) {
+      this.productService.getProductMainImage(productId).subscribe(url => {
+        this.productImagesMap.set(productId, url);
+      });
+    }
+  }
+  getProductImageUrl(productId: string): string {
+    const storedUrl = this.productImagesMap.get(productId);
+    const product = this.products.get(productId);
+    return storedUrl || product?.imageUrl || '';
   }
 }

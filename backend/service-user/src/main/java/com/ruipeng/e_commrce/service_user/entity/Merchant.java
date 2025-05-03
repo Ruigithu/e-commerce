@@ -13,16 +13,15 @@ public class Merchant {
     private UUID merchantId;
 
     @Column(name = "user_id", nullable = false)
-    private UUID userId;        // 关联到用户账号
-
-    private String storeName;      // 店铺名称
-    private String description;   // 店铺描述
-    private String logoPath;;           // 店铺logo
-    private String contactEmail;   // 联系邮箱
-    private String contactPhone;   // 联系电话
-    private String address;        // 店铺地址
-    private LocalDateTime createdAt;      // 创建时间
-    private MerchantStatus status; // 商家状态（活跃/暂停/关闭）
+    private UUID userId;
+    private String storeName;
+    private String description;
+    private String logoPath;;
+    private String contactEmail;
+    private String contactPhone;
+    private String address;
+    private LocalDateTime createdAt;
+    private MerchantStatus status;
 
     public Merchant(UUID merchantId, UUID userId, String storeName, String description, String logoPath, String contactEmail, String contactPhone, String address, LocalDateTime createdAt, MerchantStatus status) {
         this.merchantId = merchantId;
