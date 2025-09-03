@@ -39,6 +39,13 @@ spring:
           filters:
             - StripPrefix=1
 
+        - id: review-service-route
+          uri: lb://service-review
+          predicates:
+            - Path=/reviews/**
+          filters:
+            - StripPrefix=1
+
 
         - id: login-route
           uri: lb://service-user  # 用户服务的负载均衡地址

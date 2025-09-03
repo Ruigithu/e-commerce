@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="service-product@localhost">
-  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.52">
+  <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.53">
     <root id="1">
       <DateStyle>ymd</DateStyle>
       <IntrospectionStateNumber>5541</IntrospectionStateNumber>
@@ -933,32 +933,32 @@ false Zulu
       <OwnerName>postgres</OwnerName>
     </table>
     <column id="33" parent="31" name="image_id">
-      <DasType>uuid|0s</DasType>
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StateNumber>2670</StateNumber>
+      <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
     <column id="34" parent="31" name="product_id">
-      <DasType>uuid|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>2667</StateNumber>
+      <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
     <column id="35" parent="31" name="image_url">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>2667</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <column id="36" parent="31" name="created_at">
-      <DasType>timestamp|0s</DasType>
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <Position>4</Position>
       <StateNumber>2667</StateNumber>
+      <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
     <foreign-key id="37" parent="31" name="product_images_product_id_fkey">
@@ -999,54 +999,54 @@ false Zulu
       <StateNumber>5536</StateNumber>
     </check>
     <column id="42" parent="32" name="product_id">
-      <DasType>uuid|0s</DasType>
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StateNumber>917</StateNumber>
+      <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
     <column id="43" parent="32" name="name">
-      <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
       <StateNumber>923</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <column id="44" parent="32" name="description">
-      <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
       <StateNumber>922</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <column id="45" parent="32" name="price">
-      <DasType>double precision|0s</DasType>
       <Position>4</Position>
       <StateNumber>924</StateNumber>
+      <StoredType>double precision|0s</StoredType>
       <TypeId>701</TypeId>
     </column>
     <column id="46" parent="32" name="stock">
-      <DasType>integer|0s</DasType>
       <Position>5</Position>
       <StateNumber>916</StateNumber>
+      <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
     <column id="47" parent="32" name="created_at">
-      <DasType>timestamp|0s</DasType>
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <Position>6</Position>
       <StateNumber>916</StateNumber>
+      <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
     <column id="48" parent="32" name="category">
-      <DasType>varchar(255)|0s</DasType>
       <Position>8</Position>
       <StateNumber>5525</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <column id="49" parent="32" name="status">
-      <DasType>varchar(255)|0s</DasType>
       <Position>9</Position>
       <StateNumber>5536</StateNumber>
+      <StoredType>varchar(255)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
     <index id="50" parent="32" name="products_pkey">

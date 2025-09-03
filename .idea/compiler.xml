@@ -6,11 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="service-order" />
-        <module name="service-pay" />
         <module name="service-product" />
         <module name="service-user" />
         <module name="eureka" />
+        <module name="service-order" />
+        <module name="service-pay" />
+        <module name="service-review" />
         <module name="gateway" />
       </profile>
     </annotationProcessing>
@@ -22,6 +23,7 @@
       <module name="service-order" options="-parameters" />
       <module name="service-pay" options="-parameters" />
       <module name="service-product" options="-parameters" />
+      <module name="service-review" options="-parameters" />
       <module name="service-user" options="-parameters" />
     </option>
   </component>

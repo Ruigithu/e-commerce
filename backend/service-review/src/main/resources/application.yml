@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: service-review  # Eureka service name
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ecommerce
+      database: ecommerce
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/  # Eureka server URL
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    hostname: ${spring.cloud.client.ip-address}
+
+server:
+  port: 8020  # Unique port for Review Service
