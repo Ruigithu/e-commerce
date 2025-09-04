@@ -17,7 +17,7 @@ public class CorsConfig {
     public CorsConfiguration corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("http://localhost:4200");
+        config.addAllowedOriginPattern("https://e-commerce-rui667.netlify.app");
         config.addAllowedHeader("*");
         config.addAllowedHeader("Content-Type");
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));

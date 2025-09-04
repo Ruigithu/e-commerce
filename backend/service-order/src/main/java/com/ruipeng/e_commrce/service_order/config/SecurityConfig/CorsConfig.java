@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class CorsConfig {
 
     // Store the allowed origins in a constant that can be referenced
-    public static final String[] ALLOWED_ORIGINS = {"http://localhost:4200"};
+    public static final String[] ALLOWED_ORIGINS = {"https://e-commerce-rui667.netlify.app"};
 
     @Bean
     public CorsConfiguration corsConfiguration() {
