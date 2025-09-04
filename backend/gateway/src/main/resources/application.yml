@@ -65,10 +65,12 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-              allowedOrigins: "*"
+              allowedOrigins:
+                - "http://localhost:4200"
+                - "https://e-commerce-rui667.netlify.app"
               allowedMethods: "*"
               allowedHeaders: "*"
-              allowCredentials: true
+              allowCredentials: false
 eureka:
   client:
     service-url:
