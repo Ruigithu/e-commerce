@@ -4,9 +4,10 @@ spring:
 
 
   datasource:
-      url: jdbc:postgresql://localhost:5432/service-user
-      username: postgres
-      password: 123456
+      url: jdbc:postgresql://ep-lucky-cake-a8jchw20-pooler.eastus2.azure.neon.tech/service-user?sslmode=require&channel_binding=require
+#    localhost:5432/service-user
+      username: service-user_owner
+      password: npg_FJAN6WaS3ZXK
       driver-class-name: org.postgresql.Driver
 
   h2:
@@ -17,6 +18,9 @@ spring:
     hibernate:
       ddl-auto: update  # 自动更新数据库模式（可以设置为 'create', 'validate', 'none' 等）
     show-sql: true  # 显示 SQL 查询语句
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 eureka:
   client:

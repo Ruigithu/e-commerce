@@ -4,9 +4,10 @@ spring:
 
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/service-order
-    username: postgres
-    password: 123456
+    url: jdbc:postgresql://ep-gentle-flower-a816ozgy-pooler.eastus2.azure.neon.tech/service-order?sslmode=require&channel_binding=require
+#    localhost:5432/service-order
+    username: service-order_owner
+    password: npg_VgD8lmH9LQOy
     driver-class-name: org.postgresql.Driver
 
   h2:
