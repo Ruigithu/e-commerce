@@ -62,10 +62,10 @@ spring:
             - StripPrefix=1
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
-      globals:
-          corsConfigurations:
-            '[/**]':
-              allowedOrigins: "http://localhost:4200"
+      globalcors:
+        cors-configurations:
+          '[/**]':
+              allowedOrigins: "*"
               allowedMethods: "*"
               allowedHeaders: "*"
               allowCredentials: true
