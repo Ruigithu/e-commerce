@@ -10,7 +10,7 @@ import { ProductService } from '../product.service';
 import {ActivatedRoute, RouterLink, RouterModule} from '@angular/router';
 import {Header} from '../../../common/components/header/header.component';
 import {UserMenuComponent} from '../../../common/components/header/user-menu.component';
-import {environment} from '../../../environment';
+import {environment} from '../../../../environments/environment.prod';
 import {catchError, forkJoin, map, of} from 'rxjs';
 
 

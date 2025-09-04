@@ -9,7 +9,7 @@ import {CartItem} from '../orders/carts/CartItem.model';
 import {Product} from '../products/product.model';
 import { Address } from '../users/addresss/address.model';
 import {Order} from '../orders/my-orders/my-orders.service';
-import {environment} from '../../environment';
+import {environment} from '../../../environments/environment.prod';
 
 
 @Component({

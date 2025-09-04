@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { Merchant, MerchantStatus } from './merchant.modal';
 import { Product, ProductStatus } from '../products/product.model';
 import { OrderStatus } from '../orders/my-orders/my-orders.service';
-import {environment} from '../../environment';
+import {environment} from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'

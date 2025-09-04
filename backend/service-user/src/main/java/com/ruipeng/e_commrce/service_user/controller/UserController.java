@@ -2,8 +2,8 @@ package com.ruipeng.e_commrce.service_user.controller;
 
 import com.ruipeng.e_commrce.service_user.config.security.AppUserDetails;
 import com.ruipeng.e_commrce.service_user.entity.Address;
-import com.ruipeng.e_commrce.service_user.entity.Merchant;
 import com.ruipeng.e_commrce.service_user.entity.User;
+import com.ruipeng.e_commrce.service_user.repo.UserRepo;
 import com.ruipeng.e_commrce.service_user.service.AddressService;
 import com.ruipeng.e_commrce.service_user.service.MerchantService;
 import com.ruipeng.e_commrce.service_user.service.UserService;
@@ -15,35 +15,37 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 public class UserController {
 
-   private UserService service;
+    private final UserService userService;
+    private final UserRepo userRepo;
+    private UserService service;
    private MerchantService merchantService;
    private AuthenticationManager authenticationManager;
    private UserDetailsService userDetailsService;
    private AddressService addressService;;
 
     @Autowired
-   public UserController(UserService service,MerchantService merchantService,  AuthenticationManager authenticationManager,UserDetailsService userDetailsService,AddressService addressService) {
+   public UserController(UserService service, MerchantService merchantService, AuthenticationManager authenticationManager, UserDetailsService userDetailsService, AddressService addressService, UserService userService, UserRepo userRepo) {
         this.service = service;
         this.merchantService = merchantService;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.addressService = addressService;
-   }
+        this.userService = userService;
+        this.userRepo = userRepo;
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@RequestBody User user) {
@@ -93,6 +95,11 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "Authentication failed: " + e.getMessage()));
         }
+    }
+
+    @GetMapping("/findUserById")
+    public Optional<User> findUserById(@RequestParam("userId") UUID userId) {
+       return userRepo.findById(userId);
     }
 }
 

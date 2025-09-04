@@ -1,0 +1,13 @@
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\config\cors\CorsConfig.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\config\cors\SecurityConfig\SecurityConfig.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\controller\ProductController.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\entity\Product.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\entity\ProductCategoryEnum.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\entity\ProductImage.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\entity\ProductInfo.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\entity\ProductStatusEnum.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\entity\ProductStockUpdateDTO.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\repo\ProductImageRepo.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\repo\ProductRepo.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\service\ProductService.java
+E:\Job-searching-projects\e-commerce\backend\service-product\src\main\java\com\ruipeng\e_commrce\service_product\ServiceProductApplication.java

@@ -13,7 +13,7 @@ import {Product, ProductStatus} from './product.model';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ProductCategory} from './product-category.model';
 import {ProductImage} from './product-image.model';
-import {environment} from '../../environment';
+import {environment} from '../../../environments/environment.prod';
 
 //@Injectable 装饰器表示 ProductService 是一个可注入的服务，
 //providedIn: 'root' 表示这个服务是根级别的，意味着它会在整个应用中共享，

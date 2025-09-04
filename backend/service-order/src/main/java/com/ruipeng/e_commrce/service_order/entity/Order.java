@@ -19,8 +19,13 @@ public class Order {
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
+    private String trackingNumber;
+    private String shippingCarrier;
+    private String shippingNotes;
 
-    public Order(UUID orderId, UUID userId, UUID merchantId,   OrderStatus status, double totalAmount, UUID shippingAddressId, LocalDateTime createAt, LocalDateTime updateAt) {
+
+    public Order(UUID orderId, UUID userId, UUID merchantId,   OrderStatus status, double totalAmount, UUID shippingAddressId, LocalDateTime createAt, LocalDateTime updateAt
+    , String trackingNumber, String shippingCarrier, String shippingNotes) {
         this.orderId = orderId;
         this.userId = userId;
         this.merchantId = merchantId;
@@ -29,6 +34,9 @@ public class Order {
         this.shippingAddressId = shippingAddressId;
         this.createAt = createAt;
         this.updateAt = updateAt;
+        this.trackingNumber = trackingNumber;
+        this.shippingCarrier = shippingCarrier;
+        this.shippingNotes = shippingNotes;
     }
 
     public Order() {}
@@ -97,4 +105,27 @@ public class Order {
         this.updateAt = updateAt;
     }
 
+    public String getTrackingNumber() {
+        return trackingNumber;
+    }
+
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
+    }
+
+    public String getShippingCarrier() {
+        return shippingCarrier;
+    }
+
+    public void setShippingCarrier(String shippingCarrier) {
+        this.shippingCarrier = shippingCarrier;
+    }
+
+    public String getShippingNotes() {
+        return shippingNotes;
+    }
+
+    public void setShippingNotes(String shippingNotes) {
+        this.shippingNotes = shippingNotes;
+    }
 }

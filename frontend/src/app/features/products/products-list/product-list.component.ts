@@ -3,7 +3,7 @@ import { Product } from '../product.model';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../product.service';
 import { RouterLink } from '@angular/router';
-import {environment} from '../../../environment';
+import {environment} from '../../../../environments/environment.prod';
 import {catchError, forkJoin, map, of} from 'rxjs';
 import {CartService} from '../../orders/carts/cart.service';
 import {MessageService} from '../../../common/message.service';

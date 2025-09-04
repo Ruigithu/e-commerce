@@ -1,0 +1,13 @@
+com\ruipeng\e_commrce\service_product\entity\ProductStockUpdateDTO.class
+com\ruipeng\e_commrce\service_product\entity\ProductInfo.class
+com\ruipeng\e_commrce\service_product\entity\ProductStatusEnum.class
+com\ruipeng\e_commrce\service_product\repo\ProductImageRepo.class
+com\ruipeng\e_commrce\service_product\config\cors\CorsConfig.class
+com\ruipeng\e_commrce\service_product\config\cors\SecurityConfig\SecurityConfig.class
+com\ruipeng\e_commrce\service_product\service\ProductService.class
+com\ruipeng\e_commrce\service_product\repo\ProductRepo.class
+com\ruipeng\e_commrce\service_product\entity\Product.class
+com\ruipeng\e_commrce\service_product\entity\ProductCategoryEnum.class
+com\ruipeng\e_commrce\service_product\ServiceProductApplication.class
+com\ruipeng\e_commrce\service_product\controller\ProductController.class
+com\ruipeng\e_commrce\service_product\entity\ProductImage.class

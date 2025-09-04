@@ -4,7 +4,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Router, RouterLink} from '@angular/router';
 import {LoginResponse} from './loginresponse.model';
 import {CommonModule} from '@angular/common';
-import {environment} from '../../../environment';
+import {environment} from '../../../../environments/environment.prod';
 
 @Component({
   selector: `login-page`,

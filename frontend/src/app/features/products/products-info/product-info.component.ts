@@ -6,7 +6,7 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Header} from '../../../common/components/header/header.component';
 import {CartService} from '../../orders/carts/cart.service';
 import {ProductImage} from '../product-image.model';
-import {environment} from '../../../environment';
+import {environment} from '../../../../environments/environment.prod';
 
 @Component({
   selector: `product-info`,

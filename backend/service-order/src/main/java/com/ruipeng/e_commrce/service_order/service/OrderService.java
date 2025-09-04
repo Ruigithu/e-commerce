@@ -154,6 +154,7 @@ public class OrderService {
                 // 选项1: 返回空列表
                 return new HashMap<>();
             }
+            merchantOrders.removeIf(order -> order.getStatus() == OrderStatus.PENDING);
             allOrdersInformation.put("merchantOrders",merchantOrders);
             for(Order order:merchantOrders){
                 List<OrderItem> orderItems = orderItemService.getOrderItems(order.getOrderId());

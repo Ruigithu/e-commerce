@@ -3,11 +3,9 @@ package com.ruipeng.e_commerce.service_pay.service;
 import com.ruipeng.e_commerce.service_pay.entity.OrderDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -20,9 +18,10 @@ public interface OrderServiceClient {
 
 
     @PutMapping("/updateStatus/{orderId}")
-    ResponseEntity<?> updateOrderStatus(
+    ResponseEntity<String> updateOrderStatus(
             @PathVariable("orderId") UUID orderId,
             @RequestParam("status") String status
     );
-}
+    @PostMapping("/notifications/create")
+    ResponseEntity<?> createOrderNotification(@RequestBody Map<String, Object> notificationData);}
 

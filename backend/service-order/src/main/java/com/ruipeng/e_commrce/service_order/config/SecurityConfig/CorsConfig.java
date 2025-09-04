@@ -11,15 +11,21 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 
 @Configuration
-@Order(Ordered.HIGHEST_PRECEDENCE)  // 确保 CORS 配置最先被应用
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsConfig {
+
+    // Store the allowed origins in a constant that can be referenced
+    public static final String[] ALLOWED_ORIGINS = {"http://localhost:4200"};
+
     @Bean
     public CorsConfiguration corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("http://localhost:4200");
+        // Add all allowed origins
+        for (String origin : ALLOWED_ORIGINS) {
+            config.addAllowedOrigin(origin);
+        }
         config.addAllowedHeader("*");
-        config.addAllowedHeader("Content-Type");
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setMaxAge(3600L);
         return config;
@@ -29,7 +35,6 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration());
-        CorsFilter corsFilter = new CorsFilter(source);
-        return corsFilter;
+        return new CorsFilter(source);
     }
 }

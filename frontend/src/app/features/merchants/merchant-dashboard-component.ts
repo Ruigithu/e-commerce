@@ -3,7 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Product } from '../products/product.model';
 import { CommonModule } from '@angular/common';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environment';
+import {environment} from '../../../environments/environment.prod';
 import {Merchant} from './merchant.modal';
 
 @Component({

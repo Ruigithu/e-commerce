@@ -6,15 +6,17 @@ import java.util.UUID;
 public class OrderDTO {
     private UUID orderId;
     private UUID userId;
+    private UUID merchantId;
     private String status;
     private double totalAmount;
     private UUID shippingAddressId;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
-    public OrderDTO(UUID orderId, UUID userId, String status, double totalAmount, UUID shippingAddressId, LocalDateTime createAt, LocalDateTime updateAt) {
+    public OrderDTO(UUID orderId, UUID userId, UUID merchantId, String status, double totalAmount, UUID shippingAddressId, LocalDateTime createAt, LocalDateTime updateAt) {
         this.orderId = orderId;
         this.userId = userId;
+        this.merchantId = merchantId;
         this.status = status;
         this.totalAmount = totalAmount;
         this.shippingAddressId = shippingAddressId;
@@ -36,6 +38,14 @@ public class OrderDTO {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    public UUID getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(UUID merchantId) {
+        this.merchantId = merchantId;
     }
 
     public String getStatus() {
