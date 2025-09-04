@@ -46,7 +46,7 @@ npm install
 npm start
 ```
 
-This will start the Angular development server on http://localhost:4200.
+This will start the Angular development server on https://e-commerce-rui667.netlify.app.
 
 ### Available Scripts
 
@@ -157,7 +157,7 @@ cd frontend
 npm start
 ```
 
-Access the application at http://localhost:4200
+Access the application at https://e-commerce-rui667.netlify.app
 
 ## Monitoring and Management
 

@@ -22,7 +22,7 @@ public class GatewayConfiguration {
 
             if (origin != null) {
                 HttpHeaders headers = ctx.getResponse().getHeaders();
-                headers.add("Access-Control-Allow-Origin", "http://localhost:4200");
+                headers.add("Access-Control-Allow-Origin", "https://e-commerce-rui667.netlify.app");
                 headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
                 headers.add("Access-Control-Allow-Headers", "*");
                 headers.add("Access-Control-Allow-Headers","Content-Type");

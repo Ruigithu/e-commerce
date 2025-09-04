@@ -492,7 +492,7 @@
   浏览器访问：
   
   ```bash
-  http://localhost:4200/products
+  http://https://e-commerce-rui667.netlify.app/products
   ```
   
   ## 总结

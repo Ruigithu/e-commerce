@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .cors(cors -> {
                     CorsConfigurationSource source = request -> {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+                        config.setAllowedOrigins(Arrays.asList("https://e-commerce-rui667.netlify.app"));
                         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                         config.setAllowedHeaders(Arrays.asList("*"));
                         config.setAllowCredentials(true);

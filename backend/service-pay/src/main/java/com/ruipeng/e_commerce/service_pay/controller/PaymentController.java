@@ -65,8 +65,8 @@ public class PaymentController {
                 // 创建单订单支付会话参数
                 paramsBuilder = SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl("http://localhost:4200/payment-success?orderId=" + order.getOrderId())
-                        .setCancelUrl("http://localhost:4200/payment-cancelled?orderId=" + order.getOrderId())
+                        .setSuccessUrl("https://e-commerce-rui667.netlify.app/payment-success?orderId=" + order.getOrderId())
+                        .setCancelUrl("https://e-commerce-rui667.netlify.app/payment-cancelled?orderId=" + order.getOrderId())
                         .addLineItem(SessionCreateParams.LineItem.builder()
                                 .setQuantity(1L)
                                 .setPriceData(
@@ -102,8 +102,8 @@ public class PaymentController {
                 // 创建多订单支付会话参数
                 paramsBuilder = SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl("http://localhost:4200/payment-success")
-                        .setCancelUrl("http://localhost:4200/payment-cancelled")
+                        .setSuccessUrl("https://e-commerce-rui667.netlify.app/payment-success")
+                        .setCancelUrl("https://e-commerce-rui667.netlify.app/payment-cancelled")
                         .addLineItem(SessionCreateParams.LineItem.builder()
                                 .setQuantity(1L)
                                 .setPriceData(
