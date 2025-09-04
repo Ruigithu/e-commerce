@@ -6,17 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="77caea28-e314-4b3c-b6c7-9803e7f3ec18" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/eureka/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/eureka/Dockerfile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/eureka/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/gateway/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-pay/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-pay/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-product/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-product/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-review/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-user/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-user/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/eureka/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +54,7 @@
     "Maven.eureka [clean].executor": "Run",
     "Maven.eureka [package].executor": "Run",
     "Maven.gateway [clean].executor": "Run",
+    "Maven.gateway [package].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -79,7 +71,7 @@
     "Spring Boot.ServiceUserApplication.executor": "Run",
     "git-widget-placeholder": "develop",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/Job-searching-projects/e-commerce",
+    "last_opened_file_path": "E:/Job-searching-projects/e-commerce/backend/gateway",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -96,6 +88,11 @@
     ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Job-searching-projects\e-commerce\backend\gateway" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -315,7 +312,7 @@
       <workItem from="1746262029485" duration="13831000" />
       <workItem from="1756908741782" duration="452000" />
       <workItem from="1756909214987" duration="9739000" />
-      <workItem from="1756978039419" duration="2351000" />
+      <workItem from="1756978039419" duration="3240000" />
     </task>
     <servers />
   </component>

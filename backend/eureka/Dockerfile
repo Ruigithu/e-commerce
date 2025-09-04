@@ -1,4 +1,4 @@
-FROM openjdk:17-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # 直接复制预构建的 jar 文件
