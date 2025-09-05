@@ -97,3 +97,5 @@ logging:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty: DEBUG
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+    org.springframework.cloud.loadbalancer: DEBUG
+    com.netflix.loadbalancer: DEBUG

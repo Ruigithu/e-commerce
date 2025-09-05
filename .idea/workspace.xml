@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="77caea28-e314-4b3c-b6c7-9803e7f3ec18" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/gateway/src/main/java/com/ruipeng/e_commrce/gateway/config/GatewayConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/src/main/java/com/ruipeng/e_commrce/gateway/config/GatewayConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-product/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-product/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-user/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-user/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/environments/environment.prod.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.prod.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -385,7 +380,7 @@
       <workItem from="1756909214987" duration="9739000" />
       <workItem from="1756978039419" duration="10949000" />
       <workItem from="1756996610874" duration="20383000" />
-      <workItem from="1757065679336" duration="7353000" />
+      <workItem from="1757065679336" duration="8676000" />
     </task>
     <servers />
   </component>
