@@ -51,14 +51,14 @@ spring:
         - id: login-route
           uri: https://service-user-production-7ffd.up.railway.app  # 用户服务的负载均衡地址
           predicates:
-            - Path=/users/login
-          filters:
-            - StripPrefix=1
+            - Path=/login
+#          filters:
+#            - StripPrefix=1
 
         - id: signup-route
           uri: https://service-user-production-7ffd.up.railway.app  # 用户服务的负载均衡地址
           predicates:
-            - Path=/users/signup
+            - Path=/signup
           filters:
             - StripPrefix=1
       default-filters:
