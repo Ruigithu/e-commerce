@@ -1,5 +1,5 @@
 
 export const environment = {
   production: true,
-  apiUrl: 'https://gateway-production-2e3d.up.railway.app'
+  apiUrl: 'https://gateway-production-4c59.up.railway.app'
 };

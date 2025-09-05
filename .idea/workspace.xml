@@ -6,29 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="77caea28-e314-4b3c-b6c7-9803e7f3ec18" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/src/main/java/com/ruipeng/e_commrce/gateway/config/GatewayConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/src/main/java/com/ruipeng/e_commrce/gateway/config/GatewayConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-order/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/service-order/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-order/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-pay/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-pay/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-pay/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-pay/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-pay/src/main/java/com/ruipeng/e_commerce/service_pay/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-pay/src/main/java/com/ruipeng/e_commerce/service_pay/controller/PaymentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-pay/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-pay/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-product/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-product/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/service-product/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-product/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service-user/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-user/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/service-user/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service-user/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/_redirects" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/_redirects" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/angular.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.prod.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant-dashboard-component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant-dashboard-component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/merchants/merchant.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/payments/payment.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/payments/payment.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/product.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/product.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/products-info/product-info.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/products-info/product-info.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/product-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/product-list.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/specific-category.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/products/products-list/specific-category.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/users/addresss/address.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/users/addresss/address.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/users/loginPage/login-page.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/users/loginPage/login-page.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/environments/environment.prod.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.prod.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,13 +76,14 @@
     "Spring Boot.ServiceUserApplication.executor": "Run",
     "git-widget-placeholder": "develop",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/Job-searching-projects/e-commerce/backend/service-order",
+    "last_opened_file_path": "E:/Job-searching-projects/e-commerce",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "npm.build.executor": "Run",
+    "npm.ng.executor": "Run",
     "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.2",
@@ -135,7 +119,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Maven.service-user [package]">
+  <component name="RunManager" selected="npm.build">
     <configuration name="eureka [clean] (1)" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -359,9 +343,20 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="ng" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="ng" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="npm.build" />
+        <item itemvalue="npm.ng" />
         <item itemvalue="Maven.eureka [clean] (2)" />
       </list>
     </recent_temporary>
@@ -389,7 +384,8 @@
       <workItem from="1756908741782" duration="452000" />
       <workItem from="1756909214987" duration="9739000" />
       <workItem from="1756978039419" duration="10949000" />
-      <workItem from="1756996610874" duration="4092000" />
+      <workItem from="1756996610874" duration="20383000" />
+      <workItem from="1757065679336" duration="7353000" />
     </task>
     <servers />
   </component>
@@ -436,8 +432,14 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/backend/service-pay/src/main/java/com/ruipeng/e_commerce/service_pay/controller/PaymentController.java</url>
-          <line>136</line>
+          <line>150</line>
           <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-field">
+          <url>file://$PROJECT_DIR$/backend/service-user/src/main/java/com/ruipeng/e_commrce/service_user/controller/UserController.java</url>
+          <line>30</line>
+          <properties field="userService" class="com.ruipeng.e_commrce.service_user.controller.UserController" />
+          <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

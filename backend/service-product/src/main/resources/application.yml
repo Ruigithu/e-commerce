@@ -29,7 +29,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
   instance:
-    prefer-ip-address: true
+    prefer-ip-address: false
     hostname: ${RAILWAY_PUBLIC_DOMAIN:localhost}
     instance-id: ${spring.application.name}:${RAILWAY_PUBLIC_DOMAIN:localhost}:${PORT:8080}
     non-secure-port-enabled: false
