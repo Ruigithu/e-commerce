@@ -76,7 +76,7 @@ eureka:
       # 使用 Eureka 的 Railway 域名
       defaultZone: ${EUREKA_URL}/eureka/
   instance:
-    prefer-ip-address: true
+    prefer-ip-address: false
     hostname: ${RAILWAY_PUBLIC_DOMAIN:localhost}
     non-secure-port-enabled: false
     secure-port-enabled: true
