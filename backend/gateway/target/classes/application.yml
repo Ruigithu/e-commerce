@@ -12,23 +12,21 @@ spring:
           lower-case-service-id: true
       routes:
         - id: user-service-route
-          uri: https://service-user-production-7ffd.up.railway.app
+          uri: lb://service-user
           predicates:
             - Path=/users/**
           filters:
             - StripPrefix=1
 
         - id: product-service-route
-          uri: https://service-product-production.up.railway.app
-#          lb://service-product
+          uri: lb://service-product
           predicates:
             - Path=/products/**
           filters:
             - StripPrefix=1
 
         - id: order-service-route
-          uri: https://service-order-production.up.railway.app
-#          lb://service-order
+          uri: lb://service-order
           predicates:
             - Path=/orders/**
           filters:
@@ -50,14 +48,14 @@ spring:
 
 
         - id: login-route
-          uri: https://service-user-production-7ffd.up.railway.app  # 用户服务的负载均衡地址
+          uri: lb://service-user  # 用户服务的负载均衡地址
           predicates:
             - Path=/users/login
           filters:
             - StripPrefix=1
 
         - id: signup-route
-          uri: https://service-user-production-7ffd.up.railway.app  # 用户服务的负载均衡地址
+          uri: lb://service-user  # 用户服务的负载均衡地址
           predicates:
             - Path=/users/signup
           filters:
