@@ -13,7 +13,7 @@ import {Order} from '../my-orders/my-orders.service';
   providedIn: 'root'
 })
 export class CartService {
-  private apiUrl = 'http://localhost:8080'; // 网关地址
+  private apiUrl = 'https://gateway-production-4c59.up.railway.app'; // 网关地址
   address: Address | null = null;
 
   constructor(private http: HttpClient) {

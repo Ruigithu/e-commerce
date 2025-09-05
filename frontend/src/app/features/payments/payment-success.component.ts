@@ -19,7 +19,7 @@ export class PaymentSuccessComponent {
       this.orderId = params['orderId'];
       if (this.orderId) {
         // Call your API to update the order status
-        this.http.put(`http://localhost:8080/orders/updateStatus/${this.orderId}?status=PAID`, {},
+        this.http.put(`https://gateway-production-4c59.up.railway.app/orders/updateStatus/${this.orderId}?status=PAID`, {},
           { responseType: 'text' })
           .subscribe({
             next: (response) => console.log('Order status updated:', response),

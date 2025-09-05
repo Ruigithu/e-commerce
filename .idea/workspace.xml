@@ -7,6 +7,14 @@
     <list default="true" id="77caea28-e314-4b3c-b6c7-9803e7f3ec18" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/gateway-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/target/gateway-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/gateway-0.0.1-SNAPSHOT.jar.original" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/target/gateway-0.0.1-SNAPSHOT.jar.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/orders/carts/cart.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/orders/carts/cart.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/orders/my-orders/my-orders.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/payments/payment-success.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/payments/payment-success.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/users/loginPage/user-authentication.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/users/loginPage/user-authentication.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/features/users/signupPage/signupPage.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/features/users/signupPage/signupPage.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -380,7 +388,7 @@
       <workItem from="1756909214987" duration="9739000" />
       <workItem from="1756978039419" duration="10949000" />
       <workItem from="1756996610874" duration="20383000" />
-      <workItem from="1757065679336" duration="11791000" />
+      <workItem from="1757065679336" duration="13251000" />
     </task>
     <servers />
   </component>

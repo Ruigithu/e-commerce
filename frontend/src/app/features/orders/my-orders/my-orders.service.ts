@@ -38,7 +38,7 @@ export interface Order {
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'http://localhost:8080/orders'; // 根据实际API路径调整
+  private apiUrl = 'https://gateway-production-4c59.up.railway.app/orders'; // 根据实际API路径调整
 
   constructor(private http: HttpClient) { }
 

@@ -500,7 +500,7 @@ export class SignupPageComponent {
         email: this.signupForm.value.email,
       };
 
-      this.http.post<User>('http://localhost:8080/users/signup', formData, {
+      this.http.post<User>('https://gateway-production-4c59.up.railway.app/users/signup', formData, {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
         withCredentials: true
       }).subscribe({
@@ -508,7 +508,7 @@ export class SignupPageComponent {
           console.log('Signup successful:', user);
 
           // Create cart for the new user
-          this.http.post('http://localhost:8080/orders/add-newCart', {
+          this.http.post('https://gateway-production-4c59.up.railway.app/orders/add-newCart', {
             userId: user.userId
           }).subscribe({
             next: () => {
