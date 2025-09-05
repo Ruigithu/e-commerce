@@ -8,7 +8,7 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: true
+          enabled: false
           lower-case-service-id: true
       routes:
         - id: user-service-route
@@ -27,39 +27,39 @@ spring:
             - StripPrefix=1
 
         - id: order-service-route
-          uri: service-order-production.up.railway.app
+          uri: https://service-order-production.up.railway.app
 #          lb://service-order
           predicates:
             - Path=/orders/**
           filters:
             - StripPrefix=1
 
-        - id: pay-service-route
-          uri: lb://service-pay
-          predicates:
-            - Path=/pay/**
-          filters:
-            - StripPrefix=1
+#        - id: pay-service-route
+#          uri: lb://service-pay
+#          predicates:
+#            - Path=/pay/**
+#          filters:
+#            - StripPrefix=1
 
-        - id: review-service-route
-          uri: lb://service-review
-          predicates:
-            - Path=/reviews/**
-          filters:
-            - StripPrefix=1
+#        - id: review-service-route
+#          uri: lb://service-review
+#          predicates:
+#            - Path=/reviews/**
+#          filters:
+#            - StripPrefix=1
 
 
         - id: login-route
           uri: https://service-user-production-7ffd.up.railway.app  # 用户服务的负载均衡地址
           predicates:
-            - Path=/login
+            - Path=/users/login
           filters:
-
+            - StripPrefix=1
 
         - id: signup-route
           uri: https://service-user-production-7ffd.up.railway.app  # 用户服务的负载均衡地址
           predicates:
-            - Path=/signup
+            - Path=/users/signup
           filters:
             - StripPrefix=1
       default-filters:
@@ -68,7 +68,6 @@ spring:
         cors-configurations:
           '[/**]':
               allowedOrigins:
-                - "http://localhost:4200"
                 - "https://e-commerce-rui667.netlify.app"
               allowedMethods: "*"
               allowedHeaders: "*"
