@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77caea28-e314-4b3c-b6c7-9803e7f3ec18" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/gateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/classes/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/classes/com/ruipeng/e_commrce/gateway/GatewayApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/classes/com/ruipeng/e_commrce/gateway/config/GatewayConfiguration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/gateway-0.0.1-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/gateway-0.0.1-SNAPSHOT.jar.original" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/gateway/target/test-classes/com/ruipeng/e_commrce/gateway/GatewayApplicationTests.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -380,7 +390,7 @@
       <workItem from="1756909214987" duration="9739000" />
       <workItem from="1756978039419" duration="10949000" />
       <workItem from="1756996610874" duration="20383000" />
-      <workItem from="1757065679336" duration="10639000" />
+      <workItem from="1757065679336" duration="11104000" />
     </task>
     <servers />
   </component>

@@ -27,7 +27,7 @@ spring:
             - StripPrefix=1
 
         - id: order-service-route
-          uri: service-order-production.up.railway.app
+          uri: https://service-order-production.up.railway.app
           predicates:
             - Path=/orders/**
           filters:
